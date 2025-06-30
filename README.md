@@ -1,4 +1,4 @@
-<img src="./client/public/img/logo.jpg" alt="logo" width="96">
+<img src="client/public/images/logo.jpg" alt="logo" width="96">
 
 # Hydronet-Billing-System
 *Web-based solution to automate billing processes, track payments, monitor project status, and manage client records for Hydronet Consultants Inc*
