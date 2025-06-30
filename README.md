@@ -66,7 +66,7 @@ git clone https://github.com/watsonjph/Hydronet-Billing-System
 npm install
 ```
 
-1. Build the project:
+3. Build the project:
 
 ```bash
 npm run dev
