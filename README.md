@@ -46,12 +46,12 @@ Hydronet-Billing-System/
 - `public/` is the only web-accessible directory; place all user-facing assets here (CSS, JS, images).
 ---
 
-### Prerequisites
+## Prerequisites
 - Node.js v18+
 - MySQL 8.0+
 - Tailwind CSS
 
 ---
-### Setup
+## Setup
 
 -- To be Edited --
