@@ -1,41 +1,41 @@
--- Icon Here --
+<img src="./client/public/img/logo.jpg" alt="logo" width="96">
 
 # Hydronet-Billing-System
 *Web-based solution to automate billing processes, track payments, monitor project status, and manage client records for Hydronet Consultants Inc*
 Replacing Error-prine manual spreadsheets.
 
 ## 🛠 Tech Stack
-![Tech Stack](https://skills-icons.vercel.app/api/icons?i=html,js,css,tailwind,mysql,node,vite)
+![Tech Stack](https://skills-icons.vercel.app/api/icons?i=react,js,tailwind,mysql,node,vite,axios)
 
 ---
 
 ## 📁 Project Structure
 ```
 Hydronet-Billing-System/
-├── server/                    # Backend (Node.js)
-│   ├── config/                # Environment/config files
-│   │   └── db.config.js       # MySQL connection config
-│   ├── controllers/           # Route handlers
-│   ├── models/                # Data models
-│   ├── routes/                # Route definitions
-│   ├── middleware/            # Custom middleware
-│   ├── utils/                 # Helper functions
-│   └── app.js                 # Main server entry
+├── server/                       # Backend (Node.js + MySQL)
+│   ├── config/                   # Environment/config files
+│   ├── controllers/              # Route handlers
+│   ├── models/                   # Data models
+│   ├── routes/                   # API route definitions
+│   ├── middleware/               # Authentication & RBAC
+│   ├── utils/                    # PDF generator, email, etc.
+│   └── app.js                    # Express server entry point
 │
-├── client/                    # Frontend (HTML/CSS/JS)
-│   ├── public/                # Static assets
-│   │   ├── images/
-│   │   └── documents/         # Invoice templates
+├── client/                       # Frontend (React + Vite + Tailwind)
+│   ├── public/                   # Public static files
+│   │   ├── images/               # Logo, icons, etc.
+│   │   └── documents/            # Invoice templates
 │   ├── src/
-│   │   ├── css/               # Tailwind + custom CSS
-│   │   ├── js/                # Frontend logic
-│   │   └── views/             # HTML templates
-│   └── index.html             # Landing page
-│
-├── .env                       # Environment variables
+│   │   ├── assets/               # Images, icons, fonts
+│   │   ├── components/           # Reusable UI components
+│   │   ├── pages/                # Main route pages
+│   │   ├── api/                  # Axios API service functions
+│   │   ├── context/              # Global state (e.g., AuthContext)
+│   │   ├── routes/               # React Router setup
+├── .env                          # Backend environment variables
 ├── .gitignore
-├── package.json
-├── tailwind.config.js         # Tailwind configuration
+├── package.json                  # Root (for both server and scripts)
+├── config/                       # Config files for Tailwind, Vite and Postcss
 └── README.md
 ```
 
@@ -50,7 +50,7 @@ Hydronet-Billing-System/
 - Node.js v18+
 - MySQL 8.0+
 - Tailwind CSS
-
+- React v19
 ---
 ## Setup
 
