@@ -5,7 +5,7 @@
 Replacing Error-prine manual spreadsheets.
 
 ## 🛠 Tech Stack
-![Tech Stack](https://skills-icons.vercel.app/api/icons?i=react,js,tailwind,mysql,node,vite,axios)
+![Tech Stack](https://skills-icons.vercel.app/api/icons?i=react,tailwind,mysql,node,vite,axios)
 
 ---
 
@@ -49,9 +49,27 @@ Hydronet-Billing-System/
 ## Prerequisites
 - Node.js v18+
 - MySQL 8.0+
-- Tailwind CSS
-- React v19
+- npm
 ---
 ## Setup
+Quick Setup Guide for the Application
 
--- To be Edited --
+1. Clone Repo
+
+```bash
+git clone https://github.com/watsonjph/Hydronet-Billing-System
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+1. Build the project:
+
+```bash
+npm run dev
+```
+
+---
