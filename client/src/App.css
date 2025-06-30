@@ -1,0 +1,26 @@
+/* Custom Color Palette */
+.bg-custom-dark { background-color: #146C78; }
+.bg-custom-medium { background-color: #0E91A1; }
+.bg-custom-mint { background-color: #7DCE94; }
+.bg-custom-cream { background-color: #EFEDE7; }
+
+.text-custom-dark { color: #146C78; }
+.text-custom-medium { color: #0E91A1; }
+.text-custom-mint { color: #7DCE94; }
+.text-custom-cream { color: #EFEDE7; }
+
+.border-custom-dark { border-color: #146C78; }
+.border-custom-medium { border-color: #0E91A1; }
+.border-custom-mint { border-color: #7DCE94; }
+
+.hover\:bg-custom-medium:hover { background-color: #0E91A1; }
+.hover\:bg-custom-dark:hover { background-color: #146C78; }
+.hover\:text-custom-dark:hover { color: #146C78; }
+
+/* App Layout */
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #EFEDE7;
+} 
