@@ -5,7 +5,12 @@ export default {
     "../client/index.html"
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        spartan: ["'League Spartan'", 'sans-serif'],
+        poppins: ["Poppins", 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 } 
