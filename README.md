@@ -5,7 +5,7 @@
 Replacing Error-prine manual spreadsheets.
 
 ## 🛠 Tech Stack
-![Tech Stack](https://skills-icons.vercel.app/api/icons?i=html,js,css,tailwind,mysql,node)
+![Tech Stack](https://skills-icons.vercel.app/api/icons?i=html,js,css,tailwind,mysql,node,vite)
 
 ---
 
