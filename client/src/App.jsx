@@ -1,17 +1,19 @@
 import React from 'react'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import './App.css'
+import Login from './Login'
 
-function App() {
+function Landing() {
   return (
-    <div className="App">
+    <>
       {/* Simple Header */}
       <header className="bg-custom-dark shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <h1 className="text-xl font-bold text-custom-cream">Hydronet Billing System</h1>
             <nav className="space-x-4">
-              <a href="#" className="text-custom-cream hover:text-custom-mint px-3 py-2 rounded-md text-sm font-medium">Login</a>
-              <a href="#" className="bg-custom-mint text-custom-dark px-4 py-2 rounded-md text-sm font-medium hover:bg-custom-medium hover:text-custom-cream">Sign Up</a>
+              <Link to="/login" className="text-custom-cream hover:text-custom-mint px-3 py-2 rounded-md text-sm font-medium">Login</Link>
+              <Link to="/login" className="bg-custom-mint text-custom-dark px-4 py-2 rounded-md text-sm font-medium hover:bg-custom-medium hover:text-custom-cream">Sign Up</Link>
             </nav>
           </div>
         </div>
@@ -32,9 +34,9 @@ function App() {
               </p>
               <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
                 <div className="rounded-md shadow">
-                  <a href="#" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-custom-cream bg-custom-medium hover:bg-custom-dark md:py-4 md:text-lg md:px-10">
+                  <Link to="/login" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-custom-cream bg-custom-medium hover:bg-custom-dark md:py-4 md:text-lg md:px-10">
                     Get Started
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -66,7 +68,18 @@ function App() {
           </div>
         </div>
       </footer>
-    </div>
+    </>
+  )
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
   )
 }
 
