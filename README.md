@@ -78,5 +78,10 @@ npm install
 ```bash
 npm run dev
 ```
+OR (if above fails)
 
+```bash
+npm run dev:server
+npm run dev:client
+```
 ---
