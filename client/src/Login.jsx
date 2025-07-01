@@ -89,6 +89,9 @@ export default function Login({ isSignUpDefault = false }) {
         setLastName('');
         setPassword('');
       } else {
+        // Store username and role in localStorage for dashboard use
+        localStorage.setItem('username', data.username);
+        localStorage.setItem('role', data.role);
         navigate('/dashboard');
       }
     } catch (err) {

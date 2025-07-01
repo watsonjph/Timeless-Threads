@@ -29,8 +29,12 @@ const authController = {
       if (!user || user.password !== password) {
         return res.status(401).json({ error: 'Invalid credentials.' });
       }
-      // For now, just return success
-      return res.status(200).json({ message: 'Login successful.' });
+      // Return username and role for dashboard
+      return res.status(200).json({ 
+        message: 'Login successful.',
+        username: user.username,
+        role: user.role
+      });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: 'Login failed.' });
