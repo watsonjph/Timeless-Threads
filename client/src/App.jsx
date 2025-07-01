@@ -1,9 +1,22 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom'
 import './App.css'
 import Login from './Login'
 import logo from '../public/images/logo.jpg'
 import Dashboard from './Dashboard'
+
+// Route Guarding, will improve later na
+function isLoggedIn() {
+  return !!localStorage.getItem('username')
+}
+
+function PrivateRoute({ children }) {
+  return isLoggedIn() ? children : <Navigate to="/login" />
+}
+
+function PublicRoute({ children }) {
+  return !isLoggedIn() ? children : <Navigate to="/dashboard" />
+}
 
 function Landing() {
   return (
@@ -52,10 +65,10 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Login isSignUpDefault={true} />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/" element={<PublicRoute><Landing /></PublicRoute>} />
+        <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+        <Route path="/signup" element={<PublicRoute><Login isSignUpDefault={true} /></PublicRoute>} />
+        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
       </Routes>
     </Router>
   )
