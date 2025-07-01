@@ -2,7 +2,7 @@
 
 # Hydronet-Billing-System
 *Web-based solution to automate billing processes, track payments, monitor project status, and manage client records for Hydronet Consultants Inc*
-Replacing Error-prine manual spreadsheets.
+Replacing Error-prone manual spreadsheets.
 
 ## 🛠 Tech Stack
 ![Tech Stack](https://skills-icons.vercel.app/api/icons?i=react,tailwind,mysql,node,vite,axios)
@@ -42,14 +42,14 @@ Hydronet-Billing-System/
 ---
 
 ## 📌 Notes
-- `src/` is strictly for application logic and should not be directly accessible via UR
-- `public/` is the only web-accessible directory; place all user-facing assets here (CSS, JS, images).
+- Backend follows the MVC (Model-View-Controller) Architectural Pattern
+- Frontend follows the Component-Based-Architecture Pattern
+- Frontend makes API calls (via Axios) to the backend
 ---
 
 ## Prerequisites
 - Node.js v18+
 - MySQL 8.0+
-- npm
 ---
 ## Setup
 Quick Setup Guide for the Application
