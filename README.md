@@ -16,6 +16,7 @@ Hydronet-Billing-System/
 │   ├── config/                   # Environment/config files
 │   ├── controllers/              # Route handlers
 │   ├── models/                   # Data models
+│   ├── database/                 # Database schema and seed files
 │   ├── routes/                   # API route definitions
 │   ├── middleware/               # Authentication & RBAC
 │   ├── utils/                    # PDF generator, email, etc.
