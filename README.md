@@ -52,37 +52,39 @@ Hydronet-Billing-System/
 - Node.js v18+
 - MySQL 8.0+
 ---
-## Setup
+## Setup  
 Quick Setup Guide for the Application
 
-1. Create Database named hydronet_billing in MySQL
-   
-```bash
-CREATE SCHEMA `hydronet_billing` ;
-```
+1. Create a database named `hydronet_billing` in MySQL:
 
-2. Clone Repo
+    ```bash
+    CREATE SCHEMA `hydronet_billing` ;
+    ```
+    **OR**
+    ```bash
+    CREATE DATABASE hydronet_billing;
+    ```
 
-```bash
-git clone https://github.com/watsonjph/Hydronet-Billing-System
-```
+2. Clone the repository:
+
+    ```bash
+    git clone https://github.com/watsonjph/Hydronet-Billing-System
+    ```
 
 3. Install dependencies:
 
-```bash
-npm install
-```
+    ```bash
+    npm install
+    ```
 
 4. Build the project:
 
-```bash
-npm run dev
-``` 
-
-### If above fails try:
-
-```bash
-npm run dev:server
-npm run dev:client
-```
+    ```bash
+    npm run dev
+    ```
+    **OR**
+    ```bash
+    npm run dev:server
+    npm run dev:client
+    ```
 ---
