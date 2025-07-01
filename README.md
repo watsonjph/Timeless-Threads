@@ -77,8 +77,9 @@ npm install
 
 ```bash
 npm run dev
-```
-   OR (if above fails)
+``` 
+
+### If above fails try:
 
 ```bash
 npm run dev:server
