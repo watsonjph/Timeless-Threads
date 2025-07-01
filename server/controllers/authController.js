@@ -25,8 +25,8 @@ const authController = {
       return res.status(400).json({ error: 'Email and password are required.' });
     }
     try {
-      const user = await User.findByEmail(email);
-      if (!user || user.password !== password) {
+      const user = await User.findByEmailOrUsername(email);
+      if (!user || !(await User.comparePassword(password, user.password))) {
         return res.status(401).json({ error: 'Invalid credentials.' });
       }
       // Return username and role for dashboard
