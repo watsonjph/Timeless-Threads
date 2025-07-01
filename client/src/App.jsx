@@ -2,15 +2,19 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import './App.css'
 import Login from './Login'
+import logo from '../public/images/logo.jpg'
 
 function Landing() {
   return (
     <div className="font-poppins bg-custom-cream min-h-screen flex flex-col">
-      {/* Simple Header */}
+      {/* Change this guys pls huhu */}
       <header className="bg-custom-dark shadow-sm font-spartan">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <h1 className="text-xl font-bold text-custom-cream font-spartan">Hydronet Billing System</h1>
+          <div className="flex justify-between items-center h-20">
+            <div className="flex items-center space-x-4">
+              <img src={logo} alt="Hydronet Logo" className="h-10 w-10 object-contain rounded" />
+              <h1 className="text-2xl font-bold text-custom-cream font-spartan tracking-tight">Hydronet Billing System</h1>
+            </div>
             <nav className="space-x-4">
               <Link to="/login" className="text-custom-cream hover:text-custom-mint px-3 py-2 rounded-md text-sm font-medium font-poppins">Login</Link>
               <Link to="/login" className="bg-custom-mint text-custom-dark px-4 py-2 rounded-md text-sm font-medium hover:bg-custom-medium hover:text-custom-cream font-poppins">Sign Up</Link>
@@ -19,41 +23,12 @@ function Landing() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1">
-        {/* Hero Section */}
-        <div className="bg-custom-cream">
-          <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h1 className="text-4xl font-extrabold text-custom-dark sm:text-5xl md:text-6xl font-spartan">
-                <span className="block">Hydronet</span>
-                <span className="block text-custom-medium">Billing System</span>
-              </h1>
-              <p className="mt-3 max-w-md mx-auto text-base text-custom-dark sm:text-lg md:mt-5 md:text-xl md:max-w-3xl font-poppins">
-                Streamline your billing process, track payments, and manage client records with ease.
-              </p>
-              <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-                <div className="rounded-md shadow">
-                  <Link to="/login" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-custom-cream bg-custom-medium hover:bg-custom-dark md:py-4 md:text-lg md:px-10 font-poppins">
-                    Get Started
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Team Section */}
-        <div className="bg-custom-mint py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center">
-              <h2 className="text-3xl font-extrabold text-custom-dark sm:text-4xl font-spartan">
-                Temporary Landing Page
-              </h2>
-              <p className="mt-4 text-lg text-custom-dark font-poppins">
-                -- Change styling --
-              </p>
-            </div>
+      <main className="flex-1 flex flex-col items-center justify-center">
+        <div className="max-w-2xl w-full py-24 px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-extrabold text-custom-dark font-spartan mb-2">Welcome to Hydronet</h2>
+          <p className="text-lg text-custom-dark font-poppins mb-8">Internal Company Portal</p>
+          <div className="flex justify-center">
+            <Link to="/login" className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-custom-cream bg-custom-medium hover:bg-custom-dark font-poppins transition">Employee Login</Link>
           </div>
         </div>
       </main>
@@ -63,7 +38,7 @@ function Landing() {
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-base text-custom-cream">
-              &copy; 2024 Hydronet Consultants Inc. All rights reserved.
+              &copy; 2025 Hydronet Consultants Inc. All rights reserved.
             </p>
           </div>
         </div>
