@@ -55,19 +55,25 @@ Hydronet-Billing-System/
 ## Setup
 Quick Setup Guide for the Application
 
-1. Clone Repo
+1. Create Database named hydronet_billing in MySQL
+   
+```bash
+CREATE SCHEMA `hydronet_billing` ;
+```
+
+2. Clone Repo
 
 ```bash
 git clone https://github.com/watsonjph/Hydronet-Billing-System
 ```
 
-2. Install dependencies:
+3. Install dependencies:
 
 ```bash
 npm install
 ```
 
-3. Build the project:
+4. Build the project:
 
 ```bash
 npm run dev
