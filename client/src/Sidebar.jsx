@@ -59,7 +59,7 @@ export default function Sidebar({ onLogout }) {
         <div className={ICON_CONTAINER_CLASSES}>
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="text-custom-cream focus:outline-none flex items-center justify-center w-full h-full"
+            className="text-custom-cream focus:outline-none flex items-center justify-center w-full h-full cursor-pointer"
             aria-label="Collapse sidebar"
           >
             <FiX size={ICON_SIZE} />
@@ -136,7 +136,7 @@ export default function Sidebar({ onLogout }) {
         <button
           onClick={onLogout}
           tabIndex={0}
-          className="flex items-center h-16 px-4 gap-3 bg-custom-medium hover:bg-custom-dark text-custom-cream font-poppins text-base font-semibold w-full"
+          className="flex items-center h-16 px-4 gap-3 hover:bg-custom-mint text-custom-cream font-poppins text-base font-semibold w-full cursor-pointer"
         >
           <FiX size={ICON_SIZE} />
           <span className={textClass}>Logout</span>

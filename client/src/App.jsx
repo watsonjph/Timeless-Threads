@@ -62,15 +62,30 @@ function Landing() {
 }
 
 function PageTitle({ title }) {
-  return <main className="flex-1 ml-0 md:ml-64 p-8 flex flex-col items-center justify-center transition-all duration-300"><h1 className="text-3xl font-bold text-custom-dark mb-4">{title}</h1></main>;
+  return <main className="flex-1 p-8 flex flex-col items-center justify-center transition-all duration-300"><h1 className="text-3xl font-bold text-custom-dark mb-4">{title}</h1></main>;
 }
 
+// Temporary, for testing purposes
 function DashboardWelcome() {
   const username = localStorage.getItem('username') || 'User';
   const role = localStorage.getItem('role') || 'Employee';
   return (
-    <main className="flex-1 ml-0 md:ml-64 p-8 flex flex-col items-center justify-center transition-all duration-300">
+    <main className="flex-1 p-8 flex flex-col items-center justify-center transition-all duration-300">
       <h1 className="text-3xl font-bold text-custom-dark mb-4">Welcome {username}, your role is {role}</h1>
+      <p className="text-red-600 font-semibold mb-4">
+        TODO:<br/>
+        - Fix landing Page and Sidebar<br/>
+        - Hide Specifc Pages depending on role<br/>
+        - Improve Auth System and Routing<br/>
+        - Modify File Structure to fit Requirements<br/>
+        - Maybe implement a synched DB for the whole team<br/>
+        - Admin Sign Up Management<br/>
+        - Implement Dashboard Page Functionality<br/>
+        - Implement Functionality in other pages<br/>
+        - Implement Settings Functionality (with profile picture), as well as CRUD functionality to DB<br/>
+        - Research about Real Time Graphs<br/>
+        - Make Page Responsive (and Mobile Friendly)
+      </p>
     </main>
   );
 }
