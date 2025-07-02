@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-ro
 import './App.css'
 import Login from './Login'
 import logo from '../public/images/logo.jpg'
-import Dashboard from './Dashboard'
+import DashboardLayout from './Dashboard'
 
 // Route Guarding, will improve later na
 function isLoggedIn() {
@@ -61,6 +61,20 @@ function Landing() {
   )
 }
 
+function PageTitle({ title }) {
+  return <main className="flex-1 ml-0 md:ml-64 p-8 flex flex-col items-center justify-center transition-all duration-300"><h1 className="text-3xl font-bold text-custom-dark mb-4">{title}</h1></main>;
+}
+
+function DashboardWelcome() {
+  const username = localStorage.getItem('username') || 'User';
+  const role = localStorage.getItem('role') || 'Employee';
+  return (
+    <main className="flex-1 ml-0 md:ml-64 p-8 flex flex-col items-center justify-center transition-all duration-300">
+      <h1 className="text-3xl font-bold text-custom-dark mb-4">Welcome {username}, your role is {role}</h1>
+    </main>
+  );
+}
+
 function App() {
   return (
     <Router>
@@ -68,7 +82,16 @@ function App() {
         <Route path="/" element={<PublicRoute><Landing /></PublicRoute>} />
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/signup" element={<PublicRoute><Login isSignUpDefault={true} /></PublicRoute>} />
-        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
+          <Route path="/dashboard" element={<DashboardWelcome />} />
+          <Route path="/client-management" element={<PageTitle title="Client Management Page" />} />
+          <Route path="/project-dashboard" element={<PageTitle title="Project Dashboard" />} />
+          <Route path="/project-information" element={<PageTitle title="Project Information" />} />
+          <Route path="/billing-center" element={<PageTitle title="Billing Center" />} />
+          <Route path="/reporting-hub" element={<PageTitle title="Reporting Hub" />} />
+          <Route path="/user-management" element={<PageTitle title="User Management" />} />
+          <Route path="/settings" element={<PageTitle title="Settings Page" />} />
+        </Route>
       </Routes>
     </Router>
   )
