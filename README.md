@@ -5,7 +5,7 @@
 Replacing Error-prone manual spreadsheets.
 
 ## 🛠 Tech Stack
-![Tech Stack](https://skills-icons.vercel.app/api/icons?i=react,tailwind,mysql,node,vite,axios)
+![Tech Stack](https://skills-icons.vercel.app/api/icons?i=react,tailwind,mysql,node,vite,axios,express)
 
 ---
 
