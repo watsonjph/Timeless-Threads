@@ -9,8 +9,7 @@ import ClientManagement from './ClientManagement'
 
 // Route Guarding, will improve later na
 function isLoggedIn() {
-  //return !!localStorage.getItem('username')
-  return true; // temporary bypass for dev
+  return !!localStorage.getItem('username');
 }
 
 function PrivateRoute({ children }) {
@@ -72,23 +71,46 @@ function PageTitle({ title }) {
 function DashboardWelcome() {
   const username = localStorage.getItem('username') || 'User';
   const role = localStorage.getItem('role') || 'Employee';
+  const stats = [
+    { label: "Total Users", value: "Coming Soon" },
+    { label: "Total Projects", value: "Coming Soon" },
+    { label: "Pending Invoices", value: "Coming Soon" },
+  ];
   return (
     <main className="flex-1 p-8 flex flex-col items-center justify-center transition-all duration-300">
-      <h1 className="text-3xl font-bold text-custom-dark mb-4">Welcome {username}, your role is {role}</h1>
-      <p className="text-red-600 font-semibold mb-4">
-        TODO:<br/>
-        - Fix landing Page and Sidebar<br/>
-        - Hide Specifc Pages depending on role<br/>
-        - Improve Auth System and Routing<br/>
-        - Modify File Structure to fit Requirements<br/>
-        - Maybe implement a synched DB for the whole team<br/>
-        - Admin Sign Up Management<br/>
-        - Implement Dashboard Page Functionality<br/>
-        - Implement Functionality in other pages<br/>
-        - Implement Settings Functionality (with profile picture), as well as CRUD functionality to DB<br/>
-        - Research about Real Time Graphs<br/>
-        - Make Page Responsive (and Mobile Friendly)
-      </p>
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8 w-full max-w-4xl">
+        <div>
+          <h1 className="text-3xl font-bold text-custom-dark">Dashboard</h1>
+          <p className="text-gray-600">Welcome back, {username} ({role})</p>
+        </div>
+        <img
+          src="/images/logo.jpg"
+          alt="Hydronet Logo"
+          className="h-12 w-12 object-contain rounded shadow"
+        />
+      </div>
+      {/* Stat Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 w-full max-w-4xl">
+        {stats.map((stat, index) => (
+          <div
+            key={index}
+            className="bg-white shadow-md rounded-xl p-6 text-center hover:shadow-lg transition"
+          >
+            <p className="text-3xl font-bold text-custom-dark">{stat.value}</p>
+            <p className="text-gray-600 mt-2">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+      {/* Chart Placeholder */}
+      <div className="bg-white rounded-xl p-6 shadow-md w-full max-w-4xl">
+        <h2 className="text-xl font-semibold text-gray-700 mb-3">
+          Revenue Overview
+        </h2>
+        <div className="h-52 flex items-center justify-center border-2 border-dashed border-gray-300 text-gray-400 rounded-lg">
+          📊 Revenue chart coming soon...
+        </div>
+      </div>
     </main>
   );
 }
