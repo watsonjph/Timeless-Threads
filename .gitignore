@@ -1,4 +1,5 @@
 ﻿node_modules/
 .env
+.envOLD
 .DS_Store
 dist/

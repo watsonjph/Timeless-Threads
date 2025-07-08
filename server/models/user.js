@@ -39,6 +39,45 @@ const User = {
     return rows[0];
   },
 
+  async findById(id) {
+    const [rows] = await pool.query(
+      'SELECT * FROM users WHERE id = ?',
+      [id]
+    );
+    return rows[0];
+  },
+
+  async updateEmail(userId, newEmail) {
+    const sanitizedEmail = sanitize(newEmail);
+    const [result] = await pool.query(
+      'UPDATE users SET email = ? WHERE id = ?',
+      [sanitizedEmail, userId]
+    );
+    return result;
+  },
+
+  async updateUsername(userId, newUsername) {
+    const sanitizedUsername = sanitize(newUsername);
+    const [result] = await pool.query(
+      'UPDATE users SET username = ? WHERE id = ?',
+      [sanitizedUsername, userId]
+    );
+    return result;
+  },
+
+  async updatePassword(userId, newPassword) {
+    // Password must be at least 8 chars and contain a number or special char
+    if (!/^.{8,}$/.test(newPassword) || !/[^A-Za-z]/.test(newPassword)) {
+      throw new Error('Password must be at least 8 characters and include a number or special character.');
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const [result] = await pool.query(
+      'UPDATE users SET password = ? WHERE id = ?',
+      [hashedPassword, userId]
+    );
+    return result;
+  },
+
   async comparePassword(plainPassword, hashedPassword) {
     return bcrypt.compare(plainPassword, hashedPassword);
   }

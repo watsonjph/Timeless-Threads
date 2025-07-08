@@ -92,6 +92,7 @@ export default function Login({ isSignUpDefault = false }) {
         // Store username and role in localStorage for dashboard use
         localStorage.setItem('username', data.username);
         localStorage.setItem('role', data.role);
+        if (data.id) localStorage.setItem('userId', data.id);
         navigate('/dashboard');
       }
     } catch (err) {
