@@ -115,6 +115,15 @@ function DashboardWelcome() {
   );
 }
 
+function getRole() {
+  return localStorage.getItem('role') || 'Employee';
+}
+
+function RoleRoute({ allowedRoles, children }) {
+  const role = getRole();
+  return allowedRoles.includes(role) ? children : <Navigate to="/dashboard" />;
+}
+
 function App() {
   return (
     <Router>
@@ -124,13 +133,41 @@ function App() {
         <Route path="/signup" element={<PublicRoute><Login isSignUpDefault={true} /></PublicRoute>} />
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
           <Route path="/dashboard" element={<DashboardWelcome />} />
-          <Route path="/client-management" element={<ClientManagement />} />
-          <Route path="/project-dashboard" element={<PageTitle title="Project Dashboard" />} />
-          <Route path="/project-information" element={<PageTitle title="Project Information" />} />
-          <Route path="/billing-center" element={<PageTitle title="Billing Center" />} />
-          <Route path="/reporting-hub" element={<PageTitle title="Reporting Hub" />} />
-          <Route path="/user-management" element={<PageTitle title="User Management" />} />
-          <Route path="/settings" element={<PageTitle title="Settings Page" />} />
+          <Route path="/client-management" element={
+            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
+              <ClientManagement />
+            </RoleRoute>
+          } />
+          <Route path="/project-dashboard" element={
+            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
+              <PageTitle title="Project Dashboard" />
+            </RoleRoute>
+          } />
+          <Route path="/project-information" element={
+            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
+              <PageTitle title="Project Information" />
+            </RoleRoute>
+          } />
+          <Route path="/billing-center" element={
+            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff"]}>
+              <PageTitle title="Billing Center" />
+            </RoleRoute>
+          } />
+          <Route path="/reporting-hub" element={
+            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
+              <PageTitle title="Reporting Hub" />
+            </RoleRoute>
+          } />
+          <Route path="/user-management" element={
+            <RoleRoute allowedRoles={["Admin"]}>
+              <PageTitle title="User Management" />
+            </RoleRoute>
+          } />
+          <Route path="/settings" element={
+            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
+              <PageTitle title="Settings Page" />
+            </RoleRoute>
+          } />
         </Route>
       </Routes>
     </Router>

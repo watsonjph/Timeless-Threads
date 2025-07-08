@@ -15,10 +15,27 @@ const navLinks = [
   { to: '/user-management', label: 'User Management', icon: FiUserCheck },
 ];
 
+// Kinda wacky, but it works lol
+const getRole = () => localStorage.getItem('role') || 'Employee';
+
+const filterNavLinksByRole = (role) => {
+  return navLinks.filter(link => {
+    if (link.to === '/user-management') {
+      return role === 'Admin';
+    }
+    if (link.to === '/billing-center') {
+      return role !== 'Employee';
+    }
+    // All roles can see other links
+    return true;
+  });
+};
+
 export default function Sidebar({ onLogout }) {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   const sidebarRef = useRef(null);
+  const role = getRole();
 
   // Utility class for hiding/showing text smoothly
   const textClass = collapsed
@@ -164,7 +181,7 @@ export default function Sidebar({ onLogout }) {
         </div>
         {/* Navigation Links */}
         <nav className="mt-6 flex-1">
-          {navLinks.map(renderNavItem)}
+          {filterNavLinksByRole(role).map(renderNavItem)}
         </nav>
       </div>
       {/* Settings and Logout */}
