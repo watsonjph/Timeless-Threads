@@ -49,4 +49,10 @@ export const authAPI = {
 // Health check
 export const healthCheck = () => api.get('/');
 
+// Client API calls
+export const clientAPI = {
+  getAll: () => api.get('/clients'),
+  create: (clientData) => api.post('/clients', clientData),
+};
+
 export default api; 

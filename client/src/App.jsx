@@ -4,10 +4,13 @@ import './App.css'
 import Login from './Login'
 import logo from '../public/images/logo.jpg'
 import DashboardLayout from './Dashboard'
+import ClientManagement from './ClientManagement'
+
 
 // Route Guarding, will improve later na
 function isLoggedIn() {
-  return !!localStorage.getItem('username')
+  //return !!localStorage.getItem('username')
+  return true; // temporary bypass for dev
 }
 
 function PrivateRoute({ children }) {
@@ -99,7 +102,7 @@ function App() {
         <Route path="/signup" element={<PublicRoute><Login isSignUpDefault={true} /></PublicRoute>} />
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
           <Route path="/dashboard" element={<DashboardWelcome />} />
-          <Route path="/client-management" element={<PageTitle title="Client Management Page" />} />
+          <Route path="/client-management" element={<ClientManagement />} />
           <Route path="/project-dashboard" element={<PageTitle title="Project Dashboard" />} />
           <Route path="/project-information" element={<PageTitle title="Project Information" />} />
           <Route path="/billing-center" element={<PageTitle title="Billing Center" />} />
