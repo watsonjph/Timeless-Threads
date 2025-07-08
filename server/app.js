@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.js';
+import clientRoutes from './routes/clientRoute.js'; 
 
 const app = express();
 
@@ -10,9 +11,12 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
-app.use('/api/auth', authRoutes);
+
 
 // Simple health check route
+app.use('/api/auth', authRoutes);
+app.use('/api/clients', clientRoutes);
+
 app.get('/api', (req, res) => {
   res.json({ 
     status: 'success',
