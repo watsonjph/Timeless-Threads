@@ -148,7 +148,7 @@ export default function Sidebar({ onLogout }) {
               : 'hover:bg-custom-mint')}
         >
           <FiSettings size={ICON_SIZE} />
-          <span className={textClass}>Settings Page</span>
+          <span className={textClass}>Settings</span>
         </Link>
         <button
           onClick={onLogout}

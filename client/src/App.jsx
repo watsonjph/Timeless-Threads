@@ -5,6 +5,7 @@ import Login from './Login'
 import logo from '../public/images/logo.jpg'
 import DashboardLayout from './Dashboard'
 import ClientManagement from './ClientManagement'
+import Settings from './Settings';
 
 
 // Route Guarding, will improve later na
@@ -165,7 +166,7 @@ function App() {
           } />
           <Route path="/settings" element={
             <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
-              <PageTitle title="Settings Page" />
+              <Settings />
             </RoleRoute>
           } />
         </Route>
