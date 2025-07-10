@@ -59,17 +59,17 @@ Quick Setup Guide for the Application
 1. Create a database named `hydronet_billing` in MySQL:
 
     ```bash
-    CREATE SCHEMA `hydronet_billing` ;
+    CREATE SCHEMA `timeless_db` ;
     ```
     **OR**
     ```bash
-    CREATE DATABASE hydronet_billing;
+    CREATE DATABASE timeless_db;
     ```
 
 2. Clone the repository:
 
     ```bash
-    git clone https://github.com/watsonjph/Hydronet-Billing-System
+    git clone https://github.com/watsonjph/Timeless-Threads
     ```
 
 3. Install dependencies:
