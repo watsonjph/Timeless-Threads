@@ -1,9 +1,9 @@
 # OUTDATED!, Project is being Converted to a new one
 <img src="client/public/images/logo.jpg" alt="logo" width="96">
 
-# Hydronet-Billing-System
-*Web-based solution to automate billing processes, track payments, monitor project status, and manage client records for Hydronet Consultants Inc*
-Replacing Error-prone manual spreadsheets.
+# Timeless Threads
+*A Dedicated web-based e-commerce platform for Timeless Threads to replace its reliance on Instagram for sales* <br>
+The system will streamline product browsing, secure checkout, payment processing (via QR or Gcash), and automate inventory and Order management, Replacing Error-prone manual spreadsheets.
 
 ## 🛠 Tech Stack
 ![Tech Stack](https://skills-icons.vercel.app/api/icons?i=react,tailwind,mysql,node,vite,axios,express)
