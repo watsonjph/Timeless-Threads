@@ -1,6 +1,3 @@
-# OUTDATED!, Project is being Converted to a new one
-<img src="client/public/images/logo.jpg" alt="logo" width="96">
-
 # Timeless Threads
 *A Dedicated web-based e-commerce platform for Timeless Threads to replace its reliance on Instagram for sales* <br>
 The system will streamline product browsing, secure checkout, payment processing (via QR or Gcash), and automate inventory and Order management, Replacing Error-prone manual spreadsheets.
@@ -12,7 +9,7 @@ The system will streamline product browsing, secure checkout, payment processing
 
 ## 📁 Project Structure
 ```
-Hydronet-Billing-System/
+Timeless-Threads/
 ├── server/                       # Backend (Node.js + MySQL)
 │   ├── config/                   # Environment/config files
 │   ├── controllers/              # Route handlers
@@ -56,7 +53,7 @@ Hydronet-Billing-System/
 ## Setup  
 Quick Setup Guide for the Application
 
-1. Create a database named `hydronet_billing` in MySQL:
+1. Create a database named `timeless_db` in MySQL:
 
     ```bash
     CREATE SCHEMA `timeless_db` ;

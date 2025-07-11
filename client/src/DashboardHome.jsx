@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 const DashboardHome = () => {
   useEffect(() => {
-    document.title = "Dashboard | Hydronet";
+    document.title = "Dashboard | Timeless Threads";
   }, []);
 
   const stats = [
