@@ -1,5 +1,5 @@
-use hydronet_billing;
--- Database Schema for Hydronet
+use timeless_db;
+-- Database Schema for Timeless Threads
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;

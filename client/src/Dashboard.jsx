@@ -16,7 +16,7 @@ export default function DashboardLayout() {
   };
 
   useEffect(() => {
-    document.title = "Dashboard | Hydronet";
+    document.title = "Dashboard | Timeless Threads";
   }, []);
 
   // TODO: Remove the hardcoded stats and get the data from the backend

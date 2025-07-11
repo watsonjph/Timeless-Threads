@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FiSettings, FiMenu, FiX, FiUsers, FiGrid, FiInfo, FiDollarSign, FiBarChart2, FiUserCheck } from 'react-icons/fi';
-import logo from '../public/images/logo.jpg';
+// Logo removed for repurposing
 
 // Navigation links configuration
 const navLinks = [
@@ -70,8 +70,7 @@ export default function Sidebar({ onLogout }) {
     return (
       <>
         <div className="flex items-center flex-1 min-w-0 space-x-2 px-4 h-16">
-          <img src={logo} alt="Hydronet Logo" className="h-8 w-8 object-contain rounded" />
-          <span className={`text-lg font-bold font-spartan tracking-tight whitespace-nowrap ${textClass}`}>Hydronet Billing</span>
+          <span className={`text-lg font-bold font-spartan tracking-tight whitespace-nowrap ${textClass}`}>Timeless Threads</span>
         </div>
         <div className={ICON_CONTAINER_CLASSES}>
           <button
