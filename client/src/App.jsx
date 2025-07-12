@@ -5,7 +5,8 @@ import Login from './Login'
 // Logo removed for repurposing
 import DashboardLayout from './Dashboard'
 import ClientManagement from './ClientManagement'
-import Settings from './Settings';
+import Settings from './Settings'
+import SupplierPortal from './SupplierPortal';
 
 
 // Route Guarding, will improve later na
@@ -42,21 +43,6 @@ function Landing() {
       <main className="flex-1 flex flex-col items-center justify-center">
         <div className="max-w-4xl w-full py-24 px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-5xl font-extrabold text-custom-dark font-spartan mb-4">Shopping Landing Page Here</h2>
-          <p className="text-xl text-custom-dark font-poppins mb-8">This needs to be changed to a proper shopping website like Amazon</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold text-custom-dark mb-2">Product Categories</h3>
-              <p className="text-gray-600">Browse our collection of timeless fashion</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold text-custom-dark mb-2">Featured Items</h3>
-              <p className="text-gray-600">Discover trending styles and new arrivals</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h3 className="text-lg font-semibold text-custom-dark mb-2">Customer Reviews</h3>
-              <p className="text-gray-600">See what our customers are saying</p>
-            </div>
-          </div>
           <div className="flex justify-center mt-8">
             <Link to="/login" className="px-8 py-3 border border-transparent text-base font-medium rounded-md text-custom-cream bg-custom-medium hover:bg-custom-dark font-poppins transition">Employee Login</Link>
           </div>
@@ -81,8 +67,8 @@ function PageTitle({ title }) {
   return <main className="flex-1 p-8 flex flex-col items-center justify-center transition-all duration-300"><h1 className="text-3xl font-bold text-custom-dark mb-4">{title}</h1></main>;
 }
 
-// Temporary, for testing purposes
-function DashboardWelcome() {
+// Admin Dashboard - Only accessible by Admin role
+function AdminDashboard() {
   const username = localStorage.getItem('username') || 'User';
   const role = localStorage.getItem('role') || 'Employee';
   const stats = [
@@ -95,7 +81,7 @@ function DashboardWelcome() {
       {/* Header */}
       <div className="flex justify-between items-center mb-8 w-full max-w-4xl">
         <div>
-          <h1 className="text-3xl font-bold text-custom-dark">Dashboard</h1>
+          <h1 className="text-3xl font-bold text-custom-dark">Admin Dashboard</h1>
           <p className="text-gray-600">Welcome back, {username} ({role})</p>
         </div>
         {/* Logo removed for repurposing */}
@@ -142,30 +128,19 @@ function App() {
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/signup" element={<PublicRoute><Login isSignUpDefault={true} /></PublicRoute>} />
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
-          <Route path="/dashboard" element={<DashboardWelcome />} />
+          <Route path="/dashboard" element={
+            <RoleRoute allowedRoles={["Admin"]}>
+              <AdminDashboard />
+            </RoleRoute>
+          } />
           <Route path="/client-management" element={
             <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
               <ClientManagement />
             </RoleRoute>
           } />
-          <Route path="/project-dashboard" element={
+          <Route path="/supplier-portal" element={
             <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
-              <PageTitle title="Project Dashboard" />
-            </RoleRoute>
-          } />
-          <Route path="/project-information" element={
-            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
-              <PageTitle title="Project Information" />
-            </RoleRoute>
-          } />
-          <Route path="/billing-center" element={
-            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff"]}>
-              <PageTitle title="Billing Center" />
-            </RoleRoute>
-          } />
-          <Route path="/reporting-hub" element={
-            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
-              <PageTitle title="Reporting Hub" />
+              <SupplierPortal />
             </RoleRoute>
           } />
           <Route path="/user-management" element={

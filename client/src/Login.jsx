@@ -235,7 +235,7 @@ export default function Login({ isSignUpDefault = false }) {
           <Link to="/" className="text-sm text-custom-dark hover:underline font-poppins">Back to Home</Link>
         </div>
       </div>
-      <p className="mt-8 text-gray-400 text-xs font-poppins">© 2025 Timeless Threads – Internal Access Only</p>
+      <p className="mt-8 text-gray-400 text-xs font-poppins">© 2025 Timeless Threads</p>
     </div>
   );
 } 
