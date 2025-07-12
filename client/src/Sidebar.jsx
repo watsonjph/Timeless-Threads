@@ -1,17 +1,14 @@
 // WILL FIX SPACING LATER, ALSO ADD ANIMATIONS!!
 import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiSettings, FiMenu, FiX, FiUsers, FiGrid, FiInfo, FiDollarSign, FiBarChart2, FiUserCheck } from 'react-icons/fi';
+import { FiSettings, FiMenu, FiX, FiUsers, FiGrid, FiUserCheck, FiTruck } from 'react-icons/fi';
 // Logo removed for repurposing
 
 // Navigation links configuration
 const navLinks = [
   { to: '/dashboard', label: 'Dashboard', icon: FiGrid },
   { to: '/client-management', label: 'Client Management', icon: FiUsers },
-  { to: '/project-dashboard', label: 'Project Dashboard', icon: FiGrid },
-  { to: '/project-information', label: 'Project Information', icon: FiInfo },
-  { to: '/billing-center', label: 'Billing Center', icon: FiDollarSign },
-  { to: '/reporting-hub', label: 'Reporting Hub', icon: FiBarChart2 },
+  { to: '/supplier-portal', label: 'Supplier Portal', icon: FiTruck },
   { to: '/user-management', label: 'User Management', icon: FiUserCheck },
 ];
 
@@ -20,11 +17,8 @@ const getRole = () => localStorage.getItem('role') || 'Employee';
 
 const filterNavLinksByRole = (role) => {
   return navLinks.filter(link => {
-    if (link.to === '/user-management') {
+    if (link.to === '/user-management' || link.to === '/dashboard') {
       return role === 'Admin';
-    }
-    if (link.to === '/billing-center') {
-      return role !== 'Employee';
     }
     // All roles can see other links
     return true;
