@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import logo from '/images/Timeless.png'
 
 export default function Login({ isSignUpDefault = false }) {
   const [email, setEmail] = useState('');
@@ -103,7 +104,10 @@ export default function Login({ isSignUpDefault = false }) {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-custom-cream px-4 font-poppins">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-        <h2 className="text-2xl font-bold text-custom-dark mb-6 text-center font-spartan">{isSignUp ? 'Request Sign Up' : 'Employee Login'}</h2>
+        <div className="flex justify-center mb-6">
+          <img src={logo} alt="Timeless Threads" className="h-16 w-auto" />
+        </div>
+        <h2 className="text-2xl font-bold text-custom-dark mb-6 text-center font-poppins">{isSignUp ? 'Request Sign Up' : 'Employee Login'}</h2>
         <form onSubmit={handleSubmit} className="space-y-5">
           {isSignUp && signupStep === 1 && (
             <>
@@ -111,7 +115,7 @@ export default function Login({ isSignUpDefault = false }) {
                 <label className="block text-custom-dark font-medium mb-1 font-poppins">Email</label>
                 <input
                   type="email"
-                  className="w-full px-4 py-2 border border-custom-medium rounded focus:outline-none focus:ring-2 focus:ring-custom-mint font-poppins"
+                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   autoComplete="email"
@@ -122,7 +126,7 @@ export default function Login({ isSignUpDefault = false }) {
                 <label className="block text-custom-dark font-medium mb-1 font-poppins">Password</label>
                 <input
                   type="password"
-                  className="w-full px-4 py-2 border border-custom-medium rounded focus:outline-none focus:ring-2 focus:ring-custom-mint font-poppins"
+                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   autoComplete="new-password"
@@ -132,7 +136,7 @@ export default function Login({ isSignUpDefault = false }) {
               </div>
               <button
                 type="button"
-                className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-medium transition font-poppins"
+                className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
                 onClick={handleNext}
               >
                 Next
@@ -145,7 +149,7 @@ export default function Login({ isSignUpDefault = false }) {
                 <label className="block text-custom-dark font-medium mb-1 font-poppins">Username</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border border-custom-medium rounded focus:outline-none focus:ring-2 focus:ring-custom-mint font-poppins"
+                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
                   value={username}
                   onChange={e => setUsername(e.target.value)}
                   autoComplete="username"
@@ -156,7 +160,7 @@ export default function Login({ isSignUpDefault = false }) {
                 <label className="block text-custom-dark font-medium mb-1 font-poppins">First Name</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border border-custom-medium rounded focus:outline-none focus:ring-2 focus:ring-custom-mint font-poppins"
+                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
                   value={firstName}
                   onChange={e => setFirstName(e.target.value)}
                   autoComplete="given-name"
@@ -167,7 +171,7 @@ export default function Login({ isSignUpDefault = false }) {
                 <label className="block text-custom-dark font-medium mb-1 font-poppins">Last Name</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border border-custom-medium rounded focus:outline-none focus:ring-2 focus:ring-custom-mint font-poppins"
+                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
                   value={lastName}
                   onChange={e => setLastName(e.target.value)}
                   autoComplete="family-name"
@@ -176,13 +180,13 @@ export default function Login({ isSignUpDefault = false }) {
               </div>
               <button
                 type="submit"
-                className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-medium transition font-poppins"
+                className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
               >
                 Request Sign Up
               </button>
               <button
                 type="button"
-                className="w-full mt-2 py-2 px-4 bg-custom-mint text-custom-dark font-semibold rounded hover:bg-custom-medium transition font-poppins"
+                className="w-full mt-2 py-2 px-4 bg-custom-cream text-custom-dark font-semibold rounded hover:bg-custom-mint transition font-poppins border border-custom-dark"
                 onClick={() => { setSignupStep(1); setError(''); }}
               >
                 Back
@@ -195,7 +199,7 @@ export default function Login({ isSignUpDefault = false }) {
                 <label className="block text-custom-dark font-medium mb-1 font-poppins">Email or Username</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border border-custom-medium rounded focus:outline-none focus:ring-2 focus:ring-custom-mint font-poppins"
+                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   autoComplete="username"
@@ -206,7 +210,7 @@ export default function Login({ isSignUpDefault = false }) {
                 <label className="block text-custom-dark font-medium mb-1 font-poppins">Password</label>
                 <input
                   type="password"
-                  className="w-full px-4 py-2 border border-custom-medium rounded focus:outline-none focus:ring-2 focus:ring-custom-mint font-poppins"
+                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
                   value={password}
                   onChange={e => setPassword(e.target.value)}
                   autoComplete="current-password"
@@ -216,7 +220,7 @@ export default function Login({ isSignUpDefault = false }) {
               </div>
               <button
                 type="submit"
-                className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-medium transition font-poppins"
+                className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
               >
                 Employee Login
               </button>

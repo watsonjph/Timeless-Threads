@@ -120,68 +120,68 @@ export default function Settings() {
         {/* Profile Picture Placeholder */}
         <div className="flex flex-col items-center w-full mb-2">
           <div className="w-36 h-36 rounded-full bg-white border-4 border-custom-medium flex items-center justify-center mb-2 shadow-lg" />
-          <p className="text-red-600 font-semibold text-center mt-2">TODO: Add Profile Picture Capability</p>
-          <p className="text-red-600 font-semibold text-center mt-2">TODO: Redesign this page</p>
+          <p className="text-red-600 font-semibold text-center mt-2 font-nunito">TODO: Add Profile Picture Capability</p>
+          <p className="text-red-600 font-semibold text-center mt-2 font-nunito">TODO: Redesign this page</p>
         </div>
         {/* Separator below profile picture */}
         <div className="w-full h-px bg-custom-dark opacity-20 mb-2" />
         {/* Email Section */}
         <form onSubmit={handleEmailChange} className="w-full flex flex-col gap-2">
-          <h2 className="text-lg font-semibold text-custom-dark mb-1">Email</h2>
+          <h2 className="text-lg font-semibold text-custom-dark mb-1 font-poppins">Email</h2>
           <div className="flex flex-row items-center gap-8 mb-4 w-full">
             <div className="flex-1 flex flex-col">
               <label className="text-custom-dark font-poppins mb-1">Current</label>
-              <input type="email" className="border rounded px-4 py-3 bg-custom-cream" value={email} disabled />
+              <input type="email" className="border border-custom-dark rounded px-4 py-3 bg-custom-cream font-nunito" value={email} disabled />
             </div>
             <div className="flex-1 flex flex-col">
               <label className="text-custom-dark font-poppins mb-1">New</label>
-              <input type="email" className="border rounded px-4 py-3" value={newEmail} onChange={e => setNewEmail(e.target.value)} placeholder="New Email" />
+              <input type="email" className="border border-custom-dark rounded px-4 py-3 font-nunito" value={newEmail} onChange={e => setNewEmail(e.target.value)} placeholder="New Email" />
             </div>
           </div>
           <div className="flex flex-row justify-start">
-            <button type="submit" className="bg-custom-dark text-custom-cream px-8 py-2 rounded-lg hover:bg-custom-medium transition">Apply</button>
+            <button type="submit" className="bg-custom-dark text-custom-cream px-8 py-2 rounded-lg hover:bg-custom-mint transition font-poppins">Apply</button>
           </div>
-          {emailMsg && <div className="mt-2 text-sm text-custom-dark text-left">{emailMsg}</div>}
+          {emailMsg && <div className="mt-2 text-sm text-custom-dark text-left font-nunito">{emailMsg}</div>}
         </form>
         {/* Separator */}
         <div className="w-full h-px bg-custom-dark opacity-20 mb-2 mt-4" />
         {/* Username Section */}
         <form onSubmit={handleUsernameChange} className="w-full flex flex-col gap-2">
-          <h2 className="text-lg font-semibold text-custom-dark mb-1">Username</h2>
+          <h2 className="text-lg font-semibold text-custom-dark mb-1 font-poppins">Username</h2>
           <div className="flex flex-row items-center gap-8 mb-4 w-full">
             <div className="flex-1 flex flex-col">
               <label className="text-custom-dark font-poppins mb-1">Current</label>
-              <input type="text" className="border rounded px-4 py-3 bg-custom-cream" value={username} disabled />
+              <input type="text" className="border border-custom-dark rounded px-4 py-3 bg-custom-cream font-nunito" value={username} disabled />
             </div>
             <div className="flex-1 flex flex-col">
               <label className="text-custom-dark font-poppins mb-1">New</label>
-              <input type="text" className="border rounded px-4 py-3" value={newUsername} onChange={e => setNewUsername(e.target.value)} placeholder="New Username" />
+              <input type="text" className="border border-custom-dark rounded px-4 py-3 font-nunito" value={newUsername} onChange={e => setNewUsername(e.target.value)} placeholder="New Username" />
             </div>
           </div>
-          <div className="flex flex-row justify-start">
-            <button type="submit" className="bg-custom-dark text-custom-cream px-8 py-2 rounded-lg hover:bg-custom-medium transition">Apply</button>
+                      <div className="flex flex-row justify-start">
+            <button type="submit" className="bg-custom-dark text-custom-cream px-8 py-2 rounded-lg hover:bg-custom-mint transition font-poppins">Apply</button>
           </div>
-          {usernameMsg && <div className="mt-2 text-sm text-custom-dark text-left">{usernameMsg}</div>}
+          {usernameMsg && <div className="mt-2 text-sm text-custom-dark text-left font-nunito">{usernameMsg}</div>}
         </form>
         {/* Separator */}
         <div className="w-full h-px bg-custom-dark opacity-20 mb-2 mt-4" />
         {/* Password Section */}
         <form onSubmit={handlePasswordChange} className="w-full flex flex-col gap-2">
-          <h2 className="text-lg font-semibold text-custom-dark mb-1">Password</h2>
+          <h2 className="text-lg font-semibold text-custom-dark mb-1 font-poppins">Password</h2>
           <div className="flex flex-row items-center gap-8 mb-4 w-full">
             <div className="flex-1 flex flex-col">
               <label className="text-custom-dark font-poppins mb-1">Current</label>
-              <input type="password" className="border rounded px-4 py-3" value={currentPwd} onChange={e => setCurrentPwd(e.target.value)} placeholder="Current Password" />
+              <input type="password" className="border border-custom-dark rounded px-4 py-3 font-nunito" value={currentPwd} onChange={e => setCurrentPwd(e.target.value)} placeholder="Current Password" />
             </div>
             <div className="flex-1 flex flex-col">
               <label className="text-custom-dark font-poppins mb-1">New</label>
-              <input type="password" className="border rounded px-4 py-3" value={newPwd} onChange={e => setNewPwd(e.target.value)} placeholder="New Password" />
+              <input type="password" className="border border-custom-dark rounded px-4 py-3 font-nunito" value={newPwd} onChange={e => setNewPwd(e.target.value)} placeholder="New Password" />
             </div>
           </div>
-          <div className="flex flex-row justify-start">
-            <button type="submit" className="bg-custom-dark text-custom-cream px-8 py-2 rounded-lg hover:bg-custom-medium transition">Apply</button>
+                      <div className="flex flex-row justify-start">
+            <button type="submit" className="bg-custom-dark text-custom-cream px-8 py-2 rounded-lg hover:bg-custom-mint transition font-poppins">Apply</button>
           </div>
-          {pwdMsg && <div className="mt-2 text-sm text-custom-dark text-left">{pwdMsg}</div>}
+          {pwdMsg && <div className="mt-2 text-sm text-custom-dark text-left font-nunito">{pwdMsg}</div>}
         </form>
       </div>
     </main>

@@ -30,16 +30,4 @@ ALTER TABLE `users`
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
-CREATE TABLE `clients` (
-  `clientID` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `contact` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `phone` varchar(255) DEFAULT NULL,
-  `projects` varchar(255) DEFAULT NULL,
-  `lastContact` date DEFAULT NULL,
-  PRIMARY KEY (`clientID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
 COMMIT;
