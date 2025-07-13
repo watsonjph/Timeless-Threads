@@ -2,7 +2,8 @@
 import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FiSettings, FiMenu, FiX, FiUsers, FiGrid, FiUserCheck, FiTruck } from 'react-icons/fi';
-// Logo removed for repurposing
+import logo from '/images/Timeless.png'
+import logoInverted from '/images/Timeless-Inverted.png'
 
 // Navigation links configuration
 const navLinks = [
@@ -64,7 +65,7 @@ export default function Sidebar({ onLogout }) {
     return (
       <>
         <div className="flex items-center flex-1 min-w-0 space-x-2 px-4 h-16">
-          <span className={`text-lg font-bold font-spartan tracking-tight whitespace-nowrap ${textClass}`}>Timeless Threads</span>
+          <img src={logoInverted} alt="Timeless Threads" className={`h-8 w-auto ${textClass}`} />
         </div>
         <div className={ICON_CONTAINER_CLASSES}>
           <button
@@ -100,7 +101,7 @@ export default function Sidebar({ onLogout }) {
         tabIndex={0}
         className={`flex items-center h-16 px-4 gap-3 font-poppins text-base w-full ` +
           (location.pathname === link.to
-            ? 'bg-custom-medium text-custom-cream font-bold shadow-sm'
+            ? 'bg-custom-dark text-custom-cream font-bold shadow-sm'
             : 'hover:bg-custom-mint')}
         title={link.label}
       >
@@ -122,7 +123,7 @@ export default function Sidebar({ onLogout }) {
             <FiSettings size={ICON_SIZE} />
           </div>
           <div
-            className={ICON_CONTAINER_CLASSES + " bg-custom-medium text-custom-cream font-poppins text-base font-semibold pointer-events-none select-none w-full"}
+            className={ICON_CONTAINER_CLASSES + " bg-custom-dark text-custom-cream font-poppins text-base font-semibold pointer-events-none select-none w-full"}
             title="Logout"
           >
             <FiX size={ICON_SIZE} />
@@ -135,10 +136,10 @@ export default function Sidebar({ onLogout }) {
         <Link
           to="/settings"
           tabIndex={0}
-          className={`flex items-center h-16 px-4 gap-3 font-poppins text-base mb-2 w-full ` +
-            (location.pathname === '/settings'
-              ? 'bg-custom-medium text-custom-cream font-bold shadow-sm'
-              : 'hover:bg-custom-mint')}
+                  className={`flex items-center h-16 px-4 gap-3 font-poppins text-base mb-2 w-full ` +
+          (location.pathname === '/settings'
+            ? 'bg-custom-dark text-custom-cream font-bold shadow-sm'
+            : 'hover:bg-custom-mint')}
         >
           <FiSettings size={ICON_SIZE} />
           <span className={textClass}>Settings</span>
@@ -146,7 +147,7 @@ export default function Sidebar({ onLogout }) {
         <button
           onClick={onLogout}
           tabIndex={0}
-          className="flex items-center h-16 px-4 gap-3 hover:bg-custom-mint text-custom-cream font-poppins text-base font-semibold w-full cursor-pointer"
+          className="flex items-center h-16 px-4 gap-3 hover:bg-custom-dark text-custom-cream font-poppins text-base font-semibold w-full cursor-pointer"
         >
           <FiX size={ICON_SIZE} />
           <span className={textClass}>Logout</span>

@@ -15,8 +15,8 @@ export default function SupplierPortal() {
       <div className="h-64 flex items-center justify-center border-2 border-dashed border-gray-300 text-gray-400 rounded-lg">
         <div className="text-center">
           <div className="text-4xl mb-2">📊</div>
-          <p className="text-lg font-medium">Overview Content</p>
-          <p className="text-sm">Content will be added here</p>
+          <p className="text-lg font-medium font-kanit">Overview Content</p>
+          <p className="text-sm font-nunito">Content will be added here</p>
         </div>
       </div>
     </div>
@@ -27,8 +27,8 @@ export default function SupplierPortal() {
       <div className="h-64 flex items-center justify-center border-2 border-dashed border-gray-300 text-gray-400 rounded-lg">
         <div className="text-center">
           <div className="text-4xl mb-2">🏢</div>
-          <p className="text-lg font-medium">Suppliers Content</p>
-          <p className="text-sm">Content will be added here</p>
+          <p className="text-lg font-medium font-kanit">Suppliers Content</p>
+          <p className="text-sm font-nunito">Content will be added here</p>
         </div>
       </div>
     </div>
@@ -39,8 +39,8 @@ export default function SupplierPortal() {
       <div className="h-64 flex items-center justify-center border-2 border-dashed border-gray-300 text-gray-400 rounded-lg">
         <div className="text-center">
           <div className="text-4xl mb-2">📦</div>
-          <p className="text-lg font-medium">Orders Content</p>
-          <p className="text-sm">Content will be added here</p>
+          <p className="text-lg font-medium font-kanit">Orders Content</p>
+          <p className="text-sm font-nunito">Content will be added here</p>
         </div>
       </div>
     </div>
@@ -51,8 +51,8 @@ export default function SupplierPortal() {
       <div className="h-64 flex items-center justify-center border-2 border-dashed border-gray-300 text-gray-400 rounded-lg">
         <div className="text-center">
           <div className="text-4xl mb-2">📈</div>
-          <p className="text-lg font-medium">Analytics Content</p>
-          <p className="text-sm">Content will be added here</p>
+          <p className="text-lg font-medium font-kanit">Analytics Content</p>
+          <p className="text-sm font-nunito">Content will be added here</p>
         </div>
       </div>
     </div>
@@ -77,8 +77,8 @@ export default function SupplierPortal() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-custom-dark">Supplier Portal</h1>
-          <p className="text-gray-600">Manage your suppliers and purchase orders</p>
+          <h1 className="text-3xl font-bold text-custom-dark font-poppins">Supplier Portal</h1>
+          <p className="text-gray-600 font-nunito">Manage your suppliers and purchase orders</p>
         </div>
       </div>
 
@@ -89,9 +89,9 @@ export default function SupplierPortal() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 flex items-center justify-center space-x-2 px-4 py-2 rounded-lg font-medium transition ${
+              className={`flex-1 flex items-center justify-center space-x-2 px-4 py-2 rounded-lg font-medium transition font-kanit ${
                 activeTab === tab.id
-                  ? 'bg-custom-medium text-custom-cream'
+                  ? 'bg-custom-dark text-custom-cream'
                   : 'text-gray-600 hover:text-custom-dark hover:bg-gray-100'
               }`}
             >

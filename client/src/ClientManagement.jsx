@@ -28,14 +28,14 @@ export default function ClientManagement() {
 
   return (
     <div className="p-8 font-poppins">
-      <h1 className="text-3xl font-bold text-custom-dark mb-6">Client Management</h1>
+      <h1 className="text-3xl font-bold text-custom-dark mb-6 font-poppins">Client Management</h1>
 
       <input
         type="text"
         placeholder="Search clients..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="mb-4 px-4 py-2 border rounded w-full max-w-sm"
+        className="mb-4 px-4 py-2 border border-custom-dark rounded w-full max-w-sm font-nunito"
       />
 
       <table className="min-w-full bg-white border rounded shadow overflow-x-auto">

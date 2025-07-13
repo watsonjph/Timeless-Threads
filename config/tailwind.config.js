@@ -9,6 +9,8 @@ export default {
       fontFamily: {
         spartan: ["'League Spartan'", 'sans-serif'],
         poppins: ["Poppins", 'sans-serif'],
+        kanit: ["Kanit", 'sans-serif'],
+        nunito: ["'Nunito Sans'", 'sans-serif'],
       },
     },
   },
