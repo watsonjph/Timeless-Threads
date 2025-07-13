@@ -23,4 +23,12 @@
   display: flex;
   flex-direction: column;
   background-color: #ffffff;
+}
+
+/* Spacing for react-slick carousel items */
+.slick-slide > div {
+  margin: 0 16px;
+}
+.slick-list {
+  margin: 0 -16px;
 } 
