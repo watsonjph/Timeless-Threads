@@ -15,8 +15,8 @@ const User = {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
     const [result] = await pool.query(
-      'INSERT INTO users (email, username, firstName, lastName, password) VALUES (?, ?, ?, ?, ?)',
-      [sanitizedEmail, sanitizedUsername, sanitizedFirstName, sanitizedLastName, hashedPassword]
+      'INSERT INTO users (email, username, firstName, lastName, password, role) VALUES (?, ?, ?, ?, ?, ?)',
+      [sanitizedEmail, sanitizedUsername, sanitizedFirstName, sanitizedLastName, hashedPassword, 'User']
     );
     return result;
   },

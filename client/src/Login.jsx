@@ -94,7 +94,14 @@ export default function Login({ isSignUpDefault = false }) {
         localStorage.setItem('username', data.username);
         localStorage.setItem('role', data.role);
         if (data.id) localStorage.setItem('userId', data.id);
-        navigate('/dashboard');
+        
+        // Route users based on their role
+        if (data.role === 'Admin' || data.role === 'Supplier') {
+          navigate('/dashboard');
+        } else {
+          // Regular users go back to landing page
+          navigate('/');
+        }
       }
     } catch (err) {
       setError('Network error.');
@@ -105,9 +112,9 @@ export default function Login({ isSignUpDefault = false }) {
     <div className="min-h-screen flex flex-col justify-center items-center bg-custom-cream px-4 font-poppins">
       <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
         <div className="flex justify-center mb-6">
-          <img src={logo} alt="Timeless Threads" className="h-16 w-auto" />
+          <img src={logo} alt="Timeless Threads" className="h-24 w-auto" />
         </div>
-        <h2 className="text-2xl font-bold text-custom-dark mb-6 text-center font-poppins">{isSignUp ? 'Request Sign Up' : 'Employee Login'}</h2>
+        <h2 className="text-2xl font-bold text-custom-dark mb-6 text-center font-poppins">{isSignUp ? 'Sign Up' : 'Login'}</h2>
         <form onSubmit={handleSubmit} className="space-y-5">
           {isSignUp && signupStep === 1 && (
             <>
@@ -182,7 +189,7 @@ export default function Login({ isSignUpDefault = false }) {
                 type="submit"
                 className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
               >
-                Request Sign Up
+                Sign Up
               </button>
               <button
                 type="button"
@@ -222,21 +229,21 @@ export default function Login({ isSignUpDefault = false }) {
                 type="submit"
                 className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
               >
-                Employee Login
+                Login
               </button>
             </>
           )}
           {error && <div className="text-red-600 text-center text-sm font-poppins mb-2">{error}</div>}
           {success && <div className="text-green-600 text-center text-sm font-poppins mb-2">{success}</div>}
         </form>
-        <div className="flex justify-between items-center mt-4">
+        <div className="flex justify-between items-center mt-6">
           <button
-            className="text-sm text-custom-medium hover:underline font-poppins focus:outline-none bg-transparent border-none"
+            className="text-sm text-custom-dark font-medium hover:text-custom-mint transition-colors font-poppins focus:outline-none bg-transparent border-none"
             onClick={() => { setIsSignUp(!isSignUp); setError(''); }}
           >
-            {isSignUp ? 'Back to Login' : 'Request Sign Up'}
+            {isSignUp ? 'Back to Login' : "Don't have an account? Sign up"}
           </button>
-          <Link to="/" className="text-sm text-custom-dark hover:underline font-poppins">Back to Home</Link>
+          <Link to="/" className="text-sm text-custom-dark hover:text-custom-mint transition-colors font-poppins">Back to Home</Link>
         </div>
       </div>
       <p className="mt-8 text-gray-400 text-xs font-poppins">© 2025 Timeless Threads</p>
