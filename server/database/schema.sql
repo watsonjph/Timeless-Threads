@@ -15,7 +15,7 @@ CREATE TABLE `users` (
   `username` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
-  `role` enum('Employee','Finance Staff','Admin', 'Project Manager') DEFAULT 'Employee',
+  `role` enum('User','Supplier','Admin',) DEFAULT 'User',
   `hasProfilePic` tinyint(1) DEFAULT 0,
   `is_first_login` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
