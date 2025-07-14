@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '/images/Timeless.png'
+import { FaArrowLeft } from 'react-icons/fa';
+import Navbar from './Navbar';
 
 export default function Login({ isSignUpDefault = false }) {
   const [email, setEmail] = useState('');
@@ -109,144 +111,151 @@ export default function Login({ isSignUpDefault = false }) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-custom-cream px-4 font-poppins">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-        <div className="flex justify-center mb-6">
-          <img src={logo} alt="Timeless Threads" className="h-24 w-auto" />
-        </div>
-        <h2 className="text-2xl font-bold text-custom-dark mb-6 text-center font-poppins">{isSignUp ? 'Sign Up' : 'Login'}</h2>
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {isSignUp && signupStep === 1 && (
-            <>
-              <div>
-                <label className="block text-custom-dark font-medium mb-1 font-poppins">Email</label>
-                <input
-                  type="email"
-                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  autoComplete="email"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-custom-dark font-medium mb-1 font-poppins">Password</label>
-                <input
-                  type="password"
-                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  autoComplete="new-password"
-                  required
-                />
-                <p className="text-xs text-gray-500 mt-1 font-poppins">8+ chars, numbers, special characters</p>
-              </div>
-              <button
-                type="button"
-                className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
-                onClick={handleNext}
-              >
-                Next
-              </button>
-            </>
-          )}
-          {isSignUp && signupStep === 2 && (
-            <>
-              <div>
-                <label className="block text-custom-dark font-medium mb-1 font-poppins">Username</label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
-                  value={username}
-                  onChange={e => setUsername(e.target.value)}
-                  autoComplete="username"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-custom-dark font-medium mb-1 font-poppins">First Name</label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
-                  value={firstName}
-                  onChange={e => setFirstName(e.target.value)}
-                  autoComplete="given-name"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-custom-dark font-medium mb-1 font-poppins">Last Name</label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
-                  value={lastName}
-                  onChange={e => setLastName(e.target.value)}
-                  autoComplete="family-name"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
-              >
-                Sign Up
-              </button>
-              <button
-                type="button"
-                className="w-full mt-2 py-2 px-4 bg-custom-cream text-custom-dark font-semibold rounded hover:bg-custom-mint transition font-poppins border border-custom-dark"
-                onClick={() => { setSignupStep(1); setError(''); }}
-              >
-                Back
-              </button>
-            </>
-          )}
-          {!isSignUp && (
-            <>
-              <div>
-                <label className="block text-custom-dark font-medium mb-1 font-poppins">Email or Username</label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  autoComplete="username"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-custom-dark font-medium mb-1 font-poppins">Password</label>
-                <input
-                  type="password"
-                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  autoComplete="current-password"
-                  required
-                />
-                <p className="text-xs text-gray-500 mt-1 font-poppins">8+ chars, numbers, special characters</p>
-              </div>
-              <button
-                type="submit"
-                className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
-              >
-                Login
-              </button>
-            </>
-          )}
-          {error && <div className="text-red-600 text-center text-sm font-poppins mb-2">{error}</div>}
-          {success && <div className="text-green-600 text-center text-sm font-poppins mb-2">{success}</div>}
-        </form>
-        <div className="flex justify-between items-center mt-6">
+    <div className="min-h-screen flex flex-col bg-custom-cream font-poppins">
+      <Navbar alwaysHovered={true} />
+      <div className="flex flex-col justify-center items-center flex-1">
+        <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8 relative">
           <button
-            className="text-sm text-custom-dark font-medium hover:text-custom-mint transition-colors font-poppins focus:outline-none bg-transparent border-none"
-            onClick={() => { setIsSignUp(!isSignUp); setError(''); }}
+            className="absolute top-4 left-4 text-custom-dark hover:text-custom-mint focus:outline-none cursor-pointer"
+            onClick={() => navigate('/')}
+            aria-label="Back to Home"
           >
-            {isSignUp ? 'Back to Login' : "Don't have an account? Sign up"}
+            <FaArrowLeft size={22} />
           </button>
-          <Link to="/" className="text-sm text-custom-dark hover:text-custom-mint transition-colors font-poppins">Back to Home</Link>
+          <h2 className="text-2xl font-bold text-custom-dark mb-6 text-center font-poppins">{isSignUp ? 'Sign Up' : 'Login'}</h2>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {isSignUp && signupStep === 1 && (
+              <>
+                <div>
+                  <label className="block text-custom-dark font-medium mb-1 font-poppins">Email</label>
+                  <input
+                    type="email"
+                    className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    autoComplete="email"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-custom-dark font-medium mb-1 font-poppins">Password</label>
+                  <input
+                    type="password"
+                    className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    autoComplete="new-password"
+                    required
+                  />
+                  <p className="text-xs text-gray-500 mt-1 font-poppins">8+ chars, numbers, special characters</p>
+                </div>
+                <button
+                  type="button"
+                  className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
+                  onClick={handleNext}
+                >
+                  Next
+                </button>
+              </>
+            )}
+            {isSignUp && signupStep === 2 && (
+              <>
+                <div>
+                  <label className="block text-custom-dark font-medium mb-1 font-poppins">Username</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                    autoComplete="username"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-custom-dark font-medium mb-1 font-poppins">First Name</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
+                    value={firstName}
+                    onChange={e => setFirstName(e.target.value)}
+                    autoComplete="given-name"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-custom-dark font-medium mb-1 font-poppins">Last Name</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
+                    value={lastName}
+                    onChange={e => setLastName(e.target.value)}
+                    autoComplete="family-name"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
+                >
+                  Sign Up
+                </button>
+                <button
+                  type="button"
+                  className="w-full mt-2 py-2 px-4 bg-custom-cream text-custom-dark font-semibold rounded hover:bg-custom-mint transition font-poppins border border-custom-dark"
+                  onClick={() => { setSignupStep(1); setError(''); }}
+                >
+                  Back
+                </button>
+              </>
+            )}
+            {!isSignUp && (
+              <>
+                <div>
+                  <label className="block text-custom-dark font-medium mb-1 font-poppins">Email or Username</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    autoComplete="username"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-custom-dark font-medium mb-1 font-poppins">Password</label>
+                  <input
+                    type="password"
+                    className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    autoComplete="current-password"
+                    required
+                  />
+                  <p className="text-xs text-gray-500 mt-1 font-poppins">8+ chars, numbers, special characters</p>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
+                >
+                  Login
+                </button>
+              </>
+            )}
+            {error && <div className="text-red-600 text-center text-sm font-poppins mb-2">{error}</div>}
+            {success && <div className="text-green-600 text-center text-sm font-poppins mb-2">{success}</div>}
+          </form>
+          <div className="flex justify-between items-center mt-6">
+            <button
+              className="text-sm text-custom-dark font-medium hover:text-custom-mint transition-colors font-poppins focus:outline-none bg-transparent border-none cursor-pointer"
+              onClick={() => { setIsSignUp(!isSignUp); setError(''); }}
+            >
+              {isSignUp ? 'Back to Login' : "Don't have an account? Sign up"}
+            </button>
+            <Link to="/forgot-password" className="text-sm text-custom-dark hover:text-custom-mint transition-colors font-poppins">Forgot Password?</Link>
+          </div>
         </div>
+        <p className="mt-8 text-gray-400 text-xs font-poppins">© 2025 Timeless Threads</p>
       </div>
-      <p className="mt-8 text-gray-400 text-xs font-poppins">© 2025 Timeless Threads</p>
     </div>
   );
 } 
