@@ -1,4 +1,4 @@
--- Database Schema for Hydronet
+-- Database Schema for Timeless Threads
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
