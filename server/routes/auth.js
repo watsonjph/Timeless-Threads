@@ -9,6 +9,8 @@ router.post('/login', authController.login);
 router.post('/update-email', authController.updateEmail);
 router.post('/update-username', authController.updateUsername);
 router.post('/update-password', authController.updatePassword);
+router.post('/forgot-password', authController.forgotPassword);
+router.post('/verify-email', authController.verifyEmail);
 router.get('/user/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
