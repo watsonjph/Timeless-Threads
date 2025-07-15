@@ -9,12 +9,23 @@ import DashboardLayout from './Dashboard'
 import ClientManagement from './ClientManagement'
 import Settings from './Settings'
 import SupplierPortal from './SupplierPortal';
-import ForgotPassword from './ForgotPassword';
-import VerifyEmail from './VerifyEmail';
-import ResetPassword from './ResetPassword';
 import { FaInstagram, FaPaypal } from 'react-icons/fa';
 import Marquee from 'react-fast-marquee';
-import Navbar from './Navbar';
+import ProductCarousel from './ProductCarousel';
+import ProductDetails from './ProductDetails';
+import About from './About';
+import Mens from './Mens';
+import Womens from './Womens';
+import Cart from './Cart';
+import Checkout from './Checkout';
+import FAQs from './FAQs';
+
+
+
+
+
+
+
 
 
 // Route Guarding, will improve later na
@@ -33,28 +44,69 @@ function PublicRoute({ children }) {
 function Landing() {
   return (
     <div className="font-poppins min-h-screen flex flex-col">
-      {/* Hero Section with Full Background Image and animated background */}
-      <div className="relative min-h-screen flex flex-col" style={{ minHeight: '60vh' }}>
-        <div 
-          className="absolute inset-0 w-full h-full animate-landing-bg-zoom-slow z-0"
-          style={{
-            backgroundImage: `url(${mainBg})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-          }}
-        />
-        <div className="relative z-10 flex flex-col min-h-screen">
-          <Navbar />
-          {/* Hero Content */}
-          <main className="flex-1 flex flex-col items-center justify-center">
-            <div className="max-w-4xl w-full py-24 px-4 sm:px-6 lg:px-8 text-center">
+      {/* Hero Section with Full Background Image */}
+      <div 
+        className="relative min-h-screen flex flex-col"
+        style={{
+          backgroundImage: `url(${mainBg})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        {/* Header with transparent background */}
+        <header className="bg-transparent hover:bg-white transition-all duration-500 ease-in-out font-poppins group">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-24">
+              {/* Left Navigation */}
+              <nav className="flex items-center space-x-12 -ml-16">
+                <Link to="/mens" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative hover:text-black group">
+                  <span>Men's</span>
+                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
+                </Link>
+                <Link to="/womens" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative hover:text-black group">
+                  <span>Women's</span>
+                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
+                </Link>
+                <Link to="/products" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative hover:text-black group">
+                  <span>All Products</span>
+                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
+                </Link>
+              </nav>
+              
+              {/* Center Logo */}
+              <div className="absolute left-1/2 transform -translate-x-1/2">
+                <img src={logoInverted} alt="Timeless Threads" className="h-28 w-auto group-hover:opacity-0 transition-all duration-500 ease-in-out" />
+                <img src={logo} alt="Timeless Threads" className="h-28 w-auto absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out" />
+              </div>
+              
+              {/* Right Navigation */}
+              <nav className="flex items-center space-x-8 mr-16">
+                <Link to="/login" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative hover:text-black group">
+                  <span>Login</span>
+                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
+                </Link>
+                <Link to="/cart" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out flex items-center space-x-2 uppercase tracking-wider relative hover:text-black group">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
+                  </svg>
+                  <span>CART</span>
+                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
+                </Link>
+              </nav>
             </div>
-          </main>
-        </div>
+          </div>
+        </header>
+
+        {/* Hero Content */}
+        <main className="flex-1 flex flex-col items-center justify-center">
+          <div className="max-w-4xl w-full py-24 px-4 sm:px-6 lg:px-8 text-center">
+          </div>
+        </main>
       </div>
+
       {/* Product Carousel Section */}
-      <section className="bg-custom-cream py-4 w-full mt-4">
+      {/* <section className="bg-custom-cream py-4 w-full">
         <div className="px-0 sm:px-0 lg:px-0 w-full">
           <Marquee
             pauseOnHover={true}
@@ -82,10 +134,10 @@ function Landing() {
             ))}
           </Marquee>
         </div>
-      </section>
+      </section> */}
 
       {/* Opposite Direction Carousel */}
-      <section className="bg-custom-cream pt-0 pb-4 w-full mt-2">
+      {/* <section className="bg-custom-cream pt-0 pb-4 w-full">
         <div className="px-0 sm:px-0 lg:px-0 w-full">
           <Marquee
             pauseOnHover={true}
@@ -114,7 +166,9 @@ function Landing() {
             ))}
           </Marquee>
         </div>
-      </section>
+      </section> */}
+    <ProductCarousel />
+
 
       {/* Footer */}
       <footer className="bg-white font-kanit border-t border-custom-medium mt-8">
@@ -137,7 +191,7 @@ function Landing() {
               </h3>
               <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Shipping</a>
               <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Returns</a>
-              <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">FAQs</a>
+              <Link to="/faqs" className="hover:underline">FAQs</Link>
               <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Sizing Guide</a>
               <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Product Care</a>
               <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Contact Us</a>
@@ -236,27 +290,38 @@ function App() {
         <Route path="/" element={<PublicRoute><Landing /></PublicRoute>} />
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/signup" element={<PublicRoute><Login isSignUpDefault={true} /></PublicRoute>} />
-        <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
-        <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/products/:category/:slug" element={<ProductDetails />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/mens" element={<Mens />} />
+        <Route path="/womens" element={<Womens />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/faqs" element={<FAQs />} />
+
+
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
           <Route path="/dashboard" element={
-            <RoleRoute allowedRoles={["user", "admin", "supplier"]}>
+            <RoleRoute allowedRoles={["Admin"]}>
               <AdminDashboard />
             </RoleRoute>
           } />
+          <Route path="/client-management" element={
+            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
+              <ClientManagement />
+            </RoleRoute>
+          } />
           <Route path="/supplier-portal" element={
-            <RoleRoute allowedRoles={["user", "admin", "supplier"]}>
+            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
               <SupplierPortal />
             </RoleRoute>
           } />
           <Route path="/user-management" element={
-            <RoleRoute allowedRoles={["admin"]}>
+            <RoleRoute allowedRoles={["Admin"]}>
               <PageTitle title="User Management" />
             </RoleRoute>
           } />
           <Route path="/settings" element={
-            <RoleRoute allowedRoles={["user", "admin", "supplier"]}>
+            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
               <Settings />
             </RoleRoute>
           } />

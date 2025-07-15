@@ -41,7 +41,7 @@ const User = {
 
   async findById(id) {
     const [rows] = await pool.query(
-      'SELECT * FROM users WHERE user_id = ?',
+      'SELECT * FROM users WHERE id = ?',
       [id]
     );
     return rows[0];
@@ -50,7 +50,7 @@ const User = {
   async updateEmail(userId, newEmail) {
     const sanitizedEmail = sanitize(newEmail);
     const [result] = await pool.query(
-      'UPDATE users SET email = ? WHERE user_id = ?',
+      'UPDATE users SET email = ? WHERE id = ?',
       [sanitizedEmail, userId]
     );
     return result;
@@ -59,7 +59,7 @@ const User = {
   async updateUsername(userId, newUsername) {
     const sanitizedUsername = sanitize(newUsername);
     const [result] = await pool.query(
-      'UPDATE users SET username = ? WHERE user_id = ?',
+      'UPDATE users SET username = ? WHERE id = ?',
       [sanitizedUsername, userId]
     );
     return result;
@@ -72,7 +72,7 @@ const User = {
     }
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     const [result] = await pool.query(
-      'UPDATE users SET password = ? WHERE user_id = ?',
+      'UPDATE users SET password = ? WHERE id = ?',
       [hashedPassword, userId]
     );
     return result;
