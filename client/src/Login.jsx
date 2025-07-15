@@ -82,7 +82,7 @@ export default function Login({ isSignUpDefault = false }) {
         return;
       }
       if (isSignUp) {
-        setSuccess('Registration successful. You may now log in.');
+        setSuccess('Registration successful! Please check your email to verify your account.');
         setError('');
         setIsSignUp(false);
         setSignupStep(1);
