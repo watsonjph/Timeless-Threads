@@ -10,6 +10,7 @@ import ClientManagement from './ClientManagement'
 import Settings from './Settings'
 import SupplierPortal from './SupplierPortal';
 import ForgotPassword from './ForgotPassword';
+import VerifyEmail from './VerifyEmail';
 import { FaInstagram, FaPaypal } from 'react-icons/fa';
 import Marquee from 'react-fast-marquee';
 import Navbar from './Navbar';
@@ -235,29 +236,25 @@ function App() {
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/signup" element={<PublicRoute><Login isSignUpDefault={true} /></PublicRoute>} />
         <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
           <Route path="/dashboard" element={
-            <RoleRoute allowedRoles={["Admin"]}>
+            <RoleRoute allowedRoles={["user", "admin", "supplier"]}>
               <AdminDashboard />
             </RoleRoute>
           } />
-          <Route path="/client-management" element={
-            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
-              <ClientManagement />
-            </RoleRoute>
-          } />
           <Route path="/supplier-portal" element={
-            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
+            <RoleRoute allowedRoles={["user", "admin", "supplier"]}>
               <SupplierPortal />
             </RoleRoute>
           } />
           <Route path="/user-management" element={
-            <RoleRoute allowedRoles={["Admin"]}>
+            <RoleRoute allowedRoles={["admin"]}>
               <PageTitle title="User Management" />
             </RoleRoute>
           } />
           <Route path="/settings" element={
-            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
+            <RoleRoute allowedRoles={["user", "admin", "supplier"]}>
               <Settings />
             </RoleRoute>
           } />

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import logo from '/images/Timeless.png'
 import { FaArrowLeft } from 'react-icons/fa';
 import Navbar from './Navbar';
@@ -15,12 +15,20 @@ export default function Login({ isSignUpDefault = false }) {
   const [isSignUp, setIsSignUp] = useState(isSignUpDefault);
   const [signupStep, setSignupStep] = useState(1);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const validateEmail = (email) => {
+  useEffect(() => { // Handle success message from verify email , bad code lol
+    if (location.state && location.state.success) {
+      setSuccess(location.state.success);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
+  const validateEmail = (email) => { // Regex for email validation
     return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
   };
 
-  const validatePassword = (pwd) => {
+  const validatePassword = (pwd) => { // Same here
     return pwd.length >= 8 && /[^A-Za-z]/.test(pwd);
   };
 
