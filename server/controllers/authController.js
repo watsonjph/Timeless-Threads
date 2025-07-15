@@ -197,7 +197,7 @@ const authController = {
       if (!user) {
         return res.status(404).json({ error: 'User not found.' });
       }
-      await User.updatePassword(user.id, newPassword);
+      await User.updatePassword(user.user_id, newPassword);
       delete pendingPasswordResets[email];
       return res.status(200).json({ message: 'Password reset successful! You may now log in.' });
     } catch (err) {
