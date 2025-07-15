@@ -3,6 +3,7 @@ import { sendEmail } from '../utils/email.js';
 import crypto from 'crypto';
 
 const pendingRegistrations = {};
+const pendingPasswordResets = {};
 
 const authController = {
   async register(req, res) {
@@ -123,18 +124,21 @@ const authController = {
     try {
       const user = await User.findByEmail(email);
       if (!user) {
-        return res.status(404).json({ error: 'User not found.' });
+        // For security, always respond with success
+        return res.status(200).json({ message: 'If an account with that email exists, a reset link has been sent.' });
       }
-      // Generate a simple reset token
-      const token = Math.random().toString(36).substr(2);
-      // Here you should save the token to the user in DB with expiry (not implemented)
+      // Generate a secure reset token and expiry
+      const token = crypto.randomBytes(32).toString('hex');
+      const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
+      pendingPasswordResets[email] = { token, expiresAt };
+      const resetUrl = `https://timelessthreads.xyz/reset-password?token=${token}`;
       await sendEmail({
         to: email,
         subject: 'Password Reset Request',
-        text: `Reset your password: https://timelessthreads.xyz/reset-password?token=${token}`,
-        html: `<p>Reset your password: <a href=\"https://timelessthreads.xyz/reset-password?token=${token}\">Click here</a></p>`
+        text: `Reset your password: ${resetUrl}`,
+        html: `<p>Reset your password: <a href=\"${resetUrl}\">Click here</a></p>`
       });
-      return res.status(200).json({ message: 'Password reset email sent.' });
+      return res.status(200).json({ message: 'If an account with that email exists, a reset link has been sent.' });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: 'Failed to send reset email.' });
