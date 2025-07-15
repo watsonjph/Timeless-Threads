@@ -12,11 +12,11 @@ app.use(cors({
 }));
 app.use(express.json());
 
-
-// Simple health check route
+// API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/clients', clientRoutes);
 
+// Health check
 app.get('/api', (req, res) => {
   res.json({ 
     status: 'success',
