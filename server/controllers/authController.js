@@ -1,5 +1,5 @@
 import User from '../models/user.js';
-import { sendEmail } from '../utils/email.js';
+const { sendEmail } = require('../utils/email.js');
 import crypto from 'crypto';
 
 const pendingRegistrations = {};
