@@ -11,6 +11,7 @@ import Settings from './Settings'
 import SupplierPortal from './SupplierPortal';
 import ForgotPassword from './ForgotPassword';
 import VerifyEmail from './VerifyEmail';
+import ResetPassword from './ResetPassword';
 import { FaInstagram, FaPaypal } from 'react-icons/fa';
 import Marquee from 'react-fast-marquee';
 import Navbar from './Navbar';
@@ -237,6 +238,7 @@ function App() {
         <Route path="/signup" element={<PublicRoute><Login isSignUpDefault={true} /></PublicRoute>} />
         <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
           <Route path="/dashboard" element={
             <RoleRoute allowedRoles={["user", "admin", "supplier"]}>

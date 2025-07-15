@@ -175,6 +175,36 @@ const authController = {
       return res.status(500).json({ error: 'Failed to complete registration.' });
     }
   },
+
+  async resetPassword(req, res) {
+    const { token, newPassword } = req.body;
+    if (!token || !newPassword) {
+      return res.status(400).json({ error: 'Token and new password are required.' });
+    }
+    // Find the email associated with the token
+    const entry = Object.entries(pendingPasswordResets).find(([_email, data]) => data.token === token);
+    if (!entry) {
+      return res.status(400).json({ error: 'Invalid or expired token.' });
+    }
+    const [email, data] = entry;
+    if (Date.now() > data.expiresAt) {
+      delete pendingPasswordResets[email];
+      return res.status(400).json({ error: 'Token has expired.' });
+    }
+    try {
+      // Update the user's password using the existing User.updatePassword method
+      const user = await User.findByEmail(email);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found.' });
+      }
+      await User.updatePassword(user.id, newPassword);
+      delete pendingPasswordResets[email];
+      return res.status(200).json({ message: 'Password reset successful! You may now log in.' });
+    } catch (err) {
+      console.error('Error resetting password:', err);
+      return res.status(500).json({ error: 'Failed to reset password.' });
+    }
+  },
 };
 
 export default authController; 
