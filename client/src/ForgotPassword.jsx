@@ -10,16 +10,29 @@ export default function ForgotPassword() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setMessage('');
     if (!email) {
       setError('Please enter your email address.');
-      setMessage('');
       return;
     }
-    // Simulate sending reset email, TEMPORARY will host a backend later
-    setMessage('If an account with that email exists, a reset link has been sent.');
-    setError('');
+    try {
+      const res = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setMessage(data.message || 'If an account with that email exists, a reset link has been sent.');
+      } else {
+        setError(data.error || 'Failed to send reset link.');
+      }
+    } catch {
+      setError('Network error.');
+    }
   };
 
   return (
