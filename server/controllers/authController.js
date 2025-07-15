@@ -132,15 +132,17 @@ const authController = {
       const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
       pendingPasswordResets[email] = { token, expiresAt };
       const resetUrl = `https://timelessthreads.xyz/reset-password?token=${token}`;
+      console.log('Forgot password requested for:', email);
       await sendEmail({
         to: email,
         subject: 'Password Reset Request',
         text: `Reset your password: ${resetUrl}`,
         html: `<p>Reset your password: <a href=\"${resetUrl}\">Click here</a></p>`
       });
+      console.log('Password reset email sent (or attempted) to:', email);
       return res.status(200).json({ message: 'If an account with that email exists, a reset link has been sent.' });
     } catch (err) {
-      console.error(err);
+      console.error('Error sending password reset email:', err);
       return res.status(500).json({ error: 'Failed to send reset email.' });
     }
   },
