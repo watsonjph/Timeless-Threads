@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.js';
-import clientRoutes from './routes/clientRoute.js'; 
 
 const app = express();
 
@@ -14,7 +13,6 @@ app.use(express.json());
 
 // API routes
 app.use('/api/auth', authRoutes);
-app.use('/api/clients', clientRoutes);
 
 // Health check
 app.get('/api', (req, res) => {

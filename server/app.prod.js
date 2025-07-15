@@ -3,7 +3,6 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.js';
-import clientRoutes from './routes/clientRoute.js'; 
 
 const app = express();
 
@@ -16,7 +15,6 @@ app.use(express.json());
 
 // API routes
 app.use('/api/auth', authRoutes);
-app.use('/api/clients', clientRoutes);
 
 // Serve static files from the frontend build
 const __filename = fileURLToPath(import.meta.url);
@@ -39,7 +37,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Production server running on http://localhost:${PORT}`);
 }); 

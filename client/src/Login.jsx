@@ -65,8 +65,8 @@ export default function Login({ isSignUpDefault = false }) {
     }
     try {
       const endpoint = isSignUp
-        ? 'http://localhost:3000/api/auth/register'
-        : 'http://localhost:3000/api/auth/login';
+        ? '/api/auth/register'
+        : '/api/auth/login';
       const body = isSignUp
         ? { email, username, firstName, lastName, password }
         : { email, password };
