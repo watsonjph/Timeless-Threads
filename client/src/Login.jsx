@@ -123,13 +123,6 @@ export default function Login({ isSignUpDefault = false }) {
       <Navbar alwaysHovered={true} />
       <div className="flex flex-col justify-center items-center flex-1">
         <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8 relative">
-          <button
-            className="absolute top-4 left-4 text-custom-dark hover:text-custom-mint focus:outline-none cursor-pointer"
-            onClick={() => navigate('/')}
-            aria-label="Back to Home"
-          >
-            <FaArrowLeft size={22} />
-          </button>
           <h2 className="text-2xl font-bold text-custom-dark mb-6 text-center font-poppins">{isSignUp ? 'Sign Up' : 'Login'}</h2>
           <form onSubmit={handleSubmit} className="space-y-5">
             {isSignUp && signupStep === 1 && (
@@ -201,19 +194,21 @@ export default function Login({ isSignUpDefault = false }) {
                     required
                   />
                 </div>
-                <button
-                  type="submit"
-                  className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
-                >
-                  Sign Up
-                </button>
-                <button
-                  type="button"
-                  className="w-full mt-2 py-2 px-4 bg-custom-cream text-custom-dark font-semibold rounded hover:bg-custom-mint transition font-poppins border border-custom-dark"
-                  onClick={() => { setSignupStep(1); setError(''); }}
-                >
-                  Back
-                </button>
+                <div className="flex flex-row gap-2 mt-4">
+                  <button
+                    type="button"
+                    className="flex-1 py-2 px-4 bg-gray-200 text-custom-dark font-semibold rounded hover:bg-gray-300 transition font-poppins"
+                    onClick={() => setSignupStep(1)}
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
+                  >
+                    Sign Up
+                  </button>
+                </div>
               </>
             )}
             {!isSignUp && (

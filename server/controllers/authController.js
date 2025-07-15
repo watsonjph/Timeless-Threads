@@ -22,11 +22,9 @@ const authController = {
       // Generate token and expiry
       const token = crypto.randomBytes(32).toString('hex');
       const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
-      // Hash password for storage
-      const hashedPassword = await import('bcryptjs').then(b => b.hash(password, 10));
-      // Store pending registration
+      // Store pending registration (store plain password, not hashed)
       pendingRegistrations[email] = {
-        email, username, firstName, lastName, password: hashedPassword, token, expiresAt
+        email, username, firstName, lastName, password, token, expiresAt
       };
       // Send verification email
       const verifyUrl = `https://timelessthreads.xyz/verify-email?token=${token}`;
