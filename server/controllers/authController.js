@@ -57,7 +57,7 @@ const authController = {
         message: 'Login successful.',
         username: user.username,
         role: user.role,
-        id: user.id
+        id: user.user_id
       });
     } catch (err) {
       console.error(err);

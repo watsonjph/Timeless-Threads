@@ -25,6 +25,11 @@ export default function VerifyEmail() {
           localStorage.setItem('role', data.role);
           if (data.id) localStorage.setItem('userId', data.id);
           
+          // Dispatch custom event to notify Navbar of login
+          window.dispatchEvent(new CustomEvent('userLogin', { 
+            detail: { username: data.username, userId: data.id } 
+          }));
+          
           // Check for returnTo parameter
           const returnTo = localStorage.getItem('returnTo');
           localStorage.removeItem('returnTo'); // Clean up

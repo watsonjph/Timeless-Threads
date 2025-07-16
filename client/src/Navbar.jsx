@@ -49,7 +49,34 @@ export default function Navbar({ alwaysHovered = false }) {
     };
 
     checkLoginStatus();
-  }, []);
+
+    // Listen for storage changes (when user logs in/out in another tab)
+    const handleStorageChange = (e) => {
+      if (e.key === 'username' || e.key === 'userId') {
+        checkLoginStatus();
+      }
+    };
+
+    // Listen for custom login event
+    const handleUserLogin = (e) => {
+      checkLoginStatus();
+    };
+
+    // Listen for custom logout event
+    const handleUserLogout = (e) => {
+      checkLoginStatus();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('userLogin', handleUserLogin);
+    window.addEventListener('userLogout', handleUserLogout);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('userLogin', handleUserLogin);
+      window.removeEventListener('userLogout', handleUserLogout);
+    };
+  }, [location.pathname]);
 
 
 
@@ -58,6 +85,10 @@ export default function Navbar({ alwaysHovered = false }) {
     setIsLoggedIn(false);
     setProfilePicUrl('');
     setUsername('');
+    
+    // Dispatch custom event to notify other components of logout
+    window.dispatchEvent(new CustomEvent('userLogout'));
+    
     navigate('/');
   };
 

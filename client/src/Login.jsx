@@ -114,6 +114,11 @@ export default function Login({ isSignUpDefault = false }) {
         localStorage.setItem('role', data.role);
         if (data.id) localStorage.setItem('userId', data.id);
         
+        // Dispatch custom event to notify Navbar of login
+        window.dispatchEvent(new CustomEvent('userLogin', { 
+          detail: { username: data.username, userId: data.id } 
+        }));
+        
         // Route users based on their role and return URL
         if (returnTo === 'checkout') {
           // Redirect back to checkout if they came from there
