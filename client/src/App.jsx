@@ -46,7 +46,20 @@ function PrivateRoute({ children }) {
 }
 
 function PublicRoute({ children }) {
-  return !isLoggedIn() ? children : <Navigate to="/dashboard" />
+  const isLoggedIn = !!localStorage.getItem('username');
+  const role = localStorage.getItem('role');
+  
+  if (!isLoggedIn) {
+    return children;
+  }
+  
+  // Only redirect admin and supplier users to dashboard
+  // Regular users can access public routes
+  if (role === 'admin' || role === 'supplier') {
+    return <Navigate to="/dashboard" />;
+  }
+  
+  return children;
 }
 
 function Landing() {
@@ -242,13 +255,71 @@ function AdminDashboard() {
   );
 }
 
+// Supplier Dashboard - Only accessible by Supplier role
+function SupplierDashboard() {
+  const username = localStorage.getItem('username') || 'User';
+  const role = localStorage.getItem('role') || 'Employee';
+  const stats = [
+    { label: "Total Orders", value: "Coming Soon" },
+    { label: "Products Listed", value: "Coming Soon" },
+    { label: "Revenue", value: "Coming Soon" },
+  ];
+  return (
+    <main className="flex-1 p-8 flex flex-col items-center justify-center transition-all duration-300">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8 w-full max-w-4xl">
+        <div>
+          <h1 className="text-3xl font-bold text-custom-dark font-poppins">Supplier Dashboard</h1>
+          <p className="text-gray-600 font-nunito">Welcome back, {username} ({role})</p>
+        </div>
+        {/* Logo removed for repurposing */}
+      </div>
+      {/* Stat Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 w-full max-w-4xl">
+        {stats.map((stat, index) => (
+          <div
+            key={index}
+            className="bg-white shadow-md rounded-xl p-6 text-center hover:shadow-lg transition"
+          >
+            <p className="text-3xl font-bold text-custom-dark font-poppins">{stat.value}</p>
+            <p className="text-gray-600 mt-2 font-kanit">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+      {/* Chart Placeholder */}
+      <div className="bg-white rounded-xl p-6 shadow-md w-full max-w-4xl">
+        <h2 className="text-xl font-semibold text-gray-700 mb-3 font-kanit">
+          Order Overview
+        </h2>
+        <div className="h-52 flex items-center justify-center border-2 border-dashed border-gray-300 text-gray-400 rounded-lg font-nunito">
+          📦 Order chart coming soon...
+        </div>
+      </div>
+    </main>
+  );
+}
+
+// Dynamic Dashboard - Shows different content based on role
+function DynamicDashboard() {
+  const role = localStorage.getItem('role');
+  
+  if (role === 'admin') {
+    return <AdminDashboard />;
+  } else if (role === 'supplier') {
+    return <SupplierDashboard />;
+  } else {
+    // Fallback - redirect to landing page
+    return <Navigate to="/" />;
+  }
+}
+
 function getRole() {
   return localStorage.getItem('role') || 'Employee';
 }
 
 function RoleRoute({ allowedRoles, children }) {
   const role = getRole();
-  return allowedRoles.includes(role) ? children : <Navigate to="/dashboard" />;
+  return allowedRoles.includes(role) ? children : <Navigate to="/" />;
 }
 
 function App() {
@@ -275,18 +346,18 @@ function App() {
 
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
           <Route path="/dashboard" element={
-            <RoleRoute allowedRoles={["user", "admin", "supplier"]}>
-              <AdminDashboard />
+            <RoleRoute allowedRoles={["admin", "supplier"]}>
+              <DynamicDashboard />
             </RoleRoute>
           } />
 
           <Route path="/supplier-portal" element={
-            <RoleRoute allowedRoles={["user", "admin", "supplier"]}>
+            <RoleRoute allowedRoles={["admin", "supplier"]}>
               <SupplierPortal />
             </RoleRoute>
           } />
           <Route path="/settings" element={
-            <RoleRoute allowedRoles={["user", "admin", "supplier"]}>
+            <RoleRoute allowedRoles={["admin", "supplier"]}>
               <Settings />
             </RoleRoute>
           } />
