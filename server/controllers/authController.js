@@ -168,8 +168,15 @@ const authController = {
         lastName: entry.lastName,
         password: entry.password
       });
+      // Fetch the user to get their role and id
+      const user = await User.findByEmail(entry.email);
       delete pendingRegistrations[entry.email];
-      return res.status(201).json({ message: 'Email verified and registration complete.' });
+      return res.status(201).json({ 
+        message: 'Email verified and registration complete.',
+        role: user.role,
+        username: user.username,
+        id: user.user_id
+      });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: 'Failed to complete registration.' });

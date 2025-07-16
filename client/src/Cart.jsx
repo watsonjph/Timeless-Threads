@@ -20,6 +20,17 @@ const Cart = () => {
 
   const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
+  const handleCheckout = () => {
+    const isLoggedIn = !!localStorage.getItem('username');
+    if (!isLoggedIn) {
+      alert('Please log in to proceed to checkout.');
+      window.location.href = '/login?returnTo=checkout';
+      return;
+    }
+    // If logged in, navigate to checkout
+    window.location.href = '/checkout';
+  };
+
   return (
     <div className="font-poppins min-h-screen flex flex-col bg-custom-cream">
       <Navbar alwaysHovered={true} />
@@ -53,11 +64,11 @@ const Cart = () => {
 
             <div className="text-right text-custom-dark text-xl font-bold pt-4 border-t border-gray-300 space-y-4">
                 <p>Total: ₱{totalPrice.toLocaleString()}</p>
-            <Link
-                to="/checkout"
+            <button
+                onClick={handleCheckout}
                 className="inline-block bg-black text-white px-6 py-3 rounded-full hover:bg-gray-800 hover:shadow-lg transition-all duration-300 ease-in-out">
                 Proceed to Checkout
-            </Link>
+            </button>
             </div>
 
           </div>

@@ -17,6 +17,10 @@ export default function Login({ isSignUpDefault = false }) {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Get return URL from query parameters
+  const searchParams = new URLSearchParams(location.search);
+  const returnTo = searchParams.get('returnTo');
+
   useEffect(() => { // Handle success message from verify email , bad code lol
     if (location.state && location.state.success) {
       setSuccess(location.state.success);
@@ -28,8 +32,8 @@ export default function Login({ isSignUpDefault = false }) {
     return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
   };
 
-  const validatePassword = (pwd) => { // Same here
-    return pwd.length >= 8 && /[^A-Za-z]/.test(pwd);
+  const validatePassword = (pwd) => { // Updated password validation
+    return pwd.length >= 8 && /\d/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
   };
 
   const handleNext = (e) => {
@@ -43,7 +47,7 @@ export default function Login({ isSignUpDefault = false }) {
       return;
     }
     if (!validatePassword(password)) {
-      setError('Password must be at least 8 characters, includes a number or a special character.');
+      setError('Password must be at least 8 characters, includes a number and a special character.');
       return;
     }
     setError('');
@@ -68,7 +72,7 @@ export default function Login({ isSignUpDefault = false }) {
       }
     }
     if (!validatePassword(password)) {
-      setError('Password must be at least 8 characters and include a number or special character.');
+      setError('Password must be at least 8 characters and include a number and a special character.');
       return;
     }
     try {
@@ -90,6 +94,10 @@ export default function Login({ isSignUpDefault = false }) {
         return;
       }
       if (isSignUp) {
+        // Store returnTo parameter for after email verification
+        if (returnTo) {
+          localStorage.setItem('returnTo', returnTo);
+        }
         setSuccess('Registration successful! Please check your email to verify your account.');
         setError('');
         setIsSignUp(false);
@@ -105,8 +113,11 @@ export default function Login({ isSignUpDefault = false }) {
         localStorage.setItem('role', data.role);
         if (data.id) localStorage.setItem('userId', data.id);
         
-        // Route users based on their role
-        if (data.role === 'Admin' || data.role === 'Supplier') {
+        // Route users based on their role and return URL
+        if (returnTo === 'checkout') {
+          // Redirect back to checkout if they came from there
+          navigate('/checkout');
+        } else if (data.role === 'Admin' || data.role === 'Supplier') {
           navigate('/dashboard');
         } else {
           // Regular users go back to landing page
@@ -148,7 +159,7 @@ export default function Login({ isSignUpDefault = false }) {
                   autoComplete="new-password"
                   required
                 />
-                <p className="text-xs text-gray-500 mt-1 font-poppins">8+ chars, numbers, special characters</p>
+                <p className="text-xs text-gray-500 mt-1 font-poppins">8+ chars, number, special character</p>
               </div>
               <button
                 type="button"
@@ -234,7 +245,7 @@ export default function Login({ isSignUpDefault = false }) {
                   autoComplete="current-password"
                   required
                 />
-                <p className="text-xs text-gray-500 mt-1 font-poppins">8+ chars, numbers, special characters</p>
+                <p className="text-xs text-gray-500 mt-1 font-poppins">8+ chars, number, special character</p>
               </div>
               <button
                 type="submit"

@@ -290,19 +290,26 @@ const ProductDetails = () => {
   }, [product?.sku]);
 
   const addToCart = () => {
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const existingIndex = cart.findIndex(item => item.sku === product.sku);
+    const isLoggedIn = !!localStorage.getItem('username');
+    
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingIndex = cart.findIndex(item => item.sku === product.sku);
 
-  if (existingIndex !== -1) {
-    if (cart[existingIndex].quantity < product.stock) {
-      cart[existingIndex].quantity += 1;
+    if (existingIndex !== -1) {
+      if (cart[existingIndex].quantity < product.stock) {
+        cart[existingIndex].quantity += 1;
+      }
+    } else {
+      cart.push({ ...product, quantity: 1 });
     }
-  } else {
-    cart.push({ ...product, quantity: 1 });
-  }
 
-  localStorage.setItem('cart', JSON.stringify(cart));
-  alert(`${product.name} added to cart.`);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    if (isLoggedIn) {
+      alert(`${product.name} added to cart.`);
+    } else {
+      alert(`${product.name} added to cart. Please log in to checkout.`);
+    }
   };
 
 

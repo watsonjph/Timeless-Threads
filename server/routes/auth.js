@@ -16,9 +16,43 @@ router.get('/user/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ error: 'User not found.' });
-    res.json({ email: user.email, username: user.username });
+    res.json({ 
+      email: user.email, 
+      username: user.username,
+      has_profile_pic: user.has_profile_pic,
+      profile_pic_url: user.profile_pic_url
+    });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch user.' });
+  }
+});
+
+router.get('/users', async (req, res) => {
+  try {
+    const users = await User.findAll();
+    res.json({ users });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch users.' });
+  }
+});
+
+router.post('/update-user-role', async (req, res) => {
+  try {
+    const { userId, newRole } = req.body;
+    if (!userId || !newRole) {
+      return res.status(400).json({ error: 'User ID and new role are required.' });
+    }
+    
+    // Validate role
+    const validRoles = ['user', 'supplier', 'admin'];
+    if (!validRoles.includes(newRole.toLowerCase())) {
+      return res.status(400).json({ error: 'Invalid role.' });
+    }
+    
+    await User.updateRole(userId, newRole.toLowerCase());
+    res.json({ message: 'User role updated successfully.' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update user role.' });
   }
 });
 
