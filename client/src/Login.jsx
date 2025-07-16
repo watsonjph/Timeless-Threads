@@ -71,7 +71,8 @@ export default function Login({ isSignUpDefault = false }) {
         return;
       }
     }
-    if (!validatePassword(password)) {
+    // Only validate password for registration, not login
+    if (isSignUp && !validatePassword(password)) {
       setError('Password must be at least 8 characters and include a number and a special character.');
       return;
     }
@@ -245,7 +246,6 @@ export default function Login({ isSignUpDefault = false }) {
                   autoComplete="current-password"
                   required
                 />
-                <p className="text-xs text-gray-500 mt-1 font-poppins">8+ chars, number, special character</p>
               </div>
               <button
                 type="submit"
