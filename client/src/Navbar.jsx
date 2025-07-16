@@ -33,6 +33,12 @@ export default function Navbar({ alwaysHovered = false }) {
     };
 
     const fetchUserProfilePic = async (userId) => {
+      // For now, always use default profile picture
+      // TODO: Implement custom profile picture functionality later
+      setProfilePicUrl('/api/uploads/default-pfp.png');
+      
+      // Uncomment this when custom profile pictures are implemented:
+      /*
       try {
         const res = await fetch(`/api/auth/user/${userId}`);
         const data = await res.json();
@@ -43,9 +49,11 @@ export default function Navbar({ alwaysHovered = false }) {
           setProfilePicUrl('/api/uploads/default-pfp.png');
         }
       } catch (err) {
+        console.error('Error fetching user profile:', err);
         // Fallback to default profile picture
         setProfilePicUrl('/api/uploads/default-pfp.png');
       }
+      */
     };
 
     checkLoginStatus();
@@ -137,14 +145,33 @@ export default function Navbar({ alwaysHovered = false }) {
             {isLoggedIn ? (
               <div className="relative profile-dropdown group">
                 <div className="flex items-center space-x-2 cursor-pointer">
-                  <img
-                    src={profilePicUrl || '/api/uploads/default-pfp.png'}
-                    alt="Profile"
-                    className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 hover:border-gray-400 transition-colors"
-                    onError={(e) => {
-                      e.target.src = '/api/uploads/default-pfp.png';
-                    }}
-                  />
+                  <div className="w-10 h-10 rounded-full border-2 border-gray-300 hover:border-gray-400 transition-colors overflow-hidden bg-gray-200 flex items-center justify-center">
+                    <img
+                      src={profilePicUrl || '/api/uploads/default-pfp.png'}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        console.error('Profile image failed to load:', e.target.src);
+                        // Hide the image and show a fallback icon
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                      onLoad={() => {
+                        console.log('Profile image loaded successfully:', profilePicUrl);
+                      }}
+                    />
+                    {/* Fallback icon when image fails to load */}
+                    <svg 
+                      className="w-6 h-6 text-gray-500 hidden" 
+                      fill="currentColor" 
+                      viewBox="0 0 20 20"
+                      onError={(e) => {
+                        e.target.style.display = 'flex';
+                      }}
+                    >
+                      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                    </svg>
+                  </div>
                   <span className={`${navTextClass} text-sm font-medium`}>
                     {username}
                   </span>
