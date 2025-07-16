@@ -124,54 +124,55 @@ export default function Login({ isSignUpDefault = false }) {
         <form onSubmit={handleSubmit} className="space-y-5">
           {isSignUp && (
             <>
-              <div>
-                <label className="block text-custom-dark font-medium mb-1 font-poppins">Email</label>
-                <input
-                  type="email"
-                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  autoComplete="email"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-custom-dark font-medium mb-1 font-poppins">Username</label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
-                  value={username}
-                  onChange={e => setUsername(e.target.value)}
-                  autoComplete="username"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-custom-dark font-medium mb-1 font-poppins">Password</label>
-                <input
-                  type="password"
-                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  autoComplete="new-password"
-                  required
-                />
-                <p className="text-xs text-gray-500 mt-1 font-poppins">8+ chars, number, special character</p>
-              </div>
-              <div>
-                <label className="block text-custom-dark font-medium mb-1 font-poppins">Confirm Password</label>
-                <input
-                  type="password"
-                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
-                  value={confirmPassword}
-                  onChange={e => setConfirmPassword(e.target.value)}
-                  autoComplete="new-password"
-                  required
-                />
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-custom-dark font-medium mb-1 font-poppins">Email</label>
+                  <input
+                    type="email"
+                    className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    autoComplete="email"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-custom-dark font-medium mb-1 font-poppins">Username</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                    autoComplete="username"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-custom-dark font-medium mb-1 font-poppins">Password</label>
+                  <input
+                    type="password"
+                    className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    autoComplete="new-password"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-custom-dark font-medium mb-1 font-poppins">Confirm Password</label>
+                  <input
+                    type="password"
+                    className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
+                    value={confirmPassword}
+                    onChange={e => setConfirmPassword(e.target.value)}
+                    autoComplete="new-password"
+                    required
+                  />
+                </div>
               </div>
               <button
                 type="submit"
-                className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
+                className="w-full py-2 px-4 mt-6 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
               >
                 Sign Up
               </button>
