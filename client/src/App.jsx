@@ -23,6 +23,7 @@ import Womens from './Womens';
 import Cart from './Cart';
 import Checkout from './Checkout';
 import FAQs from './FAQs';
+import Products from './Products';
 
 
 
@@ -255,6 +256,7 @@ function App() {
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/signup" element={<PublicRoute><Login isSignUpDefault={true} /></PublicRoute>} />
         <Route path="/products/:category/:slug" element={<ProductDetails />} />
+        <Route path="/products" element={<Products />} />
         <Route path="/about" element={<About />} />
         <Route path="/mens" element={<Mens />} />
         <Route path="/womens" element={<Womens />} />

@@ -66,3 +66,4 @@ const ProductCarousel = () => (
 );
 
 export default ProductCarousel;
+export { productsTop, productsBottom };
