@@ -7,13 +7,16 @@ import Navbar from './Navbar';
 export default function Login({ isSignUpDefault = false }) {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  // Remove firstName and lastName
+  // const [firstName, setFirstName] = useState('');
+  // const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [isSignUp, setIsSignUp] = useState(isSignUpDefault);
-  const [signupStep, setSignupStep] = useState(1);
+  // Remove signupStep state
+  // const [signupStep, setSignupStep] = useState(1);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -36,33 +39,25 @@ export default function Login({ isSignUpDefault = false }) {
     return pwd.length >= 8 && /\d/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
   };
 
-  const handleNext = (e) => {
-    e.preventDefault();
-    if (!email || !password) {
-      setError('Please enter both email and password.');
-      return;
-    }
-    if (!validateEmail(email)) {
-      setError('Please enter a valid email address.');
-      return;
-    }
-    if (!validatePassword(password)) {
-      setError('Password must be at least 8 characters, includes a number and a special character.');
-      return;
-    }
-    setError('');
-    setSignupStep(2);
-  };
+  // Remove handleNext, merge its logic into handleSubmit
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSignUp) {
-      if (signupStep === 1) {
-        handleNext(e);
+      if (!email || !username || !password || !confirmPassword) {
+        setError('Please fill out all fields.');
         return;
       }
-      if (!username || !firstName || !lastName) {
-        setError('All fields are required.');
+      if (!validateEmail(email)) {
+        setError('Please enter a valid email address.');
+        return;
+      }
+      if (!validatePassword(password)) {
+        setError('Password must be at least 8 characters and include a number and a special character.');
+        return;
+      }
+      if (password !== confirmPassword) {
+        setError('Passwords do not match.');
         return;
       }
     } else {
@@ -71,17 +66,12 @@ export default function Login({ isSignUpDefault = false }) {
         return;
       }
     }
-    // Only validate password for registration, not login
-    if (isSignUp && !validatePassword(password)) {
-      setError('Password must be at least 8 characters and include a number and a special character.');
-      return;
-    }
     try {
       const endpoint = isSignUp
         ? '/api/auth/register'
         : '/api/auth/login';
       const body = isSignUp
-        ? { email, username, firstName, lastName, password }
+        ? { email, username, password }
         : { email, password };
       const res = await fetch(endpoint, {
         method: 'POST',
@@ -95,38 +85,28 @@ export default function Login({ isSignUpDefault = false }) {
         return;
       }
       if (isSignUp) {
-        // Store returnTo parameter for after email verification
         if (returnTo) {
           localStorage.setItem('returnTo', returnTo);
         }
         setSuccess('Registration successful! Please check your email to verify your account.');
         setError('');
         setIsSignUp(false);
-        setSignupStep(1);
         setEmail('');
         setUsername('');
-        setFirstName('');
-        setLastName('');
         setPassword('');
+        setConfirmPassword('');
       } else {
-        // Store username and role in localStorage for dashboard use
         localStorage.setItem('username', data.username);
         localStorage.setItem('role', data.role);
         if (data.id) localStorage.setItem('userId', data.id);
-        
-        // Dispatch custom event to notify Navbar of login
         window.dispatchEvent(new CustomEvent('userLogin', { 
           detail: { username: data.username, userId: data.id } 
         }));
-        
-        // Route users based on their role and return URL
         if (returnTo === 'checkout') {
-          // Redirect back to checkout if they came from there
           navigate('/checkout');
         } else if (data.role === 'admin' || data.role === 'supplier') {
           navigate('/dashboard');
         } else {
-          // Regular users go back to landing page
           navigate('/');
         }
       }
@@ -142,7 +122,7 @@ export default function Login({ isSignUpDefault = false }) {
         <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8 relative">
           <h2 className="text-2xl font-bold text-custom-dark mb-6 text-center font-poppins">{isSignUp ? 'Sign Up' : 'Login'}</h2>
         <form onSubmit={handleSubmit} className="space-y-5">
-          {isSignUp && signupStep === 1 && (
+          {isSignUp && (
             <>
               <div>
                 <label className="block text-custom-dark font-medium mb-1 font-poppins">Email</label>
@@ -152,6 +132,17 @@ export default function Login({ isSignUpDefault = false }) {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   autoComplete="email"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-custom-dark font-medium mb-1 font-poppins">Username</label>
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
+                  autoComplete="username"
                   required
                 />
               </div>
@@ -167,65 +158,23 @@ export default function Login({ isSignUpDefault = false }) {
                 />
                 <p className="text-xs text-gray-500 mt-1 font-poppins">8+ chars, number, special character</p>
               </div>
+              <div>
+                <label className="block text-custom-dark font-medium mb-1 font-poppins">Confirm Password</label>
+                <input
+                  type="password"
+                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  autoComplete="new-password"
+                  required
+                />
+              </div>
               <button
-                type="button"
+                type="submit"
                 className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
-                onClick={handleNext}
               >
-                Next
+                Sign Up
               </button>
-            </>
-          )}
-          {isSignUp && signupStep === 2 && (
-            <>
-              <div>
-                <label className="block text-custom-dark font-medium mb-1 font-poppins">Username</label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
-                  value={username}
-                  onChange={e => setUsername(e.target.value)}
-                  autoComplete="username"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-custom-dark font-medium mb-1 font-poppins">First Name</label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
-                  value={firstName}
-                  onChange={e => setFirstName(e.target.value)}
-                  autoComplete="given-name"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-custom-dark font-medium mb-1 font-poppins">Last Name</label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 border border-custom-dark rounded focus:outline-none focus:ring-2 focus:ring-custom-dark font-poppins"
-                  value={lastName}
-                  onChange={e => setLastName(e.target.value)}
-                  autoComplete="family-name"
-                  required
-                />
-              </div>
-                <div className="flex flex-row gap-2 mt-4">
-                  <button
-                    type="button"
-                    className="flex-1 py-2 px-4 bg-gray-200 text-custom-dark font-semibold rounded hover:bg-gray-300 transition font-poppins"
-                    onClick={() => setSignupStep(1)}
-                  >
-                    Back
-                  </button>
-                  <button
-                    type="submit"
-                    className="flex-1 py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
-                  >
-                    Sign Up
-                  </button>
-                </div>
             </>
           )}
           {!isSignUp && (
