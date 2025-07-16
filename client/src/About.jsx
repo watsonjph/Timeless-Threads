@@ -1,9 +1,11 @@
 // client/src/About.jsx
 import React from 'react';
+import Navbar from './Navbar';
 
 const About = () => {
   return (
     <div className="font-poppins text-custom-dark">
+      <Navbar alwaysHovered={true} />
       {/* Hero Section */}
       <section className="relative h-[60vh] bg-cover bg-center flex items-center justify-center text-white"
         style={{ backgroundImage: "url('/images/about-hero.jpg')" }}>

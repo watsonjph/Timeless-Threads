@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import authRoutes from './routes/auth.js';
-import clientRoutes from './routes/clientRoute.js'; 
+import authRoutes from './routes/auth.js'; 
 
 const app = express();
 
@@ -13,9 +12,8 @@ app.use(cors({
 app.use(express.json());
 
 
-// Simple health check route
+// API routes
 app.use('/api/auth', authRoutes);
-app.use('/api/clients', clientRoutes);
 
 app.get('/api', (req, res) => {
   res.json({ 

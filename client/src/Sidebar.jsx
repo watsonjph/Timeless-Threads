@@ -8,7 +8,7 @@ import logoInverted from '/images/Timeless-Inverted.png'
 // Navigation links configuration
 const navLinks = [
   { to: '/dashboard', label: 'Dashboard', icon: FiGrid },
-  { to: '/client-management', label: 'Client Management', icon: FiUsers },
+
   { to: '/supplier-portal', label: 'Supplier Portal', icon: FiTruck },
   { to: '/user-management', label: 'User Management', icon: FiUserCheck },
 ];

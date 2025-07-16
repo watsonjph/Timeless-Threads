@@ -40,6 +40,9 @@ api.interceptors.response.use(
 export const authAPI = {
   login: (credentials) => api.post('/auth/login', credentials),
   register: (userData) => api.post('/auth/register', userData),
+  forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
+  verifyEmail: (token) => api.post('/auth/verify-email', { token }),
+  resetPassword: (token, newPassword) => api.post('/auth/reset-password', { token, newPassword }),
   logout: () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
@@ -49,10 +52,6 @@ export const authAPI = {
 // Health check
 export const healthCheck = () => api.get('/');
 
-// Client API calls
-export const clientAPI = {
-  getAll: () => api.get('/clients'),
-  create: (clientData) => api.post('/clients', clientData),
-};
+
 
 export default api; 

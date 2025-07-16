@@ -1,6 +1,7 @@
 // client/src/Checkout.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 
 const Checkout = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -49,8 +50,10 @@ const Checkout = () => {
   };
 
   return (
-    <div className="font-poppins min-h-screen bg-custom-cream p-8 relative">
-      <h1 className="text-3xl font-bold text-center text-custom-dark mb-8">Checkout</h1>
+    <div className="font-poppins min-h-screen bg-custom-cream relative">
+      <Navbar alwaysHovered={true} />
+      <div className="p-8">
+        <h1 className="text-3xl font-bold text-center text-custom-dark mb-8">Checkout</h1>
 
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* FORM */}
@@ -219,7 +222,7 @@ const Checkout = () => {
           </div>
         </div>
       </footer>
-
+      </div>
     </div>
   );
 };
