@@ -118,7 +118,7 @@ export default function Login({ isSignUpDefault = false }) {
         if (returnTo === 'checkout') {
           // Redirect back to checkout if they came from there
           navigate('/checkout');
-        } else if (data.role === 'Admin' || data.role === 'Supplier') {
+        } else if (data.role === 'admin' || data.role === 'supplier') {
           navigate('/dashboard');
         } else {
           // Regular users go back to landing page
