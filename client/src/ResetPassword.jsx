@@ -8,12 +8,20 @@ export default function ResetPassword() {
   const navigate = useNavigate();
   const token = new URLSearchParams(window.location.search).get('token');
 
+  const validatePassword = (pwd) => {
+    return pwd.length >= 8 && /\d/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setMessage('');
     if (!password) {
       setError('Please enter a new password.');
+      return;
+    }
+    if (!validatePassword(password)) {
+      setError('Password must be at least 8 characters and include a number and a special character.');
       return;
     }
     try {

@@ -90,9 +90,9 @@ export default function Settings() {
       setPwdMsg('Please enter your current and new password.');
       return;
     }
-    // Password must be at least 8 chars and contain a number or special char
-    if (!/^.{8,}$/.test(newPwd) || !/[^A-Za-z]/.test(newPwd)) {
-      setPwdMsg('Password must be at least 8 characters and include a number or special character.');
+    // Password must be at least 8 chars, contain a number AND a special char
+    if (!/^.{8,}$/.test(newPwd) || !/\d/.test(newPwd) || !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newPwd)) {
+      setPwdMsg('Password must be at least 8 characters and include a number and a special character.');
       return;
     }
     try {

@@ -8,6 +8,9 @@ import mainBg from '/images/main.png'
 import DashboardLayout from './Dashboard'
 
 import Settings from './Settings'
+import Account from './Account'
+import OrderHistory from './OrderHistory'
+import UserManagement from './UserManagement'
 import SupplierPortal from './SupplierPortal';
 import ForgotPassword from './ForgotPassword';
 import VerifyEmail from './VerifyEmail';
@@ -259,11 +262,13 @@ function App() {
         <Route path="/mens" element={<Mens />} />
         <Route path="/womens" element={<Womens />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
         <Route path="/faqs" element={<FAQs />} />
         <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/account" element={<PrivateRoute><Account /></PrivateRoute>} />
+        <Route path="/order-history" element={<PrivateRoute><OrderHistory /></PrivateRoute>} />
 
 
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
@@ -278,17 +283,21 @@ function App() {
               <SupplierPortal />
             </RoleRoute>
           } />
-          <Route path="/user-management" element={
-            <RoleRoute allowedRoles={["admin"]}>
-              <PageTitle title="User Management" />
-            </RoleRoute>
-          } />
           <Route path="/settings" element={
             <RoleRoute allowedRoles={["user", "admin", "supplier"]}>
               <Settings />
             </RoleRoute>
           } />
         </Route>
+
+        {/* Standalone admin routes */}
+        <Route path="/user-management" element={
+          <PrivateRoute>
+            <RoleRoute allowedRoles={["admin"]}>
+              <UserManagement />
+            </RoleRoute>
+          </PrivateRoute>
+        } />
       </Routes>
     </Router>
   )
