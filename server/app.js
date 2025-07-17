@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import authRoutes from './routes/auth.js';
 import orderRoutes from './routes/orders.js';
+import supplierOrderRoutes from './routes/supplierOrders.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,6 +24,7 @@ app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/supplier-orders', supplierOrderRoutes);
 
 app.get('/api', (req, res) => {
   res.json({
