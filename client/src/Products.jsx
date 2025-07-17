@@ -1,9 +1,15 @@
 // client/src/Products.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
+<<<<<<< Updated upstream
 import { productsTop, productsBottom } from './ProductCarousel';
 import logo from '/images/Timeless.png';
 import logoInverted from '/images/Timeless-Inverted.png';
+=======
+import { productsTop, productsBottom } from './ProductData';
+import Navbar from './Navbar';
+import Footer from './Footer';
+>>>>>>> Stashed changes
 
 const allProducts = [...productsTop, ...productsBottom];
 
@@ -62,6 +68,7 @@ const Products = () => {
             const slug = encodeURIComponent(prod.name.toLowerCase().replace(/\s+/g, '-'));
             const productPath = `/products/${prod.type}/${slug}`;
 
+<<<<<<< Updated upstream
             return (
               <div key={i} className="bg-white shadow-md hover:shadow-xl transform hover:-translate-y-2 transition-all duration-300 p-4">
                 <Link to={productPath}>
@@ -74,6 +81,26 @@ const Products = () => {
                 </Link>
                 <div className="text-custom-dark text-xs font-nunito mt-1 flex items-center justify-center gap-1">
                   <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>₱</span>{prod.price.toLocaleString()}
+=======
+              // Construct path based on product type
+              const imagePath = `/images/products/${prod.type === 'mens' ? 'Mens' : 'Womens'}/${prod.image}`;
+
+              return (
+                <div key={index} className="bg-white shadow-md p-4 hover:shadow-xl transform hover:-translate-y-1 transition duration-300">
+                  <Link to={productPath}>
+                    <img
+                      src={imagePath}
+                      alt={prod.name}
+                      className="w-full h-72 object-contain mb-3 rounded"
+                    />
+                    <div className="text-center text-sm font-medium text-custom-dark hover:underline">
+                      {prod.name}
+                    </div>
+                    <div className="text-center text-md font-semibold mt-1 text-custom-dark">
+                      ₱{prod.price.toLocaleString()}
+                    </div>
+                  </Link>
+>>>>>>> Stashed changes
                 </div>
               </div>
             );
