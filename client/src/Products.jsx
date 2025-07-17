@@ -43,13 +43,13 @@ const Products = () => {
     setCurrentPage(1);
   }, [searchParams]);
 
-//   const filteredProducts = allProducts.filter((product) => {
-//     if (selectedCategory === 'All') return true;
-//     return (
-//       product.type?.toLowerCase() === selectedCategory.toLowerCase() ||
-//       product.category?.toLowerCase() === selectedCategory.toLowerCase()
-//     );
-//   });
+  const filteredProducts = allProducts.filter((product) => {
+    if (selectedCategory === 'All') return true;
+    return (
+      product.type?.toLowerCase() === selectedCategory.toLowerCase() ||
+      product.category?.toLowerCase() === selectedCategory.toLowerCase()
+    );
+  });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     if (sortOrder === 'asc') return a.price - b.price;
