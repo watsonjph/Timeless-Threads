@@ -47,6 +47,7 @@ const CarouselRow = ({ products, direction = 'left' }) => (
           const imageFolder = getImageFolder(prod.type);
           const imagePath = `/images/products/${imageFolder}/${prod.image}`;
 
+
           return (
             <div
               key={i}

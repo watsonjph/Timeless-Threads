@@ -22,6 +22,11 @@ const productsTop = [
       'Tumble dry low',
       'Iron at medium temperature',
     ],
+//     category: 'T-Shirts',
+//     image: 'regfit1.png',
+//     description: 'This shirt offers a crisp, tailored fit in breathable cotton, ideal for daily wear and semi-formal occasions.',
+//     details: ['100% Cotton', 'Regular fit', 'Button-down collar', 'Machine washable'],
+//     care: ['Wash at max 40°C', 'Do not bleach', 'Tumble dry low', 'Iron at medium temperature'],
   },
   {
     name: 'Custom Slim Fit Mesh Polo Shirt',
@@ -55,6 +60,10 @@ const productsTop = [
       'Lightweight jersey',
       'Short sleeves',
     ],
+//     category: 'T-Shirts',
+//     image: 'slimfit2.png',
+//     description: 'Made from soft jersey cotton, this slim-fit crewneck tee is perfect for layering or wearing solo.',
+//     details: ['Slim fit', 'Crewneck', 'Lightweight jersey', 'Short sleeves'],
     care: ['Machine wash warm', 'Do not bleach', 'Tumble dry low'],
   },
   {
@@ -66,6 +75,9 @@ const productsTop = [
     image: 'oxford1.png',
     description:
       'A laid-back Oxford shirt designed to stay sharp while worn untucked—effortlessly put-together.',
+//     category: 'Jackets',
+//     image: 'oxford1.png',
+//     description: 'A relaxed-fit Oxford shirt designed to be worn untucked, combining ease and elegance.',
     details: ['Oxford cotton', 'Rounded hem', 'Chest pocket', 'Button-down'],
     care: ['Cold wash', 'Do not bleach', 'Iron medium'],
   },
@@ -84,6 +96,10 @@ const productsTop = [
       'Embroidered logo',
       'Flat knit collar',
     ],
+//     category: 'T-Shirts',
+//     image: 'regfit2.png',
+//     description: 'This Paris Polo combines timeless style with stretch fabric for extra comfort in a regular fit.',
+//     details: ['Stretch cotton blend', 'Regular fit', 'Embroidered logo', 'Flat knit collar'],
     care: ['Delicate wash 30°C', 'Do not bleach', 'Dry flat'],
   },
   {
@@ -317,6 +333,26 @@ const footwearProducts = [
       'A 2-pack of breathable performance socks—built for motion, made for comfort.',
     details: ['Moisture-wicking', 'Ankle length', 'Reinforced heel & toe'],
     care: ['Machine wash cold', 'Do not bleach', 'Tumble dry low'],
+//     category: 'T-Shirts',
+//     image: 'slimfit3.png',
+//     description: 'Designed in a soft-touch cotton fabric, this slim polo brings both class and comfort.',
+//     details: ['Slim fit', 'Soft cotton material', 'Short sleeves', 'Three-button placket'],
+//     care: ['Gentle wash', 'No bleach', 'Cool tumble dry'],
+//   },
+// ];
+
+// const productsBottom = [
+//   {
+//     name: 'Breathable Jersey Tennis Socks',
+//     price: 750,
+//     sku: 'BJT750W',
+//     stock: 8,
+//     type: 'womens',
+//     category: 'Footwear',
+//     image: 'jsocks1.png',
+//     description: 'Stay cool and dry during play with these lightweight and breathable tennis socks.',
+//     details: ['Breathable cotton', 'Low-cut athletic design', 'Elastic arch support'],
+//     care: ['Wash with like colors', 'Avoid fabric softener', 'Air dry'],
   },
   {
     name: 'Striped Ribbed Sock',
@@ -329,6 +365,12 @@ const footwearProducts = [
       'Classic striped rib socks with a retro twist—perfect for low-key flexing.',
     details: ['Ribbed cotton blend', 'Mid-calf', 'Striped design'],
     care: ['Wash with like colors', 'Do not iron print'],
+//     type: 'womens',
+//     category: 'Accessories',
+//     image: 'ribsock1.png',
+//     description: 'A colorful striped sock with ribbed texture for a snug and fashionable fit.',
+//     details: ['Ribbed knit cotton blend', 'Stripe pattern', 'Reinforced toe and heel'],
+//     care: ['Wash inside out', 'Do not bleach', 'Hang dry'],
   },
   {
     name: 'Corgi Dog Socks Khaki',
@@ -341,6 +383,12 @@ const footwearProducts = [
       'Woof-level cozy—these khaki socks feature a charming corgi design that’s all bark and style.',
     details: ['Cotton blend', 'Fun print', 'Elastic cuff'],
     care: ['Cold wash', 'Do not bleach', 'Air dry'],
+//     type: 'womens',
+//     category: 'Accessories',
+//     image: 'dogsock1.png',
+//     description: 'Fun and cute corgi pattern socks in khaki for the dog lover in your life.',
+//     details: ['Khaki base', 'Corgi print', 'Elastic top band'],
+//     care: ['Delicate cycle only', 'No bleach', 'Line dry only'],
   },
   {
     name: 'Pug Dog Sock Green',
@@ -429,3 +477,39 @@ const allProducts = [
 ];
 
 export { productsTop, productsBottom, footwearProducts, accessoriesProducts, allProducts };
+//     type: 'womens',
+//     category: 'Accessories',
+//     image: 'dogsock2.png',
+//     description: 'Green socks with charming pug prints, adding personality and fun to any look.',
+//     details: ['Pug pattern', 'Soft and stretchy', 'Green base'],
+//     care: ['Do not bleach', 'Do not tumble dry', 'Iron on low heat'],
+//   },
+//   {
+//     name: '2-Pack Sport Socks',
+//     price: 750,
+//     sku: '2PSS750W',
+//     stock: 1,
+//     type: 'womens',
+//     category: 'Footwear',
+//     image: 'sportsocks1.png',
+//     description: 'These Sport Socks are made from organic cotton jersey and feature an ankle-length design.',
+//     details: [
+//       'Organic cotton jersey',
+//       'Ankle length',
+//       'Embroidered crocodile on side',
+//       'Material: Cotton (90%), Polyamide (9%), Elastane (1%)',
+//     ],
+//     care: [
+//       'Normal Process T Max 30',
+//       'Do Not Bleach',
+//       'Do Not Tumble Dry',
+//       'Iron Max Sole-Plate T 150',
+//       'Do Not Dry-Clean',
+//       'Line Dry',
+//     ],
+//   },
+// ];
+
+// const allProducts = [...productsTop, ...productsBottom];
+
+// export { productsTop, productsBottom, allProducts };

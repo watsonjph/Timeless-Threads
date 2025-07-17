@@ -14,7 +14,7 @@ const User = {
     return rows;
   },
 
-  async getById(userId) {
+  async findById(userId) {
     const [rows] = await pool.query(
       `SELECT * FROM users WHERE user_id = ?`,
       [userId]
@@ -61,8 +61,34 @@ const User = {
     return rows[0];
   },
 
+  async findByEmail(email) {
+    const sanitized = sanitize(email);
+    const [rows] = await pool.query(
+      'SELECT * FROM users WHERE email = ?',
+      [sanitized]
+    );
+    return rows[0];
+  },
+
   async comparePassword(plainPassword, hashedPassword) {
     return bcrypt.compare(plainPassword, hashedPassword);
+  },
+
+  async updateProfilePic(userId, profilePicUrl) {
+    const [result] = await pool.query(
+      `UPDATE users SET profile_pic_url = ?, has_profile_pic = 1 WHERE user_id = ?`,
+      [profilePicUrl, userId]
+    );
+    return result.affectedRows > 0;
+  },
+
+  async updatePassword(userId, newPassword) {
+    const hashed = await bcrypt.hash(newPassword, 10);
+    const [result] = await pool.query(
+      `UPDATE users SET password = ? WHERE user_id = ?`,
+      [hashed, userId]
+    );
+    return result.affectedRows > 0;
   },
 };
 

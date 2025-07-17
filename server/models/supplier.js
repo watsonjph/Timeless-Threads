@@ -16,6 +16,14 @@ const Supplier = {
     return rows[0];
   },
 
+  async getByUserId(userId) {
+    const [rows] = await pool.query(
+      `SELECT * FROM suppliers WHERE user_id = ?`,
+      [userId]
+    );
+    return rows[0];
+  },
+
   async create(data) {
     const { name, contact_person, contact_email, contact_phone, street_address, city, province, postal_code } = data;
     const [result] = await pool.query(

@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import logo from '/images/Timeless.png';
+import logoInverted from '/images/Timeless-Inverted.png';
 import Navbar from './Navbar';
 import { FaInstagram, FaPaypal } from 'react-icons/fa';
 import { productsTop, productsBottom } from './ProductData';

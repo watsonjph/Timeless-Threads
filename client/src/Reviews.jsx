@@ -82,6 +82,9 @@ const hardcodedReviews = {
   '2PSS750W': [
     { name: "Kai", comment: "Great value, solid quality." },
     { name: "Rhea", comment: "Both pairs are soft and breathable. Love the little croc!" }
+//   BJT750W: [
+//     { name: "Denise", comment: "Best for tennis. Breathes better than my ex." },
+//     { name: "Faye", comment: "No sweaty toes? I’m in love." }
   ],
   SRS450W: [
     { name: "Ella", comment: "Cute colors, nice snug fit." },
@@ -113,6 +116,9 @@ const hardcodedReviews = {
   NYYC850A: [
     { name: "Zion", comment: "Yankees forever. Cap game leveled up." },
     { name: "Bea", comment: "Goes with every streetwear outfit I got." }
+//   '2PSS750W': [
+//     { name: "Kai", comment: "Great value, solid quality." },
+//     { name: "Rhea", comment: "Both pairs are soft and breathable. Love the little croc!" }
   ]
 };
 

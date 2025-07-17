@@ -73,10 +73,14 @@ export default function Login({ isSignUpDefault = false }) {
       const body = isSignUp
         ? { email, username, password }
         : { email, password };
+
+        console.log('Sending login request with:', body);
+
       const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      credentials: 'include'  
       });
       const data = await res.json();
       if (!res.ok) {
@@ -99,6 +103,14 @@ export default function Login({ isSignUpDefault = false }) {
         localStorage.setItem('username', data.username);
         localStorage.setItem('role', data.role);
         if (data.id) localStorage.setItem('userId', data.id);
+        if (data.supplierId) {
+          localStorage.setItem('supplierId', data.supplierId);
+        } else {
+          localStorage.removeItem('supplierId');
+        }
+        // Set session expiry for 30 minutes from now
+        const expiresAt = Date.now() + 30 * 60 * 1000;
+        localStorage.setItem('expiresAt', expiresAt);
         window.dispatchEvent(new CustomEvent('userLogin', { 
           detail: { username: data.username, userId: data.id } 
         }));

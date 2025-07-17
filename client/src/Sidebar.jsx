@@ -1,7 +1,7 @@
 // WILL FIX SPACING LATER, ALSO ADD ANIMATIONS!!
 import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiSettings, FiMenu, FiX, FiUsers, FiGrid, FiUserCheck, FiTruck } from 'react-icons/fi';
+import { FiSettings, FiMenu, FiX, FiUsers, FiGrid, FiUserCheck, FiTruck, FiShoppingBag } from 'react-icons/fi';
 import logo from '/images/Timeless.png'
 import logoInverted from '/images/Timeless-Inverted.png'
 
@@ -117,6 +117,35 @@ export default function Sidebar({ onLogout }) {
     );
   };
 
+  // Render the Access Shop button
+  const renderAccessShop = () => {
+    if (role !== 'admin' && role !== 'supplier') return null;
+    if (collapsed) {
+      return (
+        <div
+          className={ICON_CONTAINER_CLASSES + ' font-poppins text-base mb-2 pointer-events-auto select-none w-full cursor-pointer'}
+          title="Access Shop"
+          onClick={() => window.location.href = '/'}
+        >
+          <FiShoppingBag size={ICON_SIZE} />
+        </div>
+      );
+    }
+    return (
+      <button
+        className={
+          'flex items-center h-16 px-4 gap-3 font-poppins text-base mb-2 w-full hover:bg-custom-mint text-custom-cream' +
+          (location.pathname === '/' ? ' bg-custom-dark font-bold shadow-sm' : '')
+        }
+        onClick={() => window.location.href = '/'}
+        tabIndex={0}
+      >
+        <FiShoppingBag size={ICON_SIZE} />
+        <span className={textClass}>Access Shop</span>
+      </button>
+    );
+  };
+
   // Render the settings and logout section
   const renderFooter = () => {
     if (collapsed) {
@@ -183,6 +212,8 @@ export default function Sidebar({ onLogout }) {
         <nav className="mt-6 flex-1">
           {filterNavLinksByRole(role).map(renderNavItem)}
         </nav>
+        {/* Access Shop Button */}
+        {renderAccessShop()}
       </div>
       {/* Settings and Logout */}
       <div className="mb-4">

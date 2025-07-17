@@ -15,11 +15,14 @@ const allProducts = [
   ...footwearProducts,
   ...accessoriesProducts
 ];
+// import { productsTop, productsBottom } from './ProductData';
+
+
+// const allProducts = [...productsTop, ...productsBottom];
 
 const ProductDetails = () => {
   const { category, slug } = useParams();
   const navigate = useNavigate();
-
   const product = allProducts.find(prod =>
     encodeURIComponent(prod.name.toLowerCase().replace(/\s+/g, '-')) === slug
   );
@@ -37,6 +40,7 @@ const ProductDetails = () => {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const existingIndex = cart.findIndex(item => item.sku === product.sku);
 
+
     if (existingIndex !== -1) {
       if (cart[existingIndex].quantity < product.stock) {
         cart[existingIndex].quantity += 1;
@@ -45,9 +49,22 @@ const ProductDetails = () => {
       cart.push({ ...product, quantity: 1 });
     }
 
+  localStorage.setItem('cart', JSON.stringify(cart));
+  alert(`${product.name} added to cart.`);
+
+
     localStorage.setItem('cart', JSON.stringify(cart));
     alert(`${product.name} added to cart.` + (!isLoggedIn ? ' Please log in to checkout.' : ''));
   };
+
+    
+//     if (isLoggedIn) {
+//       alert(`${product.name} added to cart.`);
+//     } else {
+//       alert(`${product.name} added to cart. Please log in to checkout.`);
+//     }
+
+//   };
 
   if (!product) {
     return <div className="p-8 text-center text-red-500">Product not found</div>;
@@ -68,6 +85,17 @@ const ProductDetails = () => {
           </svg>
           Back
         </button>
+//     <div className="p-8 font-poppins max-w-4xl mx-auto">
+//       <button
+//         onClick={() => navigate(-1)}
+//         className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-custom-dark text-white rounded-full hover:bg-gray-800 transition-all duration-300 ease-in-out transform hover:-translate-x-1 hover:shadow-lg"
+//       >
+  
+//         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+//           <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+//         </svg>
+//         Back
+//       </button>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <img src={imagePath} alt={product.name} className="w-full object-cover rounded-lg" />
@@ -94,7 +122,10 @@ const ProductDetails = () => {
 
               <h2 className="font-bold mt-4 mb-2">THE DETAILS</h2>
               <ul className="list-disc pl-5">
+
                 {product.details?.map((item, i) => <li key={i}>{item}</li>)}
+
+//                 {product.details.map((item, i) => <li key={i}>{item}</li>)}
               </ul>
 
               <h2 className="font-bold mt-4 mb-2">CARE INSTRUCTIONS</h2>
@@ -120,6 +151,28 @@ const ProductDetails = () => {
             <p className="italic text-gray-600">No reviews yet.</p>
           )}
         </div>
+
+//                 {product.care.map((item, i) => <li key={i}>{item}</li>)}
+//               </ul>
+//             </div>
+//           </div>
+//         </div>
+
+//       <div className="mt-8">
+//         <h2 className="font-bold text-xl mb-2">Reviews:</h2>
+//         {reviews.length > 0 ? (
+//           <ul className="space-y-4">
+//             {reviews.map((review, i) => (
+//               <li key={i} className="border border-gray-200 p-4 rounded-lg shadow-sm">
+//                 <p className="font-semibold text-custom-dark">{review.name}</p>
+//                 <p className="text-sm text-gray-700 mt-1">{review.comment}</p>
+//               </li>
+//             ))}
+//           </ul>
+//         ) : (
+//           <p className="italic text-gray-600">No reviews yet.</p>
+//         )}
+
       </div>
     </div>
   );

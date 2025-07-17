@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import logo from '/images/Timeless.png';
+import logoInverted from '/images/Timeless-Inverted.png';
 import Navbar from './Navbar';
 import { FaInstagram, FaPaypal } from 'react-icons/fa';
 import {
@@ -16,6 +18,7 @@ const allProducts = [
   ...accessoriesProducts,
 ];
 
+
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
 
@@ -28,6 +31,8 @@ const Cart = () => {
         ? match.type.charAt(0).toUpperCase() + match.type.slice(1)
         : '';
       const imagePath = match ? `/images/products/${folder}/${match.image}` : '';
+
+
       return match ? { ...item, image: imagePath } : item;
     });
 
@@ -45,6 +50,7 @@ const Cart = () => {
     (acc, item) => acc + item.price * item.quantity,
     0
   );
+
 
   const handleCheckout = () => {
     const isLoggedIn = !!localStorage.getItem('username');
@@ -71,6 +77,8 @@ const Cart = () => {
               const slug = encodeURIComponent(
                 item.name.toLowerCase().replace(/\s+/g, '-')
               );
+
+
               const productLink = `/products/${item.type}/${slug}`;
 
               return (

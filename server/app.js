@@ -6,6 +6,8 @@ import authRoutes from './routes/auth.js';
 import orderRoutes from './routes/orders.js';
 import supplierOrderRoutes from './routes/supplierOrders.js';
 import suppliersRoutes from './routes/suppliers.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,6 +23,9 @@ app.use(express.json());
 
 // Serve static files from uploads directory
 app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Serve uploaded images statically (for profile pictures)
+app.use('/api/auth/uploads', express.static(path.join(process.cwd(), 'server', 'uploads')));
 
 // API routes
 app.use('/api/auth', authRoutes);
