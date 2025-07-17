@@ -65,6 +65,7 @@ export default function ProfilePicUploader({ userId, currentImage, onUpload }) {
       if (!blob) throw new Error('Failed to crop image.');
       const formData = new FormData();
       formData.append('profilePic', blob, 'profile.jpg');
+      formData.append('userId', userId); // Ensure userId is sent
       const res = await fetch(`/api/auth/user/${userId}/profile-pic`, {
         method: 'POST',
         body: formData

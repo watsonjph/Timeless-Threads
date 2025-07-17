@@ -118,13 +118,11 @@ const upload = multer({
 // Profile picture upload endpoint
 router.post('/user/:id/profile-pic', upload.single('profilePic'), async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = req.params.id || req.body.userId || req.query.userId || 'unknown';
     const userDir = path.join(process.cwd(), 'server', 'uploads', `user_${userId}`);
-    const profilePicPath = path.join(userDir, 'profile.jpg');
-    // Delete old profile picture if it exists
-    if (fs.existsSync(profilePicPath)) {
-      fs.unlinkSync(profilePicPath);
-    }
+    // const profilePicPath = path.join(userDir, 'profile.jpg');
+    // No need to delete the old file, Multer will overwrite it
+
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded.' });
     }
