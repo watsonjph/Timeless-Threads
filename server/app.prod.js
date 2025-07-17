@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import session from 'express-session';
 
 // Define __filename and __dirname at the top
 const __filename = fileURLToPath(import.meta.url);
@@ -20,6 +21,18 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+app.use(session({
+  name: 'ttsid',
+  secret: process.env.SESSION_SECRET || 'supersecret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 30 * 60 * 1000, // 30 minutes
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax'
+  }
+}));
 
 // Serve static files from uploads directory
 app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));

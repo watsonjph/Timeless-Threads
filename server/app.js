@@ -7,6 +7,7 @@ import orderRoutes from './routes/orders.js';
 import supplierOrderRoutes from './routes/supplierOrders.js';
 import suppliersRoutes from './routes/suppliers.js';
 import dotenv from 'dotenv';
+import session from 'express-session';
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,6 +21,18 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+app.use(session({
+  name: 'ttsid',
+  secret: process.env.SESSION_SECRET || 'supersecret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 30 * 60 * 1000, // 30 minutes
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax'
+  }
+}));
 
 // Serve static files from uploads directory
 app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));

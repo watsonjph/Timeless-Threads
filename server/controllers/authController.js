@@ -61,6 +61,10 @@ const authController = {
         const supplier = await Supplier.getByUserId(user.user_id);
         supplierId = supplier ? supplier.supplier_id : null;
       }
+      // Set session
+      req.session.userId = user.user_id;
+      req.session.username = user.username;
+      req.session.role = user.role;
       // Return username and role for dashboard
       console.log('Login successful:', user.username);
       return res.status(200).json({ 

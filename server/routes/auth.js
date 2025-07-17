@@ -120,14 +120,23 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 } // 5MB max
 });
 
-// Profile picture upload endpoint
-router.post('/user/:id/profile-pic', upload.single('profilePic'), async (req, res) => {
-  try {
-    const userId = req.params.id || req.body.userId || req.query.userId || 'unknown';
-    const userDir = path.join(process.cwd(), 'server', 'uploads', `user_${userId}`);
-    // const profilePicPath = path.join(userDir, 'profile.jpg');
-    // No need to delete the old file, Multer will overwrite it
+// Auth middleware
+function requireAuth(req, res, next) {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  next();
+}
 
+// Profile picture upload endpoint
+router.post('/user/:id/profile-pic', requireAuth, upload.single('profilePic'), async (req, res) => {
+  try {
+    // Only allow the logged-in user to upload their own profile picture
+    if (req.session.userId !== parseInt(req.params.id, 10)) {
+      return res.status(403).json({ error: 'Forbidden' });
+    }
+    const userId = req.params.id || req.body.userId || req.query.userId || 'unknown';
+    const userDir = path.join(__dirname, '..', 'uploads', `user_${userId}`);
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded.' });
     }
@@ -139,6 +148,14 @@ router.post('/user/:id/profile-pic', upload.single('profilePic'), async (req, re
   } catch (err) {
     res.status(500).json({ error: 'Failed to upload profile picture.' });
   }
+});
+
+// Logout route
+router.post('/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.clearCookie('ttsid');
+    res.json({ message: 'Logged out' });
+  });
 });
 
 // Serve uploaded images statically
