@@ -27,12 +27,43 @@ router.get('/user/:id', async (req, res) => {
   }
 });
 
+// ADMIN USER CRUD ROUTES
+// GET all users
 router.get('/users', async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await User.getAll();
     res.json({ users });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch users.' });
+  }
+});
+// POST create user
+router.post('/users', async (req, res) => {
+  try {
+    const id = await User.create(req.body);
+    res.status(201).json({ id });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to create user.' });
+  }
+});
+// PUT update user (username/email)
+router.put('/users/:id', async (req, res) => {
+  try {
+    const updated = await User.update(req.params.id, req.body);
+    if (!updated) return res.status(404).json({ error: 'User not found.' });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update user.' });
+  }
+});
+// DELETE user
+router.delete('/users/:id', async (req, res) => {
+  try {
+    const deleted = await User.remove(req.params.id);
+    if (!deleted) return res.status(404).json({ error: 'User not found.' });
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete user.' });
   }
 });
 

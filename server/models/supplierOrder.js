@@ -42,6 +42,21 @@ const SupplierOrder = {
     );
     return result.affectedRows > 0;
   },
+
+  async getActiveCount(supplierId) {
+    const [rows] = await pool.query(
+      `SELECT COUNT(*) as active FROM supplier_orders WHERE supplier_id = ? AND status = 'Pending'`,
+      [supplierId]
+    );
+    return rows[0].active;
+  },
+  async getCompletedCount(supplierId) {
+    const [rows] = await pool.query(
+      `SELECT COUNT(*) as completed FROM supplier_orders WHERE supplier_id = ? AND status = 'Delivered'`,
+      [supplierId]
+    );
+    return rows[0].completed;
+  },
 };
 
 export default SupplierOrder; 

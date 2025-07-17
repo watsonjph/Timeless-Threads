@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { adminUsersAPI } from './api/apiService';
 
 export default function UserManagement() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [updateMessage, setUpdateMessage] = useState('');
+  const [creatingUser, setCreatingUser] = useState({ email: '', username: '', password: '' });
+  const [editingUser, setEditingUser] = useState(null); // user object or null
 
   useEffect(() => {
     fetchUsers();
@@ -60,6 +63,55 @@ export default function UserManagement() {
     }
   };
 
+  // Create user
+  const handleCreateUser = async (e) => {
+    e.preventDefault();
+    try {
+      await adminUsersAPI.create(creatingUser);
+      setCreatingUser({ email: '', username: '', password: '' });
+      setUpdateMessage('User created successfully!');
+      fetchUsers();
+      setTimeout(() => setUpdateMessage(''), 3000);
+    } catch {
+      setError('Failed to create user.');
+      setTimeout(() => setError(''), 3000);
+    }
+  };
+
+  // Edit user
+  const handleEditUser = (user) => {
+    setEditingUser({ ...user });
+  };
+
+  // Update user
+  const handleUpdateUser = async (e) => {
+    e.preventDefault();
+    try {
+      await adminUsersAPI.update(editingUser.user_id, { username: editingUser.username, email: editingUser.email });
+      setEditingUser(null);
+      setUpdateMessage('User updated successfully!');
+      fetchUsers();
+      setTimeout(() => setUpdateMessage(''), 3000);
+    } catch {
+      setError('Failed to update user.');
+      setTimeout(() => setError(''), 3000);
+    }
+  };
+
+  // Delete user
+  const handleDeleteUser = async (id) => {
+    if (!window.confirm('Delete this user?')) return;
+    try {
+      await adminUsersAPI.delete(id);
+      setUpdateMessage('User deleted successfully!');
+      fetchUsers();
+      setTimeout(() => setUpdateMessage(''), 3000);
+    } catch {
+      setError('Failed to delete user.');
+      setTimeout(() => setError(''), 3000);
+    }
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -111,13 +163,22 @@ export default function UserManagement() {
             </button>
           </div>
 
+          {/* Edit User Form */}
+          {editingUser && (
+            <form className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4" onSubmit={handleUpdateUser}>
+              <input className="border rounded px-2 py-1" required placeholder="Username" value={editingUser.username} onChange={e => setEditingUser(s => ({ ...s, username: e.target.value }))} />
+              <input className="border rounded px-2 py-1" required placeholder="Email" value={editingUser.email} onChange={e => setEditingUser(s => ({ ...s, email: e.target.value }))} />
+              <button className="bg-custom-dark text-custom-cream rounded px-4 py-2 col-span-1 md:col-span-4" type="submit">Update User</button>
+              <button className="bg-red-500 text-white rounded px-4 py-2 col-span-1 md:col-span-4" type="button" onClick={() => setEditingUser(null)}>Cancel</button>
+            </form>
+          )}
+
           {/* Messages */}
           {updateMessage && (
             <div className="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
               {updateMessage}
             </div>
           )}
-          
           {error && (
             <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
               {error}
@@ -125,25 +186,15 @@ export default function UserManagement() {
           )}
 
           {/* Users Table */}
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto mb-12">
             <table className="min-w-full bg-white border border-gray-200 rounded-lg">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    User
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Email
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Role
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date Created
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Created</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -183,17 +234,9 @@ export default function UserManagement() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {formatDate(user.createdAt)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <select
-                        value={user.role}
-                        onChange={(e) => handleRoleChange(user.user_id, e.target.value)}
-                        className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-custom-dark"
-                        disabled={user.role === 'admin'} // Prevent changing admin role
-                      >
-                        <option value="user">User</option>
-                        <option value="supplier">Supplier</option>
-                        <option value="admin">Admin</option>
-                      </select>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                      <button className="bg-blue-500 text-white rounded px-2 py-1" onClick={() => handleEditUser(user)} disabled={user.role === 'admin'}>Edit</button>
+                      <button className="bg-red-500 text-white rounded px-2 py-1" onClick={() => handleDeleteUser(user.user_id)} disabled={user.role === 'admin'}>Delete</button>
                     </td>
                   </tr>
                 ))}
@@ -206,6 +249,18 @@ export default function UserManagement() {
               <p className="text-gray-500">No users found.</p>
             </div>
           )}
+
+          {/* Divider and Create User Section */}
+          <hr className="my-10 border-gray-300" />
+          <div className="mb-6">
+            <h2 className="text-xl font-bold mb-4 text-custom-dark font-kanit">Add New User</h2>
+            <form className="grid grid-cols-1 md:grid-cols-4 gap-4" onSubmit={handleCreateUser}>
+              <input className="border rounded px-2 py-1" required placeholder="Email" value={creatingUser.email} onChange={e => setCreatingUser(s => ({ ...s, email: e.target.value }))} />
+              <input className="border rounded px-2 py-1" required placeholder="Username" value={creatingUser.username} onChange={e => setCreatingUser(s => ({ ...s, username: e.target.value }))} />
+              <input className="border rounded px-2 py-1" required placeholder="Password" type="password" value={creatingUser.password} onChange={e => setCreatingUser(s => ({ ...s, password: e.target.value }))} />
+              <button className="bg-custom-dark text-custom-cream rounded px-4 py-2 col-span-1 md:col-span-4" type="submit">Add User</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>

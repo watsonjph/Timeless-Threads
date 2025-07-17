@@ -11,6 +11,16 @@ const Order = {
     );
     return rows;
   },
+
+  async getTotalOrders() {
+    const [rows] = await pool.query(`SELECT COUNT(*) as total FROM orders`);
+    return rows[0].total;
+  },
+
+  async getCompletedOrders() {
+    const [rows] = await pool.query(`SELECT COUNT(*) as completed FROM orders WHERE delivery_status = 'Delivered'`);
+    return rows[0].completed;
+  },
 };
 
 export default Order; 

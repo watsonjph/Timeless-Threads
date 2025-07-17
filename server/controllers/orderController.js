@@ -1,4 +1,7 @@
 import Order from '../models/order.js';
+import User from '../models/user.js';
+import ProductVariant from '../models/productVariant.js';
+import SupplierOrder from '../models/supplierOrder.js';
 
 const orderController = {
   async getUserOrders(req, res) {
@@ -11,6 +14,36 @@ const orderController = {
       res.json({ orders });
     } catch (err) {
       res.status(500).json({ error: 'Failed to fetch orders.' });
+    }
+  },
+
+  // Admin dashboard stats
+  async adminDashboardStats(req, res) {
+    try {
+      const [totalUsers, totalOrders, completedOrders, lowStock] = await Promise.all([
+        User.getTotal(),
+        Order.getTotalOrders(),
+        Order.getCompletedOrders(),
+        ProductVariant.getLowStock(),
+      ]);
+      res.json({ totalUsers, totalOrders, completedOrders, lowStock });
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to fetch dashboard stats.' });
+    }
+  },
+
+  // Supplier dashboard stats
+  async supplierDashboardStats(req, res) {
+    const supplierId = req.query.supplierId;
+    if (!supplierId) return res.status(400).json({ error: 'Supplier ID required' });
+    try {
+      const [activeOrders, completedOrders] = await Promise.all([
+        SupplierOrder.getActiveCount(supplierId),
+        SupplierOrder.getCompletedCount(supplierId),
+      ]);
+      res.json({ activeOrders, completedOrders });
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to fetch supplier dashboard stats.' });
     }
   },
 };

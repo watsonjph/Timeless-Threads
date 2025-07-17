@@ -27,6 +27,7 @@ import Cart from './Cart';
 import Checkout from './Checkout';
 import FAQs from './FAQs';
 import Products from './Products';
+import DashboardHome from './DashboardHome';
 
 
 
@@ -347,7 +348,7 @@ function App() {
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
           <Route path="/dashboard" element={
             <RoleRoute allowedRoles={["admin", "supplier"]}>
-              <DynamicDashboard />
+              <DashboardHome />
             </RoleRoute>
           } />
 
