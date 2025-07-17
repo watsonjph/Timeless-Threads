@@ -52,6 +52,10 @@ export const authAPI = {
 // Health check
 export const healthCheck = () => api.get('/');
 
+// Orders API calls
+export const ordersAPI = {
+  getUserOrders: (userId) => api.get(`/orders/user/${userId}`),
+};
 
 
 export default api; 

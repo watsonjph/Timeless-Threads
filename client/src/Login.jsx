@@ -172,7 +172,7 @@ export default function Login({ isSignUpDefault = false }) {
               </div>
               <button
                 type="submit"
-                className="w-full py-2 px-4 mt-6 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
+                className="w-full py-2 px-4 bg-custom-dark text-custom-cream font-semibold rounded hover:bg-custom-mint transition font-poppins"
               >
                 Sign Up
               </button>
