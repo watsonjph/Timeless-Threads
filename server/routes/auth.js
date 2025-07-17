@@ -1,6 +1,8 @@
 import express from 'express';
 import authController from '../controllers/authController.js';
 import User from '../models/user.js';
+import multer from 'multer';
+import path from 'path';
 
 const router = express.Router();
 
@@ -86,5 +88,49 @@ router.post('/update-user-role', async (req, res) => {
     res.status(500).json({ error: 'Failed to update user role.' });
   }
 });
+
+// Multer setup for profile picture uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(process.cwd(), 'server', 'uploads'));
+  },
+  filename: function (req, file, cb) {
+    // Use userId and timestamp for uniqueness
+    const userId = req.body.userId || req.query.userId || 'unknown';
+    const ext = path.extname(file.originalname);
+    cb(null, `profile_${userId}_${Date.now()}${ext}`);
+  }
+});
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    // Accept only image files
+    if (!file.mimetype.startsWith('image/')) {
+      return cb(new Error('Only image files are allowed!'), false);
+    }
+    cb(null, true);
+  },
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB max
+});
+
+// Profile picture upload endpoint
+router.post('/user/:id/profile-pic', upload.single('profilePic'), async (req, res) => {
+  try {
+    const userId = req.params.id;
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded.' });
+    }
+    // Save file path relative to /api/uploads
+    const profilePicUrl = `/api/uploads/${req.file.filename}`;
+    // Update user in DB
+    await User.updateProfilePic(userId, profilePicUrl);
+    res.json({ success: true, profile_pic_url: profilePicUrl });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to upload profile picture.' });
+  }
+});
+
+// Serve uploaded images statically
+router.use('/uploads', express.static(path.join(process.cwd(), 'server', 'uploads')));
 
 export default router; 

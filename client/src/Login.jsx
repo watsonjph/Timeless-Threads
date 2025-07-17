@@ -104,6 +104,9 @@ export default function Login({ isSignUpDefault = false }) {
         } else {
           localStorage.removeItem('supplierId');
         }
+        // Set session expiry for 30 minutes from now
+        const expiresAt = Date.now() + 30 * 60 * 1000;
+        localStorage.setItem('expiresAt', expiresAt);
         window.dispatchEvent(new CustomEvent('userLogin', { 
           detail: { username: data.username, userId: data.id } 
         }));

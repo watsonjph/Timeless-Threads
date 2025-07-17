@@ -105,9 +105,9 @@ export default function Navbar({ alwaysHovered = false }) {
   return (
     <header className={headerClass + ' transition-opacity duration-500 ease-in-out opacity-0 animate-navbar-fade-in'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-24">
+        <div className={`grid grid-cols-3 items-center h-24 w-full gap-x-40`}>
           {/* Left Navigation */}
-          <nav className="flex items-center space-x-12 -ml-16">
+          <nav className="flex items-center gap-x-16 justify-self-end col-start-1">
             <Link to="/mens" className={`${navTextClass} px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative group`}>
               <span>Men's</span>
               {!alwaysHovered && (
@@ -121,27 +121,27 @@ export default function Navbar({ alwaysHovered = false }) {
               )}
             </Link>
             <Link to="/products" className={`${navTextClass} px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative group`}>
-              <span>All Products</span>
+              <span className="whitespace-nowrap">All Products</span>
               {!alwaysHovered && (
                 <span className="absolute left-0 bottom-0 h-0.5 bg-current transition-all duration-500 ease-in-out w-0 group-hover:w-full"></span>
               )}
             </Link>
           </nav>
           {/* Center Logo */}
-          <div className="absolute left-1/2 transform -translate-x-1/2">
+          <div className="flex items-center justify-center col-start-2">
             {alwaysHovered ? (
               <Link to="/" className="group cursor-pointer">
                 <img src={logo} alt="Timeless Threads" className="h-28 w-auto transition-opacity duration-200 group-hover:opacity-80" />
               </Link>
             ) : (
-              <Link to="/" className="group cursor-pointer">
+              <Link to="/" className="group cursor-pointer relative">
                 <img src={logoInverted} alt="Timeless Threads" className="h-28 w-auto group-hover:opacity-0 transition-all duration-500 ease-in-out" />
                 <img src={logo} alt="Timeless Threads" className="h-28 w-auto absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out" />
               </Link>
             )}
           </div>
           {/* Right Navigation */}
-          <nav className="flex items-center space-x-8 mr-16">
+          <nav className="flex items-center gap-x-16 justify-self-start col-start-3">
             {isLoggedIn ? (
               <div className="relative profile-dropdown group">
                 <div className="flex items-center space-x-2 cursor-pointer">
@@ -179,7 +179,6 @@ export default function Navbar({ alwaysHovered = false }) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
-                
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                   <Link
                     to="/account"

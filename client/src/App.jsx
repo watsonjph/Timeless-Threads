@@ -29,6 +29,7 @@ import FAQs from './FAQs';
 import Products from './Products';
 import FAQBubble from './components/FAQBubble';
 import DashboardHome from './DashboardHome';
+import { useEffect } from 'react';
 
 
 
@@ -77,7 +78,16 @@ function Landing() {
             backgroundRepeat: 'no-repeat',
           }}
         />
-                <div className="relative z-10 flex flex-col min-h-screen">
+        {/* Shop Now Button - lower left over background */}
+        <div className="absolute left-20 bottom-32 z-30"> {/* moved diagonally up and right, now z-30 for clickability */}
+          <Link
+            to="/products"
+            className="shop-now-btn animate-shopNow-fade-in-up shop-now-btn--small"
+          >
+            Shop Now
+          </Link>
+        </div>
+        <div className="relative z-10 flex flex-col min-h-screen">
           <Navbar />
           {/* Hero Content */}
           <main className="flex-1 flex flex-col items-center justify-center">
@@ -323,12 +333,53 @@ function RoleRoute({ allowedRoles, children }) {
   return allowedRoles.includes(role) ? children : <Navigate to="/" />;
 }
 
+function BackToDashboardButton() {
+  const role = localStorage.getItem('role');
+  if (role !== 'admin' && role !== 'supplier') return null;
+  return (
+    <button
+      style={{
+        position: 'fixed',
+        bottom: '32px',
+        left: '32px',
+        zIndex: 1000,
+        background: '#222',
+        color: '#fff',
+        borderRadius: '9999px',
+        padding: '16px 24px',
+        fontWeight: 'bold',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+        fontFamily: 'inherit',
+        fontSize: '1rem',
+        cursor: 'pointer',
+        border: 'none',
+        transition: 'background 0.2s',
+      }}
+      onClick={() => window.location.href = '/dashboard'}
+    >
+      {'\u2190'} Back to Dashboard
+    </button>
+  );
+}
+
 function App() {
+  useEffect(() => {
+    const checkSessionExpiry = () => {
+      const expiresAt = localStorage.getItem('expiresAt');
+      if (expiresAt && Date.now() > Number(expiresAt)) {
+        localStorage.clear();
+        window.location.href = '/login';
+      }
+    };
+    checkSessionExpiry();
+    const interval = setInterval(checkSessionExpiry, 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <Router>
       <div className="relative">
       <Routes>
-        <Route path="/" element={<PublicRoute><Landing /></PublicRoute>} />
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/signup" element={<PublicRoute><Login isSignUpDefault={true} /></PublicRoute>} />
         <Route path="/products/:category/:slug" element={<ProductDetails />} />
@@ -370,7 +421,9 @@ function App() {
           } />
         </Route>
       </Routes>
-      <FAQBubble /> {/* <-- This makes the floating button appear on ALL pages */}
+      <FAQBubble />
+      {/* Back to Dashboard button for admin/supplier on landing page */}
+      {window.location.pathname === '/' && <BackToDashboardButton />}
       </div>
     </Router>
   )

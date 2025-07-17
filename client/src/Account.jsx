@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
+import ProfilePicUploader from './components/ProfilePicUploader';
 
 export default function Account() {
   // State for each form
@@ -12,6 +13,7 @@ export default function Account() {
   const [currentPwd, setCurrentPwd] = useState('');
   const [newPwd, setNewPwd] = useState('');
   const [pwdMsg, setPwdMsg] = useState('');
+  const [profilePicUrl, setProfilePicUrl] = useState('');
   const userId = localStorage.getItem('userId');
 
   // Fetch current user info on mount
@@ -24,6 +26,7 @@ export default function Account() {
         if (res.ok) {
           setEmail(data.email || '');
           setUsername(data.username || '');
+          setProfilePicUrl(data.profile_pic_url || '');
         }
       } catch (err) {
         // Optionally handle error
@@ -125,17 +128,11 @@ export default function Account() {
           {/* Profile Picture Section */}
           <div className="mb-8">
             <h2 className="text-xl font-semibold text-custom-dark mb-4">Profile Picture</h2>
-            <div className="flex items-center space-x-4">
-              <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
-                <span className="text-gray-500 text-lg">📷</span>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600 mb-2">Profile picture upload coming soon</p>
-                <button className="bg-custom-dark text-custom-cream px-4 py-2 rounded-lg hover:bg-custom-mint transition font-poppins text-sm">
-                  Upload Photo
-                </button>
-              </div>
-            </div>
+            <ProfilePicUploader
+              userId={userId}
+              currentImage={profilePicUrl}
+              onUpload={url => setProfilePicUrl(url)}
+            />
           </div>
 
           {/* Email Section */}

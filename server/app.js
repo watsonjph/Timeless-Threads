@@ -22,6 +22,9 @@ app.use(express.json());
 // Serve static files from uploads directory
 app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Serve uploaded images statically (for profile pictures)
+app.use('/api/auth/uploads', express.static(path.join(process.cwd(), 'server', 'uploads')));
+
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);

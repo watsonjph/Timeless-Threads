@@ -64,6 +64,14 @@ const User = {
   async comparePassword(plainPassword, hashedPassword) {
     return bcrypt.compare(plainPassword, hashedPassword);
   },
+
+  async updateProfilePic(userId, profilePicUrl) {
+    const [result] = await pool.query(
+      `UPDATE users SET profile_pic_url = ?, has_profile_pic = 1 WHERE user_id = ?`,
+      [profilePicUrl, userId]
+    );
+    return result.affectedRows > 0;
+  },
 };
 
 export default User;
