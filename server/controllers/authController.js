@@ -1,6 +1,7 @@
 import User from '../models/user.js';
 import { sendEmail } from '../utils/email.js';
 import crypto from 'crypto';
+import Supplier from '../models/supplier.js';
 
 const pendingRegistrations = {};
 const pendingPasswordResets = {};
@@ -48,12 +49,18 @@ const authController = {
       if (!user || !(await User.comparePassword(password, user.password))) {
         return res.status(401).json({ error: 'Invalid credentials.' });
       }
+      let supplierId = null;
+      if (user.role === 'supplier') {
+        const supplier = await Supplier.getByUserId(user.user_id);
+        supplierId = supplier ? supplier.supplier_id : null;
+      }
       // Return username and role for dashboard
       return res.status(200).json({ 
         message: 'Login successful.',
         username: user.username,
         role: user.role,
-        id: user.user_id
+        id: user.user_id,
+        supplierId
       });
     } catch (err) {
       console.error(err);

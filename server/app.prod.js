@@ -9,12 +9,14 @@ const __dirname = path.dirname(__filename);
 
 import authRoutes from './routes/auth.js';
 import suppliersRoutes from './routes/suppliers.js';
+import orderRoutes from './routes/orders.js';
+import supplierOrderRoutes from './routes/supplierOrders.js';
 
 const app = express();
 
 // Middleware
 app.use(cors({
-  origin: true, // Allow all origins or set to your production domain
+  origin: true,
   credentials: true
 }));
 app.use(express.json());
@@ -24,6 +26,8 @@ app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/supplier-orders', supplierOrderRoutes);
 app.use('/api/suppliers', suppliersRoutes);
 
 // Serve static files from the frontend build

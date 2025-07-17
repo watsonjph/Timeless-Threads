@@ -189,6 +189,16 @@ CREATE TABLE `supplier_order_items` (
   FOREIGN KEY (`variant_id`) REFERENCES `product_variants`(`variant_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Product Inventory Table
+CREATE TABLE `product_inventory` (
+  `pd_inventory_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `variant_id` INT(11) NOT NULL,
+  `stock_quantity` INT DEFAULT 0,
+  `restock_threshold` INT DEFAULT 5,
+  `last_restocked` TIMESTAMP NULL DEFAULT NULL,
+  PRIMARY KEY (`pd_inventory_id`),
+  FOREIGN KEY (`variant_id`) REFERENCES `product_variants`(`variant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 COMMIT;
