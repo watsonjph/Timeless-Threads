@@ -116,52 +116,6 @@ const FAQs = () => {
             <a href="#" className="hover:underline">Terms & Conditions</a>
           </div>
         </div>
-      </div>
-
-      {/* Footer copied from App.jsx */}
-      <footer className="bg-white font-kanit border-t border-custom-medium mt-8">
-        <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="flex flex-col items-start space-y-2">
-              <h3 className="text-custom-dark text-xs font-semibold uppercase tracking-widest mb-1">
-                Timeless Threads
-              </h3>
-              <a href="#" className="text-custom-dark hover:text-custom-medium mt-1" aria-label="Instagram">
-                <FaInstagram size={18} />
-              </a>
-            </div>
-            <div className="flex flex-col items-start space-y-2">
-              <h3 className="text-custom-dark text-xs font-semibold uppercase tracking-widest mb-2">
-                Help
-              </h3>
-              <Link to="/faqs#shipping" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Shipping</Link>
-              <Link to="/faqs#returns" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Returns</Link>
-              <Link to="/faqs#faqs" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">FAQs</Link>
-              <Link to="/faqs#sizing-guide" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Sizing Guide</Link>
-              <Link to="/faqs#product-care" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Product Care</Link>
-              <Link to="/faqs#contact-us" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Contact Us</Link>
-            </div>
-            <div className="flex flex-col items-start space-y-2">
-              <h3 className="text-custom-dark text-xs font-semibold uppercase tracking-widest mb-2">
-                About Us
-              </h3>
-              <h4 className="text-custom-dark text-[11px] uppercase tracking-widest mt-2 mb-1 font-semibold">Contact Info</h4>
-              <span className="text-custom-dark text-[11px] italic">+63 1234567890</span>
-            </div>
-            <div className="flex flex-col items-start space-y-4 w-full">
-              <h3 className="text-custom-dark text-xs font-semibold uppercase tracking-widest mb-2 invisible">Payment Options</h3>
-              <div className="flex space-x-3 mt-2">
-                <FaPaypal size={22} className="text-custom-dark" />
-                <span className="bg-gray-200 rounded px-2 py-1 text-custom-dark text-xs font-bold flex items-center" style={{height:'22px'}}>GCash</span>
-              </div>
-            </div>
-          </div>
-          <div className="mt-8 text-custom-dark text-[10px] font-kanit flex flex-wrap items-center gap-2">
-            <span>&copy; 2025 TIMELESS THREADS</span>
-            <a href="#" className="hover:underline">Privacy</a>
-            <a href="#" className="hover:underline">Terms & Conditions</a>
-          </div>
-        </div>
       </footer>
     </div>
   );

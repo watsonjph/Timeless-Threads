@@ -12,7 +12,6 @@ import {
 
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { productsTop, productsBottom } from './ProductData';
 
 const allProducts = [
   ...productsTop,
