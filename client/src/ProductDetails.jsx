@@ -120,7 +120,6 @@ const ProductDetails = () => {
           <p className="italic text-gray-600">No reviews yet.</p>
         )}
       </div>
-      </div>
     </div>
   );
 };

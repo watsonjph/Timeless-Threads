@@ -1,10 +1,5 @@
 // client/src/FAQs.jsx
 import React from 'react';
-
-const FAQs = () => {
-  return (
-    <div className="font-poppins min-h-screen bg-custom-cream p-8 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-custom-dark">Frequently Asked Questions</h1>
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
 import { FaInstagram, FaPaypal } from 'react-icons/fa';
@@ -123,8 +118,6 @@ const FAQs = () => {
 
       </footer>
 
-      </div>
-      </div>
     </div>
   );
 };
