@@ -401,7 +401,7 @@ function App() {
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
           <Route path="/dashboard" element={
             <RoleRoute allowedRoles={["admin", "supplier"]}>
-              <DynamicDashboard />
+              <DashboardHome />
             </RoleRoute>
           } />
 
