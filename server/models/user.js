@@ -81,6 +81,15 @@ const User = {
     );
     return result.affectedRows > 0;
   },
+
+  async updatePassword(userId, newPassword) {
+    const hashed = await bcrypt.hash(newPassword, 10);
+    const [result] = await pool.query(
+      `UPDATE users SET password = ? WHERE user_id = ?`,
+      [hashed, userId]
+    );
+    return result.affectedRows > 0;
+  },
 };
 
 export default User;
