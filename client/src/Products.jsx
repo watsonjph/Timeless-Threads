@@ -36,15 +36,12 @@ const Products = () => {
   const [sortOrder, setSortOrder] = useState('default');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredProducts = allProducts.filter((product) =>
-    selectedCategory === 'All' ? true : product.type === selectedCategory
-  );
-//   // Update category from URL if changed
-//   useEffect(() => {
-//     const urlCategory = searchParams.get('category') || 'All';
-//     setSelectedCategory(urlCategory);
-//     setCurrentPage(1);
-//   }, [searchParams]);
+  // Update category from URL if changed
+  useEffect(() => {
+    const urlCategory = searchParams.get('category') || 'All';
+    setSelectedCategory(urlCategory);
+    setCurrentPage(1);
+  }, [searchParams]);
 
 //   const filteredProducts = allProducts.filter((product) => {
 //     if (selectedCategory === 'All') return true;
