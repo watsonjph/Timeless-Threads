@@ -3,11 +3,6 @@ import authController from '../controllers/authController.js';
 import User from '../models/user.js';
 import multer from 'multer';
 import path from 'path';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
@@ -97,15 +92,13 @@ router.post('/update-user-role', async (req, res) => {
 // Multer setup for profile picture uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const userId = req.params.id || req.body.userId || req.query.userId || 'unknown';
-    // Use __dirname to ensure consistency with static serving
-    const userDir = path.join(__dirname, '..', 'uploads', `user_${userId}`);
-    fs.mkdirSync(userDir, { recursive: true });
-    cb(null, userDir);
+    cb(null, path.join(process.cwd(), 'server', 'uploads'));
   },
   filename: function (req, file, cb) {
-    // Always use the same filename for the user's profile picture
-    cb(null, 'profile.jpg');
+    // Use userId and timestamp for uniqueness
+    const userId = req.body.userId || req.query.userId || 'unknown';
+    const ext = path.extname(file.originalname);
+    cb(null, `profile_${userId}_${Date.now()}${ext}`);
   }
 });
 const upload = multer({
@@ -120,42 +113,21 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 } // 5MB max
 });
 
-// Auth middleware
-function requireAuth(req, res, next) {
-  if (!req.session.userId) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-  next();
-}
-
 // Profile picture upload endpoint
-router.post('/user/:id/profile-pic', requireAuth, upload.single('profilePic'), async (req, res) => {
+router.post('/user/:id/profile-pic', upload.single('profilePic'), async (req, res) => {
   try {
-    // Only allow the logged-in user to upload their own profile picture
-    if (req.session.userId !== parseInt(req.params.id, 10)) {
-      return res.status(403).json({ error: 'Forbidden' });
-    }
-    const userId = req.params.id || req.body.userId || req.query.userId || 'unknown';
-    const userDir = path.join(__dirname, '..', 'uploads', `user_${userId}`);
+    const userId = req.params.id;
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded.' });
     }
     // Save file path relative to /api/uploads
-    const profilePicUrl = `/api/uploads/user_${userId}/profile.jpg`;
+    const profilePicUrl = `/api/uploads/${req.file.filename}`;
     // Update user in DB
     await User.updateProfilePic(userId, profilePicUrl);
     res.json({ success: true, profile_pic_url: profilePicUrl });
   } catch (err) {
     res.status(500).json({ error: 'Failed to upload profile picture.' });
   }
-});
-
-// Logout route
-router.post('/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.clearCookie('ttsid');
-    res.json({ message: 'Logged out' });
-  });
 });
 
 // Serve uploaded images statically
