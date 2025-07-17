@@ -28,7 +28,12 @@ import Checkout from './Checkout';
 import FAQs from './FAQs';
 import Products from './Products';
 import FAQBubble from './components/FAQBubble';
+<<<<<<< Updated upstream
 
+=======
+import DashboardHome from './DashboardHome';
+import AboutStrip from './components/AboutStrip';
+>>>>>>> Stashed changes
 
 
 
@@ -374,6 +379,7 @@ function App() {
           </PrivateRoute>
         } />
       </Routes>
+      <AboutStrip />
       <FAQBubble /> {/* <-- This makes the floating button appear on ALL pages */}
       </div>
     </Router>

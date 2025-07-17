@@ -15,7 +15,7 @@ const FAQs = () => {
         <div className="mb-12">
           <h2 className="text-xl font-semibold text-custom-dark mb-2">Watch Our Quick Start Tutorial</h2>
           <video controls className="w-full rounded-lg shadow-lg">
-            <source src="/videos/dummy.mp4" type="video/mp4" />
+            <source src="/videos/Tutorial.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
           <p className="text-sm text-gray-600 mt-2">
