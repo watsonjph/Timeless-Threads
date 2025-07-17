@@ -23,10 +23,11 @@ const ProductVariant = {
 
   async getLowStock() {
     const [rows] = await pool.query(
-      `SELECT pv.*, p.name as product_name
+      `SELECT pv.*, p.name as product_name, pi.stock_quantity, pi.restock_threshold
        FROM product_variants pv
        JOIN products p ON pv.product_id = p.product_id
-       WHERE pv.stock < 5`
+       JOIN product_inventory pi ON pv.variant_id = pi.variant_id
+       WHERE pi.stock_quantity < pi.restock_threshold`
     );
     return rows;
   },

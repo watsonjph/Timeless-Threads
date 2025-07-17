@@ -26,8 +26,10 @@ const orderController = {
         Order.getCompletedOrders(),
         ProductVariant.getLowStock(),
       ]);
+      // lowStock now includes stock_quantity and restock_threshold
       res.json({ totalUsers, totalOrders, completedOrders, lowStock });
     } catch (err) {
+      console.error('Admin dashboard stats error:', err);
       res.status(500).json({ error: 'Failed to fetch dashboard stats.' });
     }
   },

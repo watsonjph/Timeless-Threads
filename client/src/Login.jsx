@@ -99,6 +99,11 @@ export default function Login({ isSignUpDefault = false }) {
         localStorage.setItem('username', data.username);
         localStorage.setItem('role', data.role);
         if (data.id) localStorage.setItem('userId', data.id);
+        if (data.supplierId) {
+          localStorage.setItem('supplierId', data.supplierId);
+        } else {
+          localStorage.removeItem('supplierId');
+        }
         window.dispatchEvent(new CustomEvent('userLogin', { 
           detail: { username: data.username, userId: data.id } 
         }));
