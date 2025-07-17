@@ -3,6 +3,7 @@ import authController from '../controllers/authController.js';
 import User from '../models/user.js';
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 
 const router = express.Router();
 
@@ -92,13 +93,14 @@ router.post('/update-user-role', async (req, res) => {
 // Multer setup for profile picture uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(process.cwd(), 'server', 'uploads'));
+    const userId = req.params.id || req.body.userId || req.query.userId || 'unknown';
+    const userDir = path.join(process.cwd(), 'server', 'uploads', `user_${userId}`);
+    fs.mkdirSync(userDir, { recursive: true });
+    cb(null, userDir);
   },
   filename: function (req, file, cb) {
-    // Use userId and timestamp for uniqueness
-    const userId = req.body.userId || req.query.userId || 'unknown';
-    const ext = path.extname(file.originalname);
-    cb(null, `profile_${userId}_${Date.now()}${ext}`);
+    // Always use the same filename for the user's profile picture
+    cb(null, 'profile.jpg');
   }
 });
 const upload = multer({
@@ -117,11 +119,17 @@ const upload = multer({
 router.post('/user/:id/profile-pic', upload.single('profilePic'), async (req, res) => {
   try {
     const userId = req.params.id;
+    const userDir = path.join(process.cwd(), 'server', 'uploads', `user_${userId}`);
+    const profilePicPath = path.join(userDir, 'profile.jpg');
+    // Delete old profile picture if it exists
+    if (fs.existsSync(profilePicPath)) {
+      fs.unlinkSync(profilePicPath);
+    }
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded.' });
     }
     // Save file path relative to /api/uploads
-    const profilePicUrl = `/api/uploads/${req.file.filename}`;
+    const profilePicUrl = `/api/uploads/user_${userId}/profile.jpg`;
     // Update user in DB
     await User.updateProfilePic(userId, profilePicUrl);
     res.json({ success: true, profile_pic_url: profilePicUrl });

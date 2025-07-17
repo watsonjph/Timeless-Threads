@@ -33,27 +33,18 @@ export default function Navbar({ alwaysHovered = false }) {
     };
 
     const fetchUserProfilePic = async (userId) => {
-      // For now, always use default profile picture
-      // TODO: Implement custom profile picture functionality later
-      setProfilePicUrl('/api/uploads/default-pfp.png');
-      
-      // Uncomment this when custom profile pictures are implemented:
-      /*
       try {
         const res = await fetch(`/api/auth/user/${userId}`);
         const data = await res.json();
         if (res.ok && data.has_profile_pic && data.profile_pic_url) {
           setProfilePicUrl(data.profile_pic_url);
         } else {
-          // Use default profile picture
           setProfilePicUrl('/api/uploads/default-pfp.png');
         }
       } catch (err) {
         console.error('Error fetching user profile:', err);
-        // Fallback to default profile picture
         setProfilePicUrl('/api/uploads/default-pfp.png');
       }
-      */
     };
 
     checkLoginStatus();
