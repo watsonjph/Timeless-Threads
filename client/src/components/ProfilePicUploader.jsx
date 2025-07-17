@@ -72,6 +72,7 @@ export default function ProfilePicUploader({ userId, currentImage, onUpload }) {
       const data = await res.json();
       if (res.ok && data.profile_pic_url) {
         if (onUpload) onUpload(data.profile_pic_url);
+        window.dispatchEvent(new CustomEvent('profilePicUpdated', { detail: { url: data.profile_pic_url } }));
         setImageSrc(null);
       } else {
         setError(data.error || 'Upload failed.');

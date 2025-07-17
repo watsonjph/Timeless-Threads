@@ -75,14 +75,21 @@ export default function Navbar({ alwaysHovered = false }) {
       checkLoginStatus();
     };
 
+    const handleProfilePicUpdate = (e) => {
+      const storedUserId = localStorage.getItem('userId');
+      if (storedUserId) fetchUserProfilePic(storedUserId);
+    };
+
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('userLogin', handleUserLogin);
     window.addEventListener('userLogout', handleUserLogout);
+    window.addEventListener('profilePicUpdated', handleProfilePicUpdate);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('userLogin', handleUserLogin);
       window.removeEventListener('userLogout', handleUserLogout);
+      window.removeEventListener('profilePicUpdated', handleProfilePicUpdate);
     };
   }, [location.pathname]);
 
