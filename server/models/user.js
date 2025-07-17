@@ -61,6 +61,15 @@ const User = {
     return rows[0];
   },
 
+  async findByEmail(email) {
+    const sanitized = sanitize(email);
+    const [rows] = await pool.query(
+      'SELECT * FROM users WHERE email = ?',
+      [sanitized]
+    );
+    return rows[0];
+  },
+
   async comparePassword(plainPassword, hashedPassword) {
     return bcrypt.compare(plainPassword, hashedPassword);
   },
