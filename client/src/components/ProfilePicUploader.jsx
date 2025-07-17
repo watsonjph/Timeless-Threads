@@ -75,7 +75,7 @@ export default function ProfilePicUploader({ userId, currentImage, onUpload }) {
         if (onUpload) onUpload(data.profile_pic_url);
         window.dispatchEvent(new CustomEvent('profilePicUpdated', { detail: { url: data.profile_pic_url } }));
         setImageSrc(null);
-        window.location.reload(); // Refresh the page after upload
+        // window.location.reload(); // Refresh the page after upload
       } else {
         setError(data.error || 'Upload failed.');
       }
