@@ -8,7 +8,7 @@ import logoInverted from '/images/Timeless-Inverted.png'
 // Navigation links configuration
 const navLinks = [
   { to: '/dashboard', label: 'Dashboard', icon: FiGrid },
-  { to: '/client-management', label: 'Client Management', icon: FiUsers },
+
   { to: '/supplier-portal', label: 'Supplier Portal', icon: FiTruck },
   { to: '/user-management', label: 'User Management', icon: FiUserCheck },
 ];
@@ -18,8 +18,14 @@ const getRole = () => localStorage.getItem('role') || 'Employee';
 
 const filterNavLinksByRole = (role) => {
   return navLinks.filter(link => {
-    if (link.to === '/user-management' || link.to === '/dashboard') {
-      return role === 'Admin';
+    if (link.to === '/user-management') {
+      return role === 'admin'; // Only admin sees User Management
+    }
+    if (link.to === '/supplier-portal') {
+      return role === 'admin' || role === 'supplier'; // Both admin and supplier see Supplier Portal
+    }
+    if (link.to === '/dashboard') {
+      return role === 'admin' || role === 'supplier';
     }
     // All roles can see other links
     return true;

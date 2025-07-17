@@ -6,11 +6,18 @@ import logo from '/images/Timeless.png'
 import logoInverted from '/images/Timeless-Inverted.png'
 import mainBg from '/images/main.png'
 import DashboardLayout from './Dashboard'
-import ClientManagement from './ClientManagement'
+
 import Settings from './Settings'
+import Account from './Account'
+import OrderHistory from './OrderHistory'
+import UserManagement from './UserManagement'
 import SupplierPortal from './SupplierPortal';
+import ForgotPassword from './ForgotPassword';
+import VerifyEmail from './VerifyEmail';
+import ResetPassword from './ResetPassword';
 import { FaInstagram, FaPaypal } from 'react-icons/fa';
 import Marquee from 'react-fast-marquee';
+import Navbar from './Navbar';
 import ProductCarousel from './ProductCarousel';
 import ProductDetails from './ProductDetails';
 import About from './About';
@@ -19,12 +26,9 @@ import Womens from './Womens';
 import Cart from './Cart';
 import Checkout from './Checkout';
 import FAQs from './FAQs';
-<<<<<<< Updated upstream
-=======
 import Products from './Products';
 import FAQBubble from './components/FAQBubble';
->>>>>>> Stashed changes
-
+import DashboardHome from './DashboardHome';
 
 
 
@@ -43,71 +47,44 @@ function PrivateRoute({ children }) {
 }
 
 function PublicRoute({ children }) {
-  return !isLoggedIn() ? children : <Navigate to="/dashboard" />
+  const isLoggedIn = !!localStorage.getItem('username');
+  const role = localStorage.getItem('role');
+  
+  if (!isLoggedIn) {
+    return children;
+  }
+  
+  // Only redirect admin and supplier users to dashboard
+  // Regular users can access public routes
+  if (role === 'admin' || role === 'supplier') {
+    return <Navigate to="/dashboard" />;
+  }
+  
+  return children;
 }
 
 function Landing() {
   return (
     <div className="font-poppins min-h-screen flex flex-col">
-      {/* Hero Section with Full Background Image */}
-      <div 
-        className="relative min-h-screen flex flex-col"
-        style={{
-          backgroundImage: `url(${mainBg})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
-        {/* Header with transparent background */}
-        <header className="bg-transparent hover:bg-white transition-all duration-500 ease-in-out font-poppins group">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-24">
-              {/* Left Navigation */}
-              <nav className="flex items-center space-x-12 -ml-16">
-                <Link to="/mens" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative hover:text-black group">
-                  <span>Men's</span>
-                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
-                </Link>
-                <Link to="/womens" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative hover:text-black group">
-                  <span>Women's</span>
-                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
-                </Link>
-                <Link to="/products" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative hover:text-black group">
-                  <span>All Products</span>
-                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
-                </Link>
-              </nav>
-              
-              {/* Center Logo */}
-              <div className="absolute left-1/2 transform -translate-x-1/2">
-                <img src={logoInverted} alt="Timeless Threads" className="h-28 w-auto group-hover:opacity-0 transition-all duration-500 ease-in-out" />
-                <img src={logo} alt="Timeless Threads" className="h-28 w-auto absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out" />
-              </div>
-              
-              {/* Right Navigation */}
-              <nav className="flex items-center space-x-8 mr-16">
-                <Link to="/login" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative hover:text-black group">
-                  <span>Login</span>
-                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
-                </Link>
-                <Link to="/cart" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out flex items-center space-x-2 uppercase tracking-wider relative hover:text-black group">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
-                  </svg>
-                  <span>CART</span>
-                  <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
-                </Link>
-              </nav>
+      {/* Hero Section with Full Background Image and animated background */}
+      <div className="relative min-h-screen flex flex-col" style={{ minHeight: '60vh' }}>
+        <div 
+          className="absolute inset-0 w-full h-full animate-landing-bg-zoom-slow z-0"
+          style={{
+            backgroundImage: `url(${mainBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
+                <div className="relative z-10 flex flex-col min-h-screen">
+          <Navbar />
+          {/* Hero Content */}
+          <main className="flex-1 flex flex-col items-center justify-center">
+            <div className="max-w-4xl w-full py-24 px-4 sm:px-6 lg:px-8 text-center">
             </div>
-          </div>
-        </header>
-
-        {/* Hero Content */}
-        <main className="flex-1 flex flex-col items-center justify-center">
-          <div className="max-w-4xl w-full py-24 px-4 sm:px-6 lg:px-8 text-center">
-          </div>
-        </main>
+          </main>
+        </div>
       </div>
 
       {/* Product Carousel Section */}
@@ -279,13 +256,71 @@ function AdminDashboard() {
   );
 }
 
+// Supplier Dashboard - Only accessible by Supplier role
+function SupplierDashboard() {
+  const username = localStorage.getItem('username') || 'User';
+  const role = localStorage.getItem('role') || 'Employee';
+  const stats = [
+    { label: "Total Orders", value: "Coming Soon" },
+    { label: "Products Listed", value: "Coming Soon" },
+    { label: "Revenue", value: "Coming Soon" },
+  ];
+  return (
+    <main className="flex-1 p-8 flex flex-col items-center justify-center transition-all duration-300">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8 w-full max-w-4xl">
+        <div>
+          <h1 className="text-3xl font-bold text-custom-dark font-poppins">Supplier Dashboard</h1>
+          <p className="text-gray-600 font-nunito">Welcome back, {username} ({role})</p>
+        </div>
+        {/* Logo removed for repurposing */}
+      </div>
+      {/* Stat Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 w-full max-w-4xl">
+        {stats.map((stat, index) => (
+          <div
+            key={index}
+            className="bg-white shadow-md rounded-xl p-6 text-center hover:shadow-lg transition"
+          >
+            <p className="text-3xl font-bold text-custom-dark font-poppins">{stat.value}</p>
+            <p className="text-gray-600 mt-2 font-kanit">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+      {/* Chart Placeholder */}
+      <div className="bg-white rounded-xl p-6 shadow-md w-full max-w-4xl">
+        <h2 className="text-xl font-semibold text-gray-700 mb-3 font-kanit">
+          Order Overview
+        </h2>
+        <div className="h-52 flex items-center justify-center border-2 border-dashed border-gray-300 text-gray-400 rounded-lg font-nunito">
+          📦 Order chart coming soon...
+        </div>
+      </div>
+    </main>
+  );
+}
+
+// Dynamic Dashboard - Shows different content based on role
+function DynamicDashboard() {
+  const role = localStorage.getItem('role');
+  
+  if (role === 'admin') {
+    return <AdminDashboard />;
+  } else if (role === 'supplier') {
+    return <SupplierDashboard />;
+  } else {
+    // Fallback - redirect to landing page
+    return <Navigate to="/" />;
+  }
+}
+
 function getRole() {
   return localStorage.getItem('role') || 'Employee';
 }
 
 function RoleRoute({ allowedRoles, children }) {
   const role = getRole();
-  return allowedRoles.includes(role) ? children : <Navigate to="/dashboard" />;
+  return allowedRoles.includes(role) ? children : <Navigate to="/" />;
 }
 
 function App() {
@@ -297,38 +332,40 @@ function App() {
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/signup" element={<PublicRoute><Login isSignUpDefault={true} /></PublicRoute>} />
         <Route path="/products/:category/:slug" element={<ProductDetails />} />
+        <Route path="/products" element={<Products />} />
         <Route path="/about" element={<About />} />
         <Route path="/mens" element={<Mens />} />
         <Route path="/womens" element={<Womens />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
         <Route path="/faqs" element={<FAQs />} />
+        <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/account" element={<PrivateRoute><Account /></PrivateRoute>} />
+        <Route path="/order-history" element={<PrivateRoute><OrderHistory /></PrivateRoute>} />
 
 
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
           <Route path="/dashboard" element={
-            <RoleRoute allowedRoles={["Admin"]}>
-              <AdminDashboard />
+            <RoleRoute allowedRoles={["admin", "supplier"]}>
+              <DashboardHome />
             </RoleRoute>
           } />
-          <Route path="/client-management" element={
-            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
-              <ClientManagement />
-            </RoleRoute>
-          } />
+
           <Route path="/supplier-portal" element={
-            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
+            <RoleRoute allowedRoles={["admin", "supplier"]}>
               <SupplierPortal />
             </RoleRoute>
           } />
-          <Route path="/user-management" element={
-            <RoleRoute allowedRoles={["Admin"]}>
-              <PageTitle title="User Management" />
+          <Route path="/settings" element={
+            <RoleRoute allowedRoles={["admin", "supplier"]}>
+              <Settings />
             </RoleRoute>
           } />
-          <Route path="/settings" element={
-            <RoleRoute allowedRoles={["Admin", "Project Manager", "Finance Staff", "Employee"]}>
-              <Settings />
+          <Route path="/user-management" element={
+            <RoleRoute allowedRoles={["admin"]}>
+              <UserManagement />
             </RoleRoute>
           } />
         </Route>

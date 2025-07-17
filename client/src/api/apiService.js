@@ -40,6 +40,9 @@ api.interceptors.response.use(
 export const authAPI = {
   login: (credentials) => api.post('/auth/login', credentials),
   register: (userData) => api.post('/auth/register', userData),
+  forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
+  verifyEmail: (email) => api.post('/auth/verify-email', { email }),
+  resetPassword: (email, newPassword) => api.post('/auth/reset-password', { email, newPassword }),
   logout: () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
@@ -49,10 +52,40 @@ export const authAPI = {
 // Health check
 export const healthCheck = () => api.get('/');
 
-// Client API calls
-export const clientAPI = {
-  getAll: () => api.get('/clients'),
-  create: (clientData) => api.post('/clients', clientData),
+// Orders API calls
+export const ordersAPI = {
+  getUserOrders: (userId) => api.get(`/orders/user/${userId}`),
 };
+
+// Supplier Orders API calls
+export const supplierOrdersAPI = {
+  getAll: (params) => api.get('/supplier-orders', { params }),
+  getById: (id) => api.get(`/supplier-orders/${id}`),
+  create: (data) => api.post('/supplier-orders', data),
+  updateStatus: (id, status) => api.patch(`/supplier-orders/${id}/status`, { status }),
+};
+
+// Suppliers API calls
+export const suppliersAPI = {
+  getAll: () => api.get('/suppliers'),
+  create: (data) => api.post('/suppliers', data),
+  update: (id, data) => api.put(`/suppliers/${id}`, data),
+  delete: (id) => api.delete(`/suppliers/${id}`),
+};
+
+// Admin User API calls
+export const adminUsersAPI = {
+  getAll: () => api.get('/auth/users'),
+  create: (data) => api.post('/auth/users', data),
+  update: (id, data) => api.put(`/auth/users/${id}`, data),
+  delete: (id) => api.delete(`/auth/users/${id}`),
+};
+
+// Dashboard stats API calls
+export const dashboardAPI = {
+  getAdminStats: () => api.get('/orders/admin-dashboard-stats'),
+  getSupplierStats: (supplierId) => api.get('/orders/supplier-dashboard-stats', { params: { supplierId } }),
+};
+
 
 export default api; 

@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-<<<<<<< Updated upstream
-=======
 import Navbar from './Navbar';
 import hardcodedReviews from './Reviews';
 import { productsTop, productsBottom } from './ProductData';
->>>>>>> Stashed changes
+
 
 const allProducts = [...productsTop, ...productsBottom];
 
@@ -25,30 +23,31 @@ const ProductDetails = () => {
   }, [product?.sku]);
 
   const addToCart = () => {
-<<<<<<< Updated upstream
-  const cart = JSON.parse(localStorage.getItem('cart')) || [];
-  const existingIndex = cart.findIndex(item => item.sku === product.sku);
-=======
     const isLoggedIn = !!localStorage.getItem('username');
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const existingIndex = cart.findIndex(item => item.sku === product.sku);
->>>>>>> Stashed changes
 
-  if (existingIndex !== -1) {
-    if (cart[existingIndex].quantity < product.stock) {
-      cart[existingIndex].quantity += 1;
+
+    if (existingIndex !== -1) {
+      if (cart[existingIndex].quantity < product.stock) {
+        cart[existingIndex].quantity += 1;
+      }
+    } else {
+      cart.push({ ...product, quantity: 1 });
     }
-  } else {
-    cart.push({ ...product, quantity: 1 });
-  }
 
-<<<<<<< Updated upstream
   localStorage.setItem('cart', JSON.stringify(cart));
   alert(`${product.name} added to cart.`);
-=======
+
+
     localStorage.setItem('cart', JSON.stringify(cart));
-    alert(`${product.name} added to cart.` + (!isLoggedIn ? ' Please log in to checkout.' : ''));
->>>>>>> Stashed changes
+    
+    if (isLoggedIn) {
+      alert(`${product.name} added to cart.`);
+    } else {
+      alert(`${product.name} added to cart. Please log in to checkout.`);
+    }
+
   };
 
   if (!product) {
@@ -58,31 +57,17 @@ const ProductDetails = () => {
   const imagePath = `/images/products/${product.type.charAt(0).toUpperCase() + product.type.slice(1)}/${product.image}`;
 
   return (
-<<<<<<< Updated upstream
     <div className="p-8 font-poppins max-w-4xl mx-auto">
       <button
         onClick={() => navigate(-1)}
         className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-custom-dark text-white rounded-full hover:bg-gray-800 transition-all duration-300 ease-in-out transform hover:-translate-x-1 hover:shadow-lg"
       >
+  
         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
         </svg>
         Back
       </button>
-=======
-    <div className="font-poppins min-h-screen bg-custom-cream">
-      <Navbar alwaysHovered={true} />
-      <div className="p-8 max-w-4xl mx-auto">
-        <button
-          onClick={() => navigate(-1)}
-          className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-custom-dark text-white rounded-full hover:bg-gray-800 transition-all duration-300 ease-in-out transform hover:-translate-x-1 hover:shadow-lg"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-          Back
-        </button>
->>>>>>> Stashed changes
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <img src={imagePath} alt={product.name} className="w-full object-cover rounded-lg" />
@@ -120,7 +105,6 @@ const ProductDetails = () => {
           </div>
         </div>
 
-<<<<<<< Updated upstream
       <div className="mt-8">
         <h2 className="font-bold text-xl mb-2">Reviews:</h2>
         {reviews.length > 0 ? (
@@ -135,23 +119,7 @@ const ProductDetails = () => {
         ) : (
           <p className="italic text-gray-600">No reviews yet.</p>
         )}
-=======
-        <div className="mt-8">
-          <h2 className="font-bold text-xl mb-2">Reviews:</h2>
-          {reviews.length > 0 ? (
-            <ul className="space-y-4">
-              {reviews.map((review, i) => (
-                <li key={i} className="border border-gray-200 p-4 rounded-lg shadow-sm">
-                  <p className="font-semibold text-custom-dark">{review.name}</p>
-                  <p className="text-sm text-gray-700 mt-1">{review.comment}</p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="italic text-gray-600">No reviews yet.</p>
-          )}
-        </div>
->>>>>>> Stashed changes
+      </div>
       </div>
     </div>
   );

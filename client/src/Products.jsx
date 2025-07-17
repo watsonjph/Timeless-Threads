@@ -1,74 +1,89 @@
 // client/src/Products.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-<<<<<<< Updated upstream
-import { productsTop, productsBottom } from './ProductCarousel';
 import logo from '/images/Timeless.png';
 import logoInverted from '/images/Timeless-Inverted.png';
-=======
 import { productsTop, productsBottom } from './ProductData';
 import Navbar from './Navbar';
 import Footer from './Footer';
->>>>>>> Stashed changes
 
 const allProducts = [...productsTop, ...productsBottom];
+const categories = ['All', 'mens', 'womens'];
+const itemsPerPage = 8;
 
 const Products = () => {
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [sortOrder, setSortOrder] = useState('default');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const filteredProducts = allProducts.filter(product =>
+    selectedCategory === 'All' ? true : product.type === selectedCategory
+  );
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortOrder === 'asc') return a.price - b.price;
+    if (sortOrder === 'desc') return b.price - a.price;
+    return 0;
+  });
+
+  const paginatedProducts = sortedProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
+
   return (
-    <div className="font-poppins min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="bg-transparent hover:bg-white transition-all duration-500 ease-in-out font-poppins group">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-24">
-            {/* Left Navigation */}
-            <nav className="flex items-center space-x-12 -ml-18">
-              <Link to="/mens" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative hover:text-black group">
-                <span>Men's</span>
-                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
-              </Link>
-              <Link to="/womens" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative hover:text-black group">
-                <span>Women's</span>
-                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
-              </Link>
-              <Link to="/products" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative hover:text-black group">
-                <span>All Products</span>
-                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
-              </Link>
-            </nav>
+    <div className="font-poppins min-h-screen flex flex-col bg-custom-cream">
+      <Navbar alwaysHovered={true} />
 
-            {/* Center Logo */}
-            <Link to="/" className="absolute left-1/2 transform -translate-x-1/2">
-              <img src={logoInverted} alt="Timeless Threads" className="h-28 w-auto group-hover:opacity-0 transition-all duration-500 ease-in-out" />
-              <img src={logo} alt="Timeless Threads" className="h-28 w-auto absolute top-0 left-0 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out" />
-            </Link>
+      <div className="flex flex-col md:flex-row">
+        {/* Sidebar */}
+        <aside className="w-full md:w-1/5 bg-white p-4 border-r border-gray-200">
+          <h2 className="font-bold mb-2 uppercase tracking-wide text-custom-dark">Filter by Category</h2>
+          <ul className="space-y-2">
+            {categories.map((cat) => (
+              <li key={cat}>
+                <button
+                  onClick={() => {
+                    setSelectedCategory(cat);
+                    setCurrentPage(1);
+                  }}
+                  className={`w-full text-left px-3 py-2 rounded-full font-medium ${
+                    selectedCategory === cat
+                      ? 'bg-black text-white'
+                      : 'bg-gray-100 hover:bg-gray-200'
+                  }`}
+                >
+                  {cat === 'All' ? 'All Products' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </aside>
 
-            {/* Right Navigation */}
-            <nav className="flex items-center space-x-8 mr-18">
-              <Link to="/login" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative hover:text-black group">
-                <span>Login</span>
-                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
-              </Link>
-              <Link to="/cart" className="text-white group-hover:text-black px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out flex items-center space-x-2 uppercase tracking-wider relative hover:text-black group">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
-                </svg>
-                <span>CART</span>
-                <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-current group-hover:w-full transition-all duration-500 ease-in-out"></div>
-              </Link>
-            </nav>
+        {/* Main Content */}
+        <main className="flex-1 p-6">
+          {/* Heading + Sorting */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+            <h1 className="text-2xl font-bold uppercase tracking-wider text-custom-dark">All Products</h1>
+            <select
+              className="border border-gray-300 rounded-full px-4 py-2 text-sm"
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+            >
+              <option value="default">Sort By</option>
+              <option value="asc">Price: Low to High</option>
+              <option value="desc">Price: High to Low</option>
+            </select>
           </div>
-        </div>
-      </header>
 
-      {/* All Products Grid */}
-      <main className="flex-1 px-4 sm:px-8 lg:px-16 py-12">
-        <h1 className="text-3xl font-bold text-custom-dark text-center mb-8 font-poppins uppercase tracking-widest">All Products</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {allProducts.map((prod, i) => {
-            const slug = encodeURIComponent(prod.name.toLowerCase().replace(/\s+/g, '-'));
-            const productPath = `/products/${prod.type}/${slug}`;
+          {/* Product Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {paginatedProducts.map((prod, index) => {
+              const slug = encodeURIComponent(prod.name.toLowerCase().replace(/\s+/g, '-'));
+              const productPath = `/products/${prod.type}/${slug}`;
 
-<<<<<<< Updated upstream
             return (
               <div key={i} className="bg-white shadow-md hover:shadow-xl transform hover:-translate-y-2 transition-all duration-300 p-4">
                 <Link to={productPath}>
@@ -81,15 +96,12 @@ const Products = () => {
                 </Link>
                 <div className="text-custom-dark text-xs font-nunito mt-1 flex items-center justify-center gap-1">
                   <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>₱</span>{prod.price.toLocaleString()}
-=======
-              // Construct path based on product type
-              const imagePath = `/images/products/${prod.type === 'mens' ? 'Mens' : 'Womens'}/${prod.image}`;
 
               return (
                 <div key={index} className="bg-white shadow-md p-4 hover:shadow-xl transform hover:-translate-y-1 transition duration-300">
                   <Link to={productPath}>
-                    <img
-                      src={imagePath}
+                    <img src={imagePath}
+
                       alt={prod.name}
                       className="w-full h-72 object-contain mb-3 rounded"
                     />
@@ -100,18 +112,36 @@ const Products = () => {
                       ₱{prod.price.toLocaleString()}
                     </div>
                   </Link>
->>>>>>> Stashed changes
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      </main>
+              );
+            })}
+          </div>
 
-      {/* Footer */}
-      {/* Paste the same footer block from Mens.jsx or Womens.jsx here */}
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-8 space-x-2">
+              {Array.from({ length: totalPages }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`px-4 py-2 rounded-full ${
+                    currentPage === i + 1
+                      ? 'bg-black text-white'
+                      : 'bg-white border border-gray-300 hover:bg-gray-100'
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
+
+      <Footer />
     </div>
   );
 };
 
 export default Products;
+

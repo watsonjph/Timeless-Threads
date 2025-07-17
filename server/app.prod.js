@@ -2,23 +2,35 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
+// Define __filename and __dirname at the top
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 import authRoutes from './routes/auth.js';
+import suppliersRoutes from './routes/suppliers.js';
+import orderRoutes from './routes/orders.js';
+import supplierOrderRoutes from './routes/supplierOrders.js';
 
 const app = express();
 
 // Middleware
 app.use(cors({
-  origin: true, // Allow all origins or set to your production domain
+  origin: true,
   credentials: true
 }));
 app.use(express.json());
 
+// Serve static files from uploads directory
+app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/supplier-orders', supplierOrderRoutes);
+app.use('/api/suppliers', suppliersRoutes);
 
 // Serve static files from the frontend build
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const clientDistPath = path.join(__dirname, '../client/dist');
 app.use(express.static(clientDistPath));
 

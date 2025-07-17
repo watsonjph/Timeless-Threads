@@ -1,12 +1,10 @@
 // client/src/FAQs.jsx
 import React from 'react';
-<<<<<<< Updated upstream
 
 const FAQs = () => {
   return (
     <div className="font-poppins min-h-screen bg-custom-cream p-8 max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-custom-dark">Frequently Asked Questions</h1>
-=======
 import Navbar from './Navbar';
 import { Link } from 'react-router-dom';
 import { FaInstagram, FaPaypal } from 'react-icons/fa';
@@ -17,7 +15,6 @@ const FAQs = () => {
       <Navbar alwaysHovered={true} />
       <div className="p-8 max-w-4xl mx-auto flex-grow">
         <h1 id="faqs" className="text-3xl font-bold mb-8 text-custom-dark">Frequently Asked Questions</h1>
->>>>>>> Stashed changes
 
         {/* Video Tutorial Placeholder */}
         <div className="mb-12">
@@ -78,8 +75,6 @@ const FAQs = () => {
           </div>
         </div>
       </div>
-<<<<<<< Updated upstream
-=======
 
       {/* Footer copied from App.jsx */}
       <footer className="bg-white font-kanit border-t border-custom-medium mt-8">
@@ -125,8 +120,11 @@ const FAQs = () => {
             <a href="#" className="hover:underline">Terms & Conditions</a>
           </div>
         </div>
+
       </footer>
->>>>>>> Stashed changes
+
+      </div>
+      </div>
     </div>
   );
 };

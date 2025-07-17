@@ -18,7 +18,7 @@ export default function Settings() {
     async function fetchUser() {
       if (!userId) return;
       try {
-        const res = await fetch('http://localhost:3000/api/auth/user/' + userId);
+        const res = await fetch('/api/auth/user/' + userId);
         const data = await res.json();
         if (res.ok) {
           setEmail(data.email || '');
@@ -39,7 +39,7 @@ export default function Settings() {
       return;
     }
     try {
-      const res = await fetch('http://localhost:3000/api/auth/update-email', {
+      const res = await fetch('/api/auth/update-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, newEmail })
@@ -65,7 +65,7 @@ export default function Settings() {
       return;
     }
     try {
-      const res = await fetch('http://localhost:3000/api/auth/update-username', {
+      const res = await fetch('/api/auth/update-username', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, newUsername })
@@ -90,13 +90,13 @@ export default function Settings() {
       setPwdMsg('Please enter your current and new password.');
       return;
     }
-    // Password must be at least 8 chars and contain a number or special char
-    if (!/^.{8,}$/.test(newPwd) || !/[^A-Za-z]/.test(newPwd)) {
-      setPwdMsg('Password must be at least 8 characters and include a number or special character.');
+    // Password must be at least 8 chars, contain a number AND a special char
+    if (!/^.{8,}$/.test(newPwd) || !/\d/.test(newPwd) || !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newPwd)) {
+      setPwdMsg('Password must be at least 8 characters and include a number and a special character.');
       return;
     }
     try {
-      const res = await fetch('http://localhost:3000/api/auth/update-password', {
+      const res = await fetch('/api/auth/update-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, currentPassword: currentPwd, newPassword: newPwd })

@@ -1,6 +1,7 @@
 // client/src/Checkout.jsx
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import Navbar from './Navbar';
 
 const Checkout = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -13,17 +14,58 @@ const Checkout = () => {
     gcashNumber: ''
   });
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
+    // Check for success message from login/registration
+    if (location.state && location.state.success) {
+      setSuccessMessage(location.state.success);
+      // Clear the message after 5 seconds
+      setTimeout(() => setSuccessMessage(''), 5000);
+    }
+
+    // Check if user is logged in
+    const isLoggedIn = !!localStorage.getItem('username');
+    if (!isLoggedIn) {
+      alert('Please log in to checkout.');
+      navigate('/login?returnTo=checkout');
+      return;
+    }
+
+    // Check if cart is empty
     const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
     if (storedCart.length === 0) {
       alert('Cart is empty. Redirecting to products.');
       navigate('/products');
-    } else {
-      setCartItems(storedCart);
+      return;
     }
-  }, [navigate]);
+
+    setCartItems(storedCart);
+
+    // Pre-fill form with user data if available
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      fetchUserData(userId);
+    }
+  }, [navigate, location.state]);
+
+  const fetchUserData = async (userId) => {
+    try {
+      const res = await fetch(`/api/auth/user/${userId}`);
+      const data = await res.json();
+      if (res.ok) {
+        setFormData(prev => ({
+          ...prev,
+          email: data.email || '',
+          fullName: `${data.firstName || ''} ${data.lastName || ''}`.trim()
+        }));
+      }
+    } catch (err) {
+      console.error('Failed to fetch user data:', err);
+    }
+  };
 
   const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
@@ -49,8 +91,10 @@ const Checkout = () => {
   };
 
   return (
-    <div className="font-poppins min-h-screen bg-custom-cream p-8 relative">
-      <h1 className="text-3xl font-bold text-center text-custom-dark mb-8">Checkout</h1>
+    <div className="font-poppins min-h-screen bg-custom-cream relative">
+      <Navbar alwaysHovered={true} />
+      <div className="p-8">
+        <h1 className="text-3xl font-bold text-center text-custom-dark mb-8">Checkout</h1>
 
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* FORM */}
@@ -133,6 +177,13 @@ const Checkout = () => {
           </div>
         </div>
       </div>
+
+      {/* Success Message Display */}
+      {successMessage && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-40">
+          {successMessage}
+        </div>
+      )}
 
       {/* ✅ Confirmation Animation */}
       {showConfirmation && (
@@ -219,7 +270,7 @@ const Checkout = () => {
           </div>
         </div>
       </footer>
-
+      </div>
     </div>
   );
 };
