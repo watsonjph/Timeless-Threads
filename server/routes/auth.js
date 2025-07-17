@@ -94,7 +94,8 @@ router.post('/update-user-role', async (req, res) => {
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const userId = req.params.id || req.body.userId || req.query.userId || 'unknown';
-    const userDir = path.join(process.cwd(), 'server', 'uploads', `user_${userId}`);
+    // Use __dirname to ensure consistency with static serving
+    const userDir = path.join(__dirname, '..', 'uploads', `user_${userId}`);
     fs.mkdirSync(userDir, { recursive: true });
     cb(null, userDir);
   },
