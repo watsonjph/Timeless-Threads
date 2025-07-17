@@ -7,6 +7,7 @@ export default function ResetPassword() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const token = new URLSearchParams(window.location.search).get('token');
+  const email = new URLSearchParams(window.location.search).get('email');
 
   const validatePassword = (pwd) => {
     return pwd.length >= 8 && /\d/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
@@ -28,7 +29,7 @@ export default function ResetPassword() {
       const res = await fetch('/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, newPassword: password })
+        body: JSON.stringify({ email, newPassword: password })
       });
       const data = await res.json();
       if (res.ok) {

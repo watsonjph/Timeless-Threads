@@ -8,8 +8,8 @@ const pendingPasswordResets = {};
 
 const authController = {
   async register(req, res) {
-    const { email, username, firstName, lastName, password } = req.body;
-    if (!email || !username || !firstName || !lastName || !password) {
+    const { email, username, password } = req.body;
+    if (!email || !username || !password) {
       return res.status(400).json({ error: 'All fields are required.' });
     }
     try {
@@ -22,15 +22,15 @@ const authController = {
       }
       // Store pending registration with expiry
       pendingRegistrations[email] = {
-        email, username, firstName, lastName, password,
+        email, username, password,
         expiresAt: Date.now() + 10 * 60 * 1000 // 10 minutes
       };
       const verifyUrl = `https://timelessthreads.xyz/verify-email?email=${encodeURIComponent(email)}`;
       await sendEmail({
         to: email,
         subject: 'Verify your email for Timeless Threads',
-        text: `Hi ${firstName}, please verify your email by clicking this link: ${verifyUrl}`,
-        html: `<p>Hi ${firstName},</p><p>Please verify your email by clicking <a href="${verifyUrl}">here</a>.</p>`
+        text: `Hi, please verify your email by clicking this link: ${verifyUrl}`,
+        html: `<p>Please verify your email by clicking <a href="${verifyUrl}">here</a>.</p>`
       });
       return res.status(200).json({ message: 'Verification email sent. Please check your inbox.' });
     } catch (err) {
@@ -165,8 +165,6 @@ const authController = {
       await User.create({
         email: entry.email,
         username: entry.username,
-        firstName: entry.firstName,
-        lastName: entry.lastName,
         password: entry.password
       });
       const user = await User.findByEmail(entry.email);
