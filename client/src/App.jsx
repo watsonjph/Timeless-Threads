@@ -28,12 +28,8 @@ import Checkout from './Checkout';
 import FAQs from './FAQs';
 import Products from './Products';
 import FAQBubble from './components/FAQBubble';
-<<<<<<< Updated upstream
-
-=======
 import DashboardHome from './DashboardHome';
 import AboutStrip from './components/AboutStrip';
->>>>>>> Stashed changes
 
 
 
