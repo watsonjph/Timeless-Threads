@@ -14,7 +14,7 @@ const User = {
     return rows;
   },
 
-  async getById(userId) {
+  async findById(userId) {
     const [rows] = await pool.query(
       `SELECT * FROM users WHERE user_id = ?`,
       [userId]
