@@ -1,7 +1,9 @@
 // client/src/Products.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { productsTop, productsBottom } from './ProductCarousel';
+import logo from '/images/Timeless.png';
+import logoInverted from '/images/Timeless-Inverted.png';
+import { productsTop, productsBottom } from './ProductData';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
@@ -82,11 +84,24 @@ const Products = () => {
               const slug = encodeURIComponent(prod.name.toLowerCase().replace(/\s+/g, '-'));
               const productPath = `/products/${prod.type}/${slug}`;
 
+            return (
+              <div key={i} className="bg-white shadow-md hover:shadow-xl transform hover:-translate-y-2 transition-all duration-300 p-4">
+                <Link to={productPath}>
+                  <img src={prod.image} alt={prod.name} className="w-full h-72 object-contain mb-4 transition-transform duration-300 ease-in-out hover:scale-105" />
+                </Link>
+                <Link to={productPath}>
+                  <div className="text-custom-dark text-sm font-nunito uppercase tracking-widest hover:underline text-center">
+                    {prod.name}
+                  </div>
+                </Link>
+                <div className="text-custom-dark text-xs font-nunito mt-1 flex items-center justify-center gap-1">
+                  <span style={{ fontWeight: 'bold', fontSize: '1rem' }}>₱</span>{prod.price.toLocaleString()}
+
               return (
                 <div key={index} className="bg-white shadow-md p-4 hover:shadow-xl transform hover:-translate-y-1 transition duration-300">
                   <Link to={productPath}>
-                    <img
-                      src={prod.image}
+                    <img src={imagePath}
+
                       alt={prod.name}
                       className="w-full h-72 object-contain mb-3 rounded"
                     />
