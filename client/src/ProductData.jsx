@@ -153,4 +153,3 @@ const productsBottom = [
 const allProducts = [...productsTop, ...productsBottom];
 
 export { productsTop, productsBottom, allProducts };
-

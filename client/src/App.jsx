@@ -8,6 +8,9 @@ import mainBg from '/images/main.png'
 import DashboardLayout from './Dashboard'
 
 import Settings from './Settings'
+import Account from './Account'
+import OrderHistory from './OrderHistory'
+import UserManagement from './UserManagement'
 import SupplierPortal from './SupplierPortal';
 import ForgotPassword from './ForgotPassword';
 import VerifyEmail from './VerifyEmail';
@@ -24,7 +27,9 @@ import Cart from './Cart';
 import Checkout from './Checkout';
 import FAQs from './FAQs';
 import Products from './Products';
-
+import FAQBubble from './components/FAQBubble';
+import DashboardHome from './DashboardHome';
+import { useEffect } from 'react';
 
 
 
@@ -43,7 +48,20 @@ function PrivateRoute({ children }) {
 }
 
 function PublicRoute({ children }) {
-  return !isLoggedIn() ? children : <Navigate to="/dashboard" />
+  const isLoggedIn = !!localStorage.getItem('username');
+  const role = localStorage.getItem('role');
+  
+  if (!isLoggedIn) {
+    return children;
+  }
+  
+  // Only redirect admin and supplier users to dashboard
+  // Regular users can access public routes
+  if (role === 'admin' || role === 'supplier') {
+    return <Navigate to="/dashboard" />;
+  }
+  
+  return children;
 }
 
 function Landing() {
@@ -60,7 +78,16 @@ function Landing() {
             backgroundRepeat: 'no-repeat',
           }}
         />
-                <div className="relative z-10 flex flex-col min-h-screen">
+        {/* Shop Now Button - lower left over background */}
+        <div className="absolute left-20 bottom-32 z-30"> {/* moved diagonally up and right, now z-30 for clickability */}
+          <Link
+            to="/products"
+            className="shop-now-btn animate-shopNow-fade-in-up shop-now-btn--small"
+          >
+            Shop Now
+          </Link>
+        </div>
+        <div className="relative z-10 flex flex-col min-h-screen">
           <Navbar />
           {/* Hero Content */}
           <main className="flex-1 flex flex-col items-center justify-center">
@@ -152,14 +179,14 @@ function Landing() {
             {/* Second Column - Help Section */}
             <div className="flex flex-col items-start space-y-2">
               <h3 className="text-custom-dark text-xs font-semibold uppercase tracking-widest mb-2">
-                Help
+              Help
               </h3>
-              <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Shipping</a>
-              <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Returns</a>
-              <Link to="/faqs" className="hover:underline">FAQs</Link>
-              <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Sizing Guide</a>
-              <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Product Care</a>
-              <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Contact Us</a>
+              <Link to="/faqs#shipping" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Shipping</Link>
+              <Link to="/faqs#returns" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Returns</Link>
+              <Link to="/faqs" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">FAQs</Link>
+              <Link to="/faqs#sizing-guide" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Sizing Guide</Link>
+              <Link to="/faqs#product-care" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Product Care</Link>
+              <Link to="/faqs#contact-us" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Contact Us</Link>
             </div>
 
             {/* Third Column - About Us and Contact Info */}
@@ -239,20 +266,120 @@ function AdminDashboard() {
   );
 }
 
+// Supplier Dashboard - Only accessible by Supplier role
+function SupplierDashboard() {
+  const username = localStorage.getItem('username') || 'User';
+  const role = localStorage.getItem('role') || 'Employee';
+  const stats = [
+    { label: "Total Orders", value: "Coming Soon" },
+    { label: "Products Listed", value: "Coming Soon" },
+    { label: "Revenue", value: "Coming Soon" },
+  ];
+  return (
+    <main className="flex-1 p-8 flex flex-col items-center justify-center transition-all duration-300">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-8 w-full max-w-4xl">
+        <div>
+          <h1 className="text-3xl font-bold text-custom-dark font-poppins">Supplier Dashboard</h1>
+          <p className="text-gray-600 font-nunito">Welcome back, {username} ({role})</p>
+        </div>
+        {/* Logo removed for repurposing */}
+      </div>
+      {/* Stat Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8 w-full max-w-4xl">
+        {stats.map((stat, index) => (
+          <div
+            key={index}
+            className="bg-white shadow-md rounded-xl p-6 text-center hover:shadow-lg transition"
+          >
+            <p className="text-3xl font-bold text-custom-dark font-poppins">{stat.value}</p>
+            <p className="text-gray-600 mt-2 font-kanit">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+      {/* Chart Placeholder */}
+      <div className="bg-white rounded-xl p-6 shadow-md w-full max-w-4xl">
+        <h2 className="text-xl font-semibold text-gray-700 mb-3 font-kanit">
+          Order Overview
+        </h2>
+        <div className="h-52 flex items-center justify-center border-2 border-dashed border-gray-300 text-gray-400 rounded-lg font-nunito">
+          📦 Order chart coming soon...
+        </div>
+      </div>
+    </main>
+  );
+}
+
+// Dynamic Dashboard - Shows different content based on role
+function DynamicDashboard() {
+  const role = localStorage.getItem('role');
+  
+  if (role === 'admin') {
+    return <AdminDashboard />;
+  } else if (role === 'supplier') {
+    return <SupplierDashboard />;
+  } else {
+    // Fallback - redirect to landing page
+    return <Navigate to="/" />;
+  }
+}
+
 function getRole() {
   return localStorage.getItem('role') || 'Employee';
 }
 
 function RoleRoute({ allowedRoles, children }) {
   const role = getRole();
-  return allowedRoles.includes(role) ? children : <Navigate to="/dashboard" />;
+  return allowedRoles.includes(role) ? children : <Navigate to="/" />;
+}
+
+function BackToDashboardButton() {
+  const role = localStorage.getItem('role');
+  if (role !== 'admin' && role !== 'supplier') return null;
+  return (
+    <button
+      style={{
+        position: 'fixed',
+        bottom: '32px',
+        left: '32px',
+        zIndex: 1000,
+        background: '#222',
+        color: '#fff',
+        borderRadius: '9999px',
+        padding: '16px 24px',
+        fontWeight: 'bold',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+        fontFamily: 'inherit',
+        fontSize: '1rem',
+        cursor: 'pointer',
+        border: 'none',
+        transition: 'background 0.2s',
+      }}
+      onClick={() => window.location.href = '/dashboard'}
+    >
+      {'\u2190'} Back to Dashboard
+    </button>
+  );
 }
 
 function App() {
+  useEffect(() => {
+    const checkSessionExpiry = () => {
+      const expiresAt = localStorage.getItem('expiresAt');
+      if (expiresAt && Date.now() > Number(expiresAt)) {
+        localStorage.clear();
+        window.location.href = '/login';
+      }
+    };
+    checkSessionExpiry();
+    const interval = setInterval(checkSessionExpiry, 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
   return (
     <Router>
+      <div className="relative">
       <Routes>
-        <Route path="/" element={<PublicRoute><Landing /></PublicRoute>} />
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/signup" element={<PublicRoute><Login isSignUpDefault={true} /></PublicRoute>} />
         <Route path="/products/:category/:slug" element={<ProductDetails />} />
@@ -261,37 +388,43 @@ function App() {
         <Route path="/mens" element={<Mens />} />
         <Route path="/womens" element={<Womens />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
         <Route path="/faqs" element={<FAQs />} />
         <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/account" element={<PrivateRoute><Account /></PrivateRoute>} />
+        <Route path="/order-history" element={<PrivateRoute><OrderHistory /></PrivateRoute>} />
 
 
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
           <Route path="/dashboard" element={
-            <RoleRoute allowedRoles={["user", "admin", "supplier"]}>
-              <AdminDashboard />
+            <RoleRoute allowedRoles={["admin", "supplier"]}>
+              <DashboardHome />
             </RoleRoute>
           } />
 
           <Route path="/supplier-portal" element={
-            <RoleRoute allowedRoles={["user", "admin", "supplier"]}>
+            <RoleRoute allowedRoles={["admin", "supplier"]}>
               <SupplierPortal />
+            </RoleRoute>
+          } />
+          <Route path="/settings" element={
+            <RoleRoute allowedRoles={["admin", "supplier"]}>
+              <Settings />
             </RoleRoute>
           } />
           <Route path="/user-management" element={
             <RoleRoute allowedRoles={["admin"]}>
-              <PageTitle title="User Management" />
-            </RoleRoute>
-          } />
-          <Route path="/settings" element={
-            <RoleRoute allowedRoles={["user", "admin", "supplier"]}>
-              <Settings />
+              <UserManagement />
             </RoleRoute>
           } />
         </Route>
       </Routes>
+      <FAQBubble />
+      {/* Back to Dashboard button for admin/supplier on landing page */}
+      {window.location.pathname === '/' && <BackToDashboardButton />}
+      </div>
     </Router>
   )
 }

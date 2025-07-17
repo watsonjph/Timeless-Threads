@@ -8,6 +8,7 @@ const pendingPasswordResets = {};
 
 const authController = {
   async register(req, res) {
+
     const { email, username, firstName, lastName, password } = req.body;
 
     if (!email || !username || !firstName || !lastName || !password) {

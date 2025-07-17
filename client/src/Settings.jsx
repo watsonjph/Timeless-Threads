@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ProfilePicUploader from './components/ProfilePicUploader';
 
 export default function Settings() {
   // State for each form
@@ -11,6 +12,7 @@ export default function Settings() {
   const [currentPwd, setCurrentPwd] = useState('');
   const [newPwd, setNewPwd] = useState('');
   const [pwdMsg, setPwdMsg] = useState('');
+  const [profilePicUrl, setProfilePicUrl] = useState('');
   const userId = localStorage.getItem('userId');
 
   // Fetch current user info on mount
@@ -23,6 +25,7 @@ export default function Settings() {
         if (res.ok) {
           setEmail(data.email || '');
           setUsername(data.username || '');
+          setProfilePicUrl(data.profile_pic_url || '');
         }
       } catch (err) {
         // Optionally handle error
@@ -90,9 +93,9 @@ export default function Settings() {
       setPwdMsg('Please enter your current and new password.');
       return;
     }
-    // Password must be at least 8 chars and contain a number or special char
-    if (!/^.{8,}$/.test(newPwd) || !/[^A-Za-z]/.test(newPwd)) {
-      setPwdMsg('Password must be at least 8 characters and include a number or special character.');
+    // Password must be at least 8 chars, contain a number AND a special char
+    if (!/^.{8,}$/.test(newPwd) || !/\d/.test(newPwd) || !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(newPwd)) {
+      setPwdMsg('Password must be at least 8 characters and include a number and a special character.');
       return;
     }
     try {
@@ -117,11 +120,13 @@ export default function Settings() {
   return (
     <main className="flex-1 flex flex-col items-center justify-center bg-custom-cream min-h-screen py-12">
       <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl p-16 flex flex-col items-center gap-12">
-        {/* Profile Picture Placeholder */}
+        {/* Profile Picture Section */}
         <div className="flex flex-col items-center w-full mb-2">
-          <div className="w-36 h-36 rounded-full bg-white border-4 border-custom-medium flex items-center justify-center mb-2 shadow-lg" />
-          <p className="text-red-600 font-semibold text-center mt-2 font-nunito">TODO: Add Profile Picture Capability</p>
-          <p className="text-red-600 font-semibold text-center mt-2 font-nunito">TODO: Redesign this page</p>
+          <ProfilePicUploader
+            userId={userId}
+            currentImage={profilePicUrl}
+            onUpload={url => setProfilePicUrl(url)}
+          />
         </div>
         {/* Separator below profile picture */}
         <div className="w-full h-px bg-custom-dark opacity-20 mb-2" />

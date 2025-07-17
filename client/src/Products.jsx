@@ -1,6 +1,8 @@
 // client/src/Products.jsx
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
+import logo from '/images/Timeless.png';
+import logoInverted from '/images/Timeless-Inverted.png';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { productsTop, productsBottom } from './ProductData';
@@ -102,11 +104,13 @@ const Products = () => {
               const productPath = `/products/${prod.type}/${slug}`;
               const imagePath = `/images/products/${prod.type.charAt(0).toUpperCase() + prod.type.slice(1)}/${prod.image}`;
 
+
               return (
                 <div key={index} className="bg-white shadow-md p-4 hover:shadow-xl transform hover:-translate-y-1 transition duration-300">
                   <Link to={productPath}>
                     <img
                       src={imagePath}
+
                       alt={prod.name}
                       className="w-full h-72 object-contain mb-3 rounded"
                     />

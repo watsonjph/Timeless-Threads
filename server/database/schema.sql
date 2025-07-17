@@ -1,7 +1,5 @@
 -- Database Schema for Timeless Threads
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-@@ -7,171 +8,26 @@ SET time_zone = "+00:00";
 
 -- Users Table
 CREATE TABLE `users` (
@@ -169,7 +167,38 @@ CREATE TABLE `delivery_partners` (
   PRIMARY KEY (`partner_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Supplier Orders Table
+CREATE TABLE `supplier_orders` (
+  `supplier_order_id` INT AUTO_INCREMENT PRIMARY KEY,
+  `supplier_id` INT NOT NULL,
+  `ordered_by_admin_id` INT NOT NULL, -- user_id of the admin
+  `order_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `status` ENUM('Pending', 'Shipped', 'Delivered', 'Cancelled') DEFAULT 'Pending',
+  `notes` TEXT,
+  FOREIGN KEY (`supplier_id`) REFERENCES `suppliers`(`supplier_id`),
+  FOREIGN KEY (`ordered_by_admin_id`) REFERENCES `users`(`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- Supplier Order Items Table
+CREATE TABLE `supplier_order_items` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `supplier_order_id` INT NOT NULL,
+  `variant_id` INT NOT NULL,
+  `quantity_ordered` INT NOT NULL,
+  FOREIGN KEY (`supplier_order_id`) REFERENCES `supplier_orders`(`supplier_order_id`),
+  FOREIGN KEY (`variant_id`) REFERENCES `product_variants`(`variant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Product Inventory Table
+CREATE TABLE `product_inventory` (
+  `pd_inventory_id` INT(11) NOT NULL AUTO_INCREMENT,
+  `variant_id` INT(11) NOT NULL,
+  `stock_quantity` INT DEFAULT 0,
+  `restock_threshold` INT DEFAULT 5,
+  `last_restocked` TIMESTAMP NULL DEFAULT NULL,
+  PRIMARY KEY (`pd_inventory_id`),
+  FOREIGN KEY (`variant_id`) REFERENCES `product_variants`(`variant_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 COMMIT;

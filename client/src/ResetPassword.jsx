@@ -7,6 +7,11 @@ export default function ResetPassword() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const token = new URLSearchParams(window.location.search).get('token');
+  const email = new URLSearchParams(window.location.search).get('email');
+
+  const validatePassword = (pwd) => {
+    return pwd.length >= 8 && /\d/.test(pwd) && /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pwd);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,11 +21,15 @@ export default function ResetPassword() {
       setError('Please enter a new password.');
       return;
     }
+    if (!validatePassword(password)) {
+      setError('Password must be at least 8 characters and include a number and a special character.');
+      return;
+    }
     try {
       const res = await fetch('/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, newPassword: password })
+        body: JSON.stringify({ email, newPassword: password })
       });
       const data = await res.json();
       if (res.ok) {
