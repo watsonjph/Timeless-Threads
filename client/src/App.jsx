@@ -27,7 +27,7 @@ import Cart from './Cart';
 import Checkout from './Checkout';
 import FAQs from './FAQs';
 import Products from './Products';
-import DashboardHome from './DashboardHome';
+import FAQBubble from './components/FAQBubble';
 
 
 
@@ -169,14 +169,14 @@ function Landing() {
             {/* Second Column - Help Section */}
             <div className="flex flex-col items-start space-y-2">
               <h3 className="text-custom-dark text-xs font-semibold uppercase tracking-widest mb-2">
-                Help
+              Help
               </h3>
-              <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Shipping</a>
-              <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Returns</a>
-              <Link to="/faqs" className="hover:underline">FAQs</Link>
-              <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Sizing Guide</a>
-              <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Product Care</a>
-              <a href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Contact Us</a>
+              <Link to="/faqs#shipping" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Shipping</Link>
+              <Link to="/faqs#returns" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Returns</Link>
+              <Link to="/faqs" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">FAQs</Link>
+              <Link to="/faqs#sizing-guide" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Sizing Guide</Link>
+              <Link to="/faqs#product-care" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Product Care</Link>
+              <Link to="/faqs#contact-us" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">Contact Us</Link>
             </div>
 
             {/* Third Column - About Us and Contact Info */}
@@ -326,6 +326,7 @@ function RoleRoute({ allowedRoles, children }) {
 function App() {
   return (
     <Router>
+      <div className="relative">
       <Routes>
         <Route path="/" element={<PublicRoute><Landing /></PublicRoute>} />
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
@@ -348,7 +349,7 @@ function App() {
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
           <Route path="/dashboard" element={
             <RoleRoute allowedRoles={["admin", "supplier"]}>
-              <DashboardHome />
+              <DynamicDashboard />
             </RoleRoute>
           } />
 
@@ -362,13 +363,19 @@ function App() {
               <Settings />
             </RoleRoute>
           } />
-          <Route path="/user-management" element={
+        </Route>
+
+        {/* Standalone admin routes */}
+        <Route path="/user-management" element={
+          <PrivateRoute>
             <RoleRoute allowedRoles={["admin"]}>
               <UserManagement />
             </RoleRoute>
-          } />
-        </Route>
+          </PrivateRoute>
+        } />
       </Routes>
+      <FAQBubble /> {/* <-- This makes the floating button appear on ALL pages */}
+      </div>
     </Router>
   )
 }

@@ -1,7 +1,7 @@
 // client/src/Products.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { productsTop, productsBottom } from './ProductCarousel';
+import { productsTop, productsBottom } from './ProductData';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
@@ -82,11 +82,14 @@ const Products = () => {
               const slug = encodeURIComponent(prod.name.toLowerCase().replace(/\s+/g, '-'));
               const productPath = `/products/${prod.type}/${slug}`;
 
+              // Construct path based on product type
+              const imagePath = `/images/products/${prod.type === 'mens' ? 'Mens' : 'Womens'}/${prod.image}`;
+
               return (
                 <div key={index} className="bg-white shadow-md p-4 hover:shadow-xl transform hover:-translate-y-1 transition duration-300">
                   <Link to={productPath}>
                     <img
-                      src={prod.image}
+                      src={imagePath}
                       alt={prod.name}
                       className="w-full h-72 object-contain mb-3 rounded"
                     />
@@ -129,4 +132,3 @@ const Products = () => {
 };
 
 export default Products;
-
