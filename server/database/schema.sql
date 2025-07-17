@@ -173,7 +173,7 @@ CREATE TABLE `supplier_orders` (
   `supplier_id` INT NOT NULL,
   `ordered_by_admin_id` INT NOT NULL, -- user_id of the admin
   `order_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  `status` ENUM('Pending', 'Approved', 'Shipped', 'Delivered', 'Cancelled') DEFAULT 'Pending',
+  `status` ENUM('Pending', 'Shipped', 'Delivered', 'Cancelled') DEFAULT 'Pending',
   `notes` TEXT,
   FOREIGN KEY (`supplier_id`) REFERENCES `suppliers`(`supplier_id`),
   FOREIGN KEY (`ordered_by_admin_id`) REFERENCES `users`(`user_id`)

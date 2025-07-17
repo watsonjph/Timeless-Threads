@@ -57,5 +57,13 @@ export const ordersAPI = {
   getUserOrders: (userId) => api.get(`/orders/user/${userId}`),
 };
 
+// Supplier Orders API calls
+export const supplierOrdersAPI = {
+  getAll: (params) => api.get('/supplier-orders', { params }),
+  getById: (id) => api.get(`/supplier-orders/${id}`),
+  create: (data) => api.post('/supplier-orders', data),
+  updateStatus: (id, status) => api.patch(`/supplier-orders/${id}/status`, { status }),
+};
+
 
 export default api; 
