@@ -1,12 +1,6 @@
 // client/src/Products.jsx
-<<<<<<< Updated upstream
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { productsTop, productsBottom } from './ProductCarousel';
-=======
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
->>>>>>> Stashed changes
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { productsTop, productsBottom } from './ProductData';
@@ -106,20 +100,13 @@ const Products = () => {
             {paginatedProducts.map((prod, index) => {
               const slug = encodeURIComponent(prod.name.toLowerCase().replace(/\s+/g, '-'));
               const productPath = `/products/${prod.type}/${slug}`;
-<<<<<<< Updated upstream
-=======
               const imagePath = `/images/products/${prod.type.charAt(0).toUpperCase() + prod.type.slice(1)}/${prod.image}`;
->>>>>>> Stashed changes
 
               return (
                 <div key={index} className="bg-white shadow-md p-4 hover:shadow-xl transform hover:-translate-y-1 transition duration-300">
                   <Link to={productPath}>
                     <img
-<<<<<<< Updated upstream
-                      src={prod.image}
-=======
                       src={imagePath}
->>>>>>> Stashed changes
                       alt={prod.name}
                       className="w-full h-72 object-contain mb-3 rounded"
                     />
