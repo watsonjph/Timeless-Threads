@@ -8,6 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 import authRoutes from './routes/auth.js';
+import suppliersRoutes from './routes/suppliers.js';
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/suppliers', suppliersRoutes);
 
 // Serve static files from the frontend build
 const clientDistPath = path.join(__dirname, '../client/dist');

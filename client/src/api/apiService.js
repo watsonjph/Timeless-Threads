@@ -65,5 +65,27 @@ export const supplierOrdersAPI = {
   updateStatus: (id, status) => api.patch(`/supplier-orders/${id}/status`, { status }),
 };
 
+// Suppliers API calls
+export const suppliersAPI = {
+  getAll: () => api.get('/suppliers'),
+  create: (data) => api.post('/suppliers', data),
+  update: (id, data) => api.put(`/suppliers/${id}`, data),
+  delete: (id) => api.delete(`/suppliers/${id}`),
+};
+
+// Admin User API calls
+export const adminUsersAPI = {
+  getAll: () => api.get('/auth/users'),
+  create: (data) => api.post('/auth/users', data),
+  update: (id, data) => api.put(`/auth/users/${id}`, data),
+  delete: (id) => api.delete(`/auth/users/${id}`),
+};
+
+// Dashboard stats API calls
+export const dashboardAPI = {
+  getAdminStats: () => api.get('/orders/admin-dashboard-stats'),
+  getSupplierStats: (supplierId) => api.get('/orders/supplier-dashboard-stats', { params: { supplierId } }),
+};
+
 
 export default api; 
