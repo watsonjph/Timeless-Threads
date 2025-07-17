@@ -1,4 +1,6 @@
-      {/* Footer */}
+import React from 'react';
+import { Link } from 'react-router-dom';
+
 const Footer = () => {
   return (
     <footer className="bg-white font-kanit border-t border-custom-medium mt-8">
@@ -21,19 +23,35 @@ const Footer = () => {
             <h3 className="text-custom-dark text-xs font-semibold uppercase tracking-widest mb-2">
               Help
             </h3>
-            {['Shipping', 'Returns', 'FAQs', 'Sizing Guide', 'Product Care', 'Contact Us'].map((text, idx) => (
-              <a key={idx} href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">
-                {text}
-              </a>
+            {[
+              { label: 'Shipping', anchor: 'shipping' },
+              { label: 'Returns', anchor: 'returns' },
+              { label: 'FAQs', anchor: '' },
+              { label: 'Sizing Guide', anchor: 'sizing-guide' },
+              { label: 'Product Care', anchor: 'product-care' },
+              { label: 'Contact Us', anchor: 'contact-us' },
+            ].map(({ label, anchor }, idx) => (
+              <Link
+                key={idx}
+                to={`/faqs${anchor ? `#${anchor}` : ''}`}
+                className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline"
+              >
+                {label}
+              </Link>
             ))}
           </div>
 
           {/* About and Contact Info */}
           <div className="flex flex-col items-start space-y-2">
-            <h3 className="text-custom-dark text-xs font-semibold uppercase tracking-widest mb-2">
+            <Link
+              to="/about"
+              className="text-custom-dark text-xs font-semibold uppercase tracking-widest mb-2 hover:text-custom-medium cursor-pointer transition-colors"
+            >
               About Us
-            </h3>
-            <h4 className="text-custom-dark text-[11px] uppercase tracking-widest mt-2 mb-1 font-semibold">Contact Info</h4>
+            </Link>
+            <h4 className="text-custom-dark text-[11px] uppercase tracking-widest mt-2 mb-1 font-semibold">
+              Contact Info
+            </h4>
             <span className="text-custom-dark text-[11px] italic">+63 1234567890</span>
           </div>
 
@@ -50,6 +68,7 @@ const Footer = () => {
             </div>
           </div>
         </div>
+
         <div className="mt-8 text-custom-dark text-[10px] font-kanit flex flex-wrap items-center gap-2">
           <span>&copy; 2025 TIMELESS THREADS</span>
           <a href="#" className="hover:underline">Privacy</a>
@@ -61,4 +80,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

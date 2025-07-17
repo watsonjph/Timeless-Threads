@@ -3,15 +3,30 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import logo from '/images/Timeless.png';
 import logoInverted from '/images/Timeless-Inverted.png';
+import {
+  productsTop,
+  productsBottom,
+  footwearProducts,
+  accessoriesProducts,
+} from './ProductData';
+
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { productsTop, productsBottom } from './ProductData';
 
-const allProducts = [...productsTop, ...productsBottom];
-const categories = [
-  'All', 'mens', 'womens', 'T-Shirts', 'Hoodies', 'Jackets',
-  'Jeans', 'Dresses', 'Skirts', 'Accessories', 'Footwear', 'Hats'
+const allProducts = [
+  ...productsTop,
+  ...productsBottom,
+  ...footwearProducts,
+  ...accessoriesProducts,
 ];
+
+const categories = ['All', 'mens', 'womens', 'footwear', 'accessories'];
+// const allProducts = [...productsTop, ...productsBottom];
+// const categories = [
+//   'All', 'mens', 'womens', 'T-Shirts', 'Hoodies', 'Jackets',
+//   'Jeans', 'Dresses', 'Skirts', 'Accessories', 'Footwear', 'Hats'
+// ];
 const itemsPerPage = 8;
 
 const Products = () => {
@@ -22,20 +37,23 @@ const Products = () => {
   const [sortOrder, setSortOrder] = useState('default');
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Update category from URL if changed
-  useEffect(() => {
-    const urlCategory = searchParams.get('category') || 'All';
-    setSelectedCategory(urlCategory);
-    setCurrentPage(1);
-  }, [searchParams]);
+  const filteredProducts = allProducts.filter((product) =>
+    selectedCategory === 'All' ? true : product.type === selectedCategory
+  );
+//   // Update category from URL if changed
+//   useEffect(() => {
+//     const urlCategory = searchParams.get('category') || 'All';
+//     setSelectedCategory(urlCategory);
+//     setCurrentPage(1);
+//   }, [searchParams]);
 
-  const filteredProducts = allProducts.filter((product) => {
-    if (selectedCategory === 'All') return true;
-    return (
-      product.type?.toLowerCase() === selectedCategory.toLowerCase() ||
-      product.category?.toLowerCase() === selectedCategory.toLowerCase()
-    );
-  });
+//   const filteredProducts = allProducts.filter((product) => {
+//     if (selectedCategory === 'All') return true;
+//     return (
+//       product.type?.toLowerCase() === selectedCategory.toLowerCase() ||
+//       product.category?.toLowerCase() === selectedCategory.toLowerCase()
+//     );
+//   });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     if (sortOrder === 'asc') return a.price - b.price;
@@ -51,6 +69,21 @@ const Products = () => {
   );
 
   const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
+
+  const getImageFolder = (type) => {
+    switch (type) {
+      case 'mens':
+        return 'Mens';
+      case 'womens':
+        return 'Womens';
+      case 'footwear':
+        return 'Footwear';
+      case 'accessories':
+        return 'Accessories';
+      default:
+        return '';
+    }
+  };
 
   return (
     <div className="font-poppins min-h-screen flex flex-col bg-custom-cream">
@@ -102,15 +135,18 @@ const Products = () => {
             {paginatedProducts.map((prod, index) => {
               const slug = encodeURIComponent(prod.name.toLowerCase().replace(/\s+/g, '-'));
               const productPath = `/products/${prod.type}/${slug}`;
-              const imagePath = `/images/products/${prod.type.charAt(0).toUpperCase() + prod.type.slice(1)}/${prod.image}`;
+              const imagePath = `/images/products/${getImageFolder(prod.type)}/${prod.image}`;
+//               const imagePath = `/images/products/${prod.type.charAt(0).toUpperCase() + prod.type.slice(1)}/${prod.image}`;
 
 
               return (
-                <div key={index} className="bg-white shadow-md p-4 hover:shadow-xl transform hover:-translate-y-1 transition duration-300">
+                <div
+                  key={index}
+                  className="bg-white shadow-md p-4 hover:shadow-xl transform hover:-translate-y-1 transition duration-300"
+                >
                   <Link to={productPath}>
                     <img
                       src={imagePath}
-
                       alt={prod.name}
                       className="w-full h-72 object-contain mb-3 rounded"
                     />
@@ -153,8 +189,3 @@ const Products = () => {
 };
 
 export default Products;
-
-
-
-
-

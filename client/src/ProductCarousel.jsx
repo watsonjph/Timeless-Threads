@@ -1,8 +1,12 @@
-// client/src/ProductCarousel.jsx
 import React from 'react';
 import Marquee from 'react-fast-marquee';
 import { Link } from 'react-router-dom';
-import { productsTop, productsBottom } from './ProductData';
+import {
+  productsTop,
+  productsBottom,
+  footwearProducts,
+  accessoriesProducts,
+} from './ProductData';
 
 const topMessages = [
   "Limited stocks — grab yours before it’s gone!",
@@ -23,6 +27,16 @@ const bottomMessages = [
   "No logos. No noise. Just you.",
 ];
 
+const getImageFolder = (type) => {
+  switch (type) {
+    case 'mens': return 'Mens';
+    case 'womens': return 'Womens';
+    case 'footwear': return 'Footwear';
+    case 'accessories': return 'Accessories';
+    default: return '';
+  }
+};
+
 const CarouselRow = ({ products, direction = 'left' }) => (
   <section className="bg-custom-cream py-4 w-full">
     <div className="w-full">
@@ -30,7 +44,9 @@ const CarouselRow = ({ products, direction = 'left' }) => (
         {products.map((prod, i) => {
           const slug = encodeURIComponent(prod.name.toLowerCase().replace(/\s+/g, '-'));
           const productPath = `/products/${prod.type}/${slug}`;
-          const imagePath = `/images/products/${prod.type === 'mens' ? 'Mens' : 'Womens'}/${prod.image}`;
+          const imageFolder = getImageFolder(prod.type);
+          const imagePath = `/images/products/${imageFolder}/${prod.image}`;
+
 
           return (
             <div
@@ -88,8 +104,11 @@ const ProductCarousel = () => (
     <CarouselRow products={productsTop} />
     <MessageCarousel messages={bottomMessages} direction="left" />
     <CarouselRow products={productsBottom} direction="right" />
+    <MessageCarousel messages={["Step up your sole game.", "Sneakers and socks that slap."]} direction="right" />
+    <CarouselRow products={footwearProducts} />
+    <MessageCarousel messages={["Accessories that do more than accessorize.", "Top off the fit. Always."]} direction="left" />
+    <CarouselRow products={accessoriesProducts} direction="right" />
   </>
 );
 
 export default ProductCarousel;
-export { productsTop, productsBottom };

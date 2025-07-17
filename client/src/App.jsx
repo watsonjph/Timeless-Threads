@@ -29,6 +29,7 @@ import FAQs from './FAQs';
 import Products from './Products';
 import FAQBubble from './components/FAQBubble';
 import DashboardHome from './DashboardHome';
+import AboutStrip from './components/AboutStrip';
 import { useEffect } from 'react';
 
 
@@ -400,7 +401,7 @@ function App() {
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
           <Route path="/dashboard" element={
             <RoleRoute allowedRoles={["admin", "supplier"]}>
-              <DashboardHome />
+              <DynamicDashboard />
             </RoleRoute>
           } />
 
@@ -414,14 +415,19 @@ function App() {
               <Settings />
             </RoleRoute>
           } />
-          <Route path="/user-management" element={
+        </Route>
+
+        {/* Standalone admin routes */}
+        <Route path="/user-management" element={
+          <PrivateRoute>
             <RoleRoute allowedRoles={["admin"]}>
               <UserManagement />
             </RoleRoute>
-          } />
-        </Route>
+          </PrivateRoute>
+        } />
       </Routes>
-      <FAQBubble />
+      <AboutStrip />
+      <FAQBubble /> {/* <-- This makes the floating button appear on ALL pages */}
       {/* Back to Dashboard button for admin/supplier on landing page */}
       {window.location.pathname === '/' && <BackToDashboardButton />}
       </div>

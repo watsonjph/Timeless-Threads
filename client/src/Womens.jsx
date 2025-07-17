@@ -6,7 +6,6 @@ import Navbar from './Navbar';
 import { FaInstagram, FaPaypal } from 'react-icons/fa';
 import { productsTop, productsBottom } from './ProductData';
 
-
 // Filter for women's products only
 const womensProducts = [...productsTop, ...productsBottom].filter(prod => prod.type === 'womens');
 
