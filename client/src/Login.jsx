@@ -68,15 +68,19 @@ export default function Login({ isSignUpDefault = false }) {
     }
     try {
       const endpoint = isSignUp
-        ? '/api/auth/register'
-        : '/api/auth/login';
+  ? 'http://localhost:3000/api/auth/register'
+  : 'http://localhost:3000/api/auth/login';
       const body = isSignUp
         ? { email, username, password }
         : { email, password };
+
+        console.log('Sending login request with:', body);
+
       const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      credentials: 'include'  
       });
       const data = await res.json();
       if (!res.ok) {

@@ -6,6 +6,8 @@ import authRoutes from './routes/auth.js';
 import orderRoutes from './routes/orders.js';
 import supplierOrderRoutes from './routes/supplierOrders.js';
 import suppliersRoutes from './routes/suppliers.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

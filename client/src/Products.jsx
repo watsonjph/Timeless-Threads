@@ -1,28 +1,47 @@
 // client/src/Products.jsx
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
 import logo from '/images/Timeless.png';
 import logoInverted from '/images/Timeless-Inverted.png';
-import { productsTop, productsBottom } from './ProductData';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { productsTop, productsBottom } from './ProductData';
 
 const allProducts = [...productsTop, ...productsBottom];
-const categories = ['All', 'mens', 'womens'];
+const categories = [
+  'All', 'mens', 'womens', 'T-Shirts', 'Hoodies', 'Jackets',
+  'Jeans', 'Dresses', 'Skirts', 'Accessories', 'Footwear', 'Hats'
+];
 const itemsPerPage = 8;
 
 const Products = () => {
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [searchParams] = useSearchParams();
+  const initialCategory = searchParams.get('category') || 'All';
+
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [sortOrder, setSortOrder] = useState('default');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredProducts = allProducts.filter(product =>
-    selectedCategory === 'All' ? true : product.type === selectedCategory
-  );
+  // Update category from URL if changed
+  useEffect(() => {
+    const urlCategory = searchParams.get('category') || 'All';
+    setSelectedCategory(urlCategory);
+    setCurrentPage(1);
+  }, [searchParams]);
+
+  const filteredProducts = allProducts.filter((product) => {
+    if (selectedCategory === 'All') return true;
+    return (
+      product.type?.toLowerCase() === selectedCategory.toLowerCase() ||
+      product.category?.toLowerCase() === selectedCategory.toLowerCase()
+    );
+  });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     if (sortOrder === 'asc') return a.price - b.price;
     if (sortOrder === 'desc') return b.price - a.price;
+    if (sortOrder === 'az') return a.name.localeCompare(b.name);
+    if (sortOrder === 'za') return b.name.localeCompare(a.name);
     return 0;
   });
 
@@ -44,19 +63,16 @@ const Products = () => {
           <ul className="space-y-2">
             {categories.map((cat) => (
               <li key={cat}>
-                <button
-                  onClick={() => {
-                    setSelectedCategory(cat);
-                    setCurrentPage(1);
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-full font-medium ${
-                    selectedCategory === cat
+                <Link
+                  to={`/products?category=${encodeURIComponent(cat)}`}
+                  className={`block px-3 py-2 rounded-full font-medium ${
+                    selectedCategory.toLowerCase() === cat.toLowerCase()
                       ? 'bg-black text-white'
                       : 'bg-gray-100 hover:bg-gray-200'
                   }`}
                 >
-                  {cat === 'All' ? 'All Products' : cat.charAt(0).toUpperCase() + cat.slice(1)}
-                </button>
+                  {cat === 'All' ? 'All Products' : cat}
+                </Link>
               </li>
             ))}
           </ul>
@@ -64,9 +80,10 @@ const Products = () => {
 
         {/* Main Content */}
         <main className="flex-1 p-6">
-          {/* Heading + Sorting */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-            <h1 className="text-2xl font-bold uppercase tracking-wider text-custom-dark">All Products</h1>
+            <h1 className="text-2xl font-bold uppercase tracking-wider text-custom-dark">
+              {selectedCategory === 'All' ? 'All Products' : selectedCategory}
+            </h1>
             <select
               className="border border-gray-300 rounded-full px-4 py-2 text-sm"
               value={sortOrder}
@@ -75,6 +92,8 @@ const Products = () => {
               <option value="default">Sort By</option>
               <option value="asc">Price: Low to High</option>
               <option value="desc">Price: High to Low</option>
+              <option value="az">Name: A to Z</option>
+              <option value="za">Name: Z to A</option>
             </select>
           </div>
 
@@ -84,10 +103,14 @@ const Products = () => {
               const slug = encodeURIComponent(prod.name.toLowerCase().replace(/\s+/g, '-'));
               const productPath = `/products/${prod.type}/${slug}`;
               const imagePath = `/images/products/${prod.type.charAt(0).toUpperCase() + prod.type.slice(1)}/${prod.image}`;
+
+
               return (
                 <div key={index} className="bg-white shadow-md p-4 hover:shadow-xl transform hover:-translate-y-1 transition duration-300">
                   <Link to={productPath}>
-                    <img src={imagePath}
+                    <img
+                      src={imagePath}
+
                       alt={prod.name}
                       className="w-full h-72 object-contain mb-3 rounded"
                     />
@@ -130,4 +153,8 @@ const Products = () => {
 };
 
 export default Products;
+
+
+
+
 

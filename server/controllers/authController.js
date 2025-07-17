@@ -8,8 +8,10 @@ const pendingPasswordResets = {};
 
 const authController = {
   async register(req, res) {
-    const { email, username, password } = req.body;
-    if (!email || !username || !password) {
+
+    const { email, username, firstName, lastName, password } = req.body;
+
+    if (!email || !username || !firstName || !lastName || !password) {
       return res.status(400).json({ error: 'All fields are required.' });
     }
     try {
@@ -41,12 +43,17 @@ const authController = {
 
   async login(req, res) {
     const { email, password } = req.body;
+    console.log('Login request received:', { email, password });
+
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required.' });
     }
     try {
       const user = await User.findByEmailOrUsername(email);
+      console.log('User found:', user); 
+
       if (!user || !(await User.comparePassword(password, user.password))) {
+        console.log('Invalid credentials');
         return res.status(401).json({ error: 'Invalid credentials.' });
       }
       let supplierId = null;
@@ -55,6 +62,7 @@ const authController = {
         supplierId = supplier ? supplier.supplier_id : null;
       }
       // Return username and role for dashboard
+      console.log('Login successful:', user.username);
       return res.status(200).json({ 
         message: 'Login successful.',
         username: user.username,
@@ -63,7 +71,7 @@ const authController = {
         supplierId
       });
     } catch (err) {
-      console.error(err);
+      console.error('Login error:', err);
       return res.status(500).json({ error: 'Login failed.' });
     }
   },

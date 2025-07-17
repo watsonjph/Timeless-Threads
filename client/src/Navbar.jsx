@@ -103,7 +103,7 @@ export default function Navbar({ alwaysHovered = false }) {
 
 
   return (
-    <header className={headerClass + ' transition-opacity duration-500 ease-in-out opacity-0 animate-navbar-fade-in'}>
+    <header className={headerClass + ' z-50 transition-opacity duration-500 ease-in-out opacity-0 animate-navbar-fade-in'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`grid grid-cols-3 items-center h-24 w-full gap-x-40`}>
           {/* Left Navigation */}
@@ -120,12 +120,26 @@ export default function Navbar({ alwaysHovered = false }) {
                 <span className="absolute left-0 bottom-0 h-0.5 bg-current transition-all duration-500 ease-in-out w-0 group-hover:w-full"></span>
               )}
             </Link>
-            <Link to="/products" className={`${navTextClass} px-3 py-2 text-base font-medium font-kanit transition-all duration-500 ease-in-out uppercase tracking-wider relative group`}>
-              <span className="whitespace-nowrap">All Products</span>
-              {!alwaysHovered && (
-                <span className="absolute left-0 bottom-0 h-0.5 bg-current transition-all duration-500 ease-in-out w-0 group-hover:w-full"></span>
-              )}
-            </Link>
+            {/* All Products Dropdown */}
+            <div className="relative group">
+              <div className={`${navTextClass} px-3 py-2 text-base font-medium font-kanit uppercase tracking-wider cursor-pointer flex items-center space-x-1`}>
+                <span>All Products</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+              <div className="absolute left-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                {['All', 'mens', 'womens', 'T-Shirts', 'Hoodies', 'Jackets', 'Jeans', 'Dresses', 'Skirts', 'Accessories', 'Footwear', 'Hats'].map((cat) => (
+                  <Link
+                    key={cat}
+                    to={`/products?category=${encodeURIComponent(cat)}`}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 capitalize"
+                  >
+                    {cat === 'All' ? 'All Products' : cat}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </nav>
           {/* Center Logo */}
           <div className="flex items-center justify-center col-start-2">
