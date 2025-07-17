@@ -1,12 +1,23 @@
 // client/src/Products.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { productsTop, productsBottom } from './ProductData';
+import {
+  productsTop,
+  productsBottom,
+  footwearProducts,
+  accessoriesProducts,
+} from './ProductData';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
-const allProducts = [...productsTop, ...productsBottom];
-const categories = ['All', 'mens', 'womens'];
+const allProducts = [
+  ...productsTop,
+  ...productsBottom,
+  ...footwearProducts,
+  ...accessoriesProducts,
+];
+
+const categories = ['All', 'mens', 'womens', 'footwear', 'accessories'];
 const itemsPerPage = 8;
 
 const Products = () => {
@@ -14,7 +25,7 @@ const Products = () => {
   const [sortOrder, setSortOrder] = useState('default');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredProducts = allProducts.filter(product =>
+  const filteredProducts = allProducts.filter((product) =>
     selectedCategory === 'All' ? true : product.type === selectedCategory
   );
 
@@ -30,6 +41,21 @@ const Products = () => {
   );
 
   const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
+
+  const getImageFolder = (type) => {
+    switch (type) {
+      case 'mens':
+        return 'Mens';
+      case 'womens':
+        return 'Womens';
+      case 'footwear':
+        return 'Footwear';
+      case 'accessories':
+        return 'Accessories';
+      default:
+        return '';
+    }
+  };
 
   return (
     <div className="font-poppins min-h-screen flex flex-col bg-custom-cream">
@@ -81,12 +107,13 @@ const Products = () => {
             {paginatedProducts.map((prod, index) => {
               const slug = encodeURIComponent(prod.name.toLowerCase().replace(/\s+/g, '-'));
               const productPath = `/products/${prod.type}/${slug}`;
-
-              // Construct path based on product type
-              const imagePath = `/images/products/${prod.type === 'mens' ? 'Mens' : 'Womens'}/${prod.image}`;
+              const imagePath = `/images/products/${getImageFolder(prod.type)}/${prod.image}`;
 
               return (
-                <div key={index} className="bg-white shadow-md p-4 hover:shadow-xl transform hover:-translate-y-1 transition duration-300">
+                <div
+                  key={index}
+                  className="bg-white shadow-md p-4 hover:shadow-xl transform hover:-translate-y-1 transition duration-300"
+                >
                   <Link to={productPath}>
                     <img
                       src={imagePath}

@@ -2,9 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import { FaInstagram, FaPaypal } from 'react-icons/fa';
-import { productsTop, productsBottom } from './ProductData';
+import {
+  productsTop,
+  productsBottom,
+  footwearProducts,
+  accessoriesProducts,
+} from './ProductData';
 
-const allProducts = [...productsTop, ...productsBottom];
+const allProducts = [
+  ...productsTop,
+  ...productsBottom,
+  ...footwearProducts,
+  ...accessoriesProducts,
+];
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -14,9 +24,10 @@ const Cart = () => {
 
     const updatedCart = storedCart.map((item) => {
       const match = allProducts.find((prod) => prod.sku === item.sku);
-      const imagePath = match
-        ? `/images/products/${match.type.charAt(0).toUpperCase() + match.type.slice(1)}/${match.image}`
+      const folder = match?.type
+        ? match.type.charAt(0).toUpperCase() + match.type.slice(1)
         : '';
+      const imagePath = match ? `/images/products/${folder}/${match.image}` : '';
       return match ? { ...item, image: imagePath } : item;
     });
 
@@ -30,7 +41,10 @@ const Cart = () => {
     setCartItems(updatedCart);
   };
 
-  const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const totalPrice = cartItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   const handleCheckout = () => {
     const isLoggedIn = !!localStorage.getItem('username');
@@ -54,7 +68,9 @@ const Cart = () => {
         ) : (
           <div className="w-full max-w-4xl space-y-6">
             {cartItems.map((item, index) => {
-              const slug = encodeURIComponent(item.name.toLowerCase().replace(/\s+/g, '-'));
+              const slug = encodeURIComponent(
+                item.name.toLowerCase().replace(/\s+/g, '-')
+              );
               const productLink = `/products/${item.type}/${slug}`;
 
               return (
@@ -69,10 +85,10 @@ const Cart = () => {
                       className="w-24 h-24 object-contain group-hover:opacity-90 transition"
                     />
                     <div>
-                      <h2 className="text-custom-dark font-semibold">
-                        {item.name}
-                      </h2>
-                      <p className="text-sm text-gray-600">₱{item.price.toLocaleString()}</p>
+                      <h2 className="text-custom-dark font-semibold">{item.name}</h2>
+                      <p className="text-sm text-gray-600">
+                        ₱{item.price.toLocaleString()}
+                      </p>
                       <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
                     </div>
                   </Link>
@@ -85,9 +101,6 @@ const Cart = () => {
                 </div>
               );
             })}
-
-
-
 
             <div className="text-right text-custom-dark text-xl font-bold pt-4 border-t border-gray-300 space-y-4">
               <p>Total: ₱{totalPrice.toLocaleString()}</p>

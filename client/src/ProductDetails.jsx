@@ -2,13 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import hardcodedReviews from './Reviews';
-import { productsTop, productsBottom } from './ProductData';
+import {
+  productsTop,
+  productsBottom,
+  footwearProducts,
+  accessoriesProducts
+} from './ProductData';
 
-const allProducts = [...productsTop, ...productsBottom];
+const allProducts = [
+  ...productsTop,
+  ...productsBottom,
+  ...footwearProducts,
+  ...accessoriesProducts
+];
 
 const ProductDetails = () => {
   const { category, slug } = useParams();
   const navigate = useNavigate();
+
   const product = allProducts.find(prod =>
     encodeURIComponent(prod.name.toLowerCase().replace(/\s+/g, '-')) === slug
   );
@@ -83,12 +94,12 @@ const ProductDetails = () => {
 
               <h2 className="font-bold mt-4 mb-2">THE DETAILS</h2>
               <ul className="list-disc pl-5">
-                {product.details.map((item, i) => <li key={i}>{item}</li>)}
+                {product.details?.map((item, i) => <li key={i}>{item}</li>)}
               </ul>
 
               <h2 className="font-bold mt-4 mb-2">CARE INSTRUCTIONS</h2>
               <ul className="list-disc pl-5">
-                {product.care.map((item, i) => <li key={i}>{item}</li>)}
+                {product.care?.map((item, i) => <li key={i}>{item}</li>)}
               </ul>
             </div>
           </div>
