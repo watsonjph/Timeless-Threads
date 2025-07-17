@@ -361,16 +361,12 @@ function App() {
               <Settings />
             </RoleRoute>
           } />
-        </Route>
-
-        {/* Standalone admin routes */}
-        <Route path="/user-management" element={
-          <PrivateRoute>
+          <Route path="/user-management" element={
             <RoleRoute allowedRoles={["admin"]}>
               <UserManagement />
             </RoleRoute>
-          </PrivateRoute>
-        } />
+          } />
+        </Route>
       </Routes>
     </Router>
   )

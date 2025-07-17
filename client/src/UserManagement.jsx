@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './Navbar';
 
 export default function UserManagement() {
   const [users, setUsers] = useState([]);
@@ -88,7 +87,6 @@ export default function UserManagement() {
   if (loading) {
     return (
       <div className="min-h-screen bg-custom-cream font-poppins">
-        <Navbar alwaysHovered={true} />
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-custom-dark mx-auto"></div>
@@ -101,7 +99,6 @@ export default function UserManagement() {
 
   return (
     <div className="min-h-screen bg-custom-cream font-poppins">
-      <Navbar alwaysHovered={true} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-white rounded-lg shadow-lg p-8">
           <div className="flex justify-between items-center mb-8">

@@ -19,7 +19,10 @@ const getRole = () => localStorage.getItem('role') || 'Employee';
 const filterNavLinksByRole = (role) => {
   return navLinks.filter(link => {
     if (link.to === '/user-management') {
-      return role === 'admin';
+      return role === 'admin'; // Only admin sees User Management
+    }
+    if (link.to === '/supplier-portal') {
+      return role === 'admin' || role === 'supplier'; // Both admin and supplier see Supplier Portal
     }
     if (link.to === '/dashboard') {
       return role === 'admin' || role === 'supplier';

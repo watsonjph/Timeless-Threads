@@ -2,15 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { supplierOrdersAPI } from './api/apiService';
 
 export default function SupplierPortal() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const role = localStorage.getItem('role');
+  // Tabs: Admin sees Suppliers and Orders, Supplier sees only Orders
+  const tabs = role === 'admin'
+    ? [
+        { id: 'suppliers', label: 'Suppliers', icon: '🏢' },
+        { id: 'orders', label: 'Orders', icon: '📦' },
+      ]
+    : [
+        { id: 'orders', label: 'Orders', icon: '📦' },
+      ];
+  const [activeTab, setActiveTab] = useState(tabs[0].id);
 
-  const tabs = [
-    { id: 'overview', label: 'Overview', icon: '📊' },
-    { id: 'suppliers', label: 'Suppliers', icon: '🏢' },
-    { id: 'orders', label: 'Orders', icon: '📦' },
-    { id: 'analytics', label: 'Analytics', icon: '📈' },
-  ];
-
+  // Orders state
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [statusUpdating, setStatusUpdating] = useState({});
@@ -39,27 +43,11 @@ export default function SupplierPortal() {
     }
   };
 
-  const renderOverview = () => (
-    <div className="bg-white rounded-xl shadow-md p-6">
-      <div className="h-64 flex items-center justify-center border-2 border-dashed border-gray-300 text-gray-400 rounded-lg">
-        <div className="text-center">
-          <div className="text-4xl mb-2">📊</div>
-          <p className="text-lg font-medium font-kanit">Overview Content</p>
-          <p className="text-sm font-nunito">Content will be added here</p>
-        </div>
-      </div>
-    </div>
-  );
-
+  // Suppliers tab content (admin only, placeholder for now)
   const renderSuppliers = () => (
     <div className="bg-white rounded-xl shadow-md p-6">
-      <div className="h-64 flex items-center justify-center border-2 border-dashed border-gray-300 text-gray-400 rounded-lg">
-        <div className="text-center">
-          <div className="text-4xl mb-2">🏢</div>
-          <p className="text-lg font-medium font-kanit">Suppliers Content</p>
-          <p className="text-sm font-nunito">Content will be added here</p>
-        </div>
-      </div>
+      <h2 className="text-2xl font-bold mb-4 font-kanit">Suppliers (Admin Only)</h2>
+      <div className="text-gray-500">CRUD supplier management coming soon...</div>
     </div>
   );
 
@@ -134,31 +122,11 @@ export default function SupplierPortal() {
     );
   }
 
-  const renderAnalytics = () => (
-    <div className="bg-white rounded-xl shadow-md p-6">
-      <div className="h-64 flex items-center justify-center border-2 border-dashed border-gray-300 text-gray-400 rounded-lg">
-        <div className="text-center">
-          <div className="text-4xl mb-2">📈</div>
-          <p className="text-lg font-medium font-kanit">Analytics Content</p>
-          <p className="text-sm font-nunito">Content will be added here</p>
-        </div>
-      </div>
-    </div>
-  );
-
+  // Render content based on active tab
   const renderContent = () => {
-    switch (activeTab) {
-      case 'overview':
-        return renderOverview();
-      case 'suppliers':
-        return renderSuppliers();
-      case 'orders':
-        return renderOrders();
-      case 'analytics':
-        return renderAnalytics();
-      default:
-        return renderOverview();
-    }
+    if (activeTab === 'orders') return renderOrders();
+    if (activeTab === 'suppliers' && role === 'admin') return renderSuppliers();
+    return null;
   };
 
   return (
@@ -166,7 +134,7 @@ export default function SupplierPortal() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-custom-dark font-poppins">Supplier Portal</h1>
-          <p className="text-gray-600 font-nunito">Manage your suppliers and purchase orders</p>
+          <p className="text-gray-600 font-nunito">{role === 'admin' ? 'Manage your suppliers and purchase orders' : 'View and manage your supplier orders'}</p>
         </div>
       </div>
 
