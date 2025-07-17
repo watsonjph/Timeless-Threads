@@ -16,7 +16,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: true,
+  origin: ['https://timelessthreads.xyz', 'http://localhost:5173'],
   credentials: true
 }));
 app.use(express.json());
