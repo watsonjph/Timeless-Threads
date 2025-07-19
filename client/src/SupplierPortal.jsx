@@ -24,6 +24,8 @@ export default function SupplierPortal() {
   const [suppliers, setSuppliers] = useState([]);
   const [loadingSuppliers, setLoadingSuppliers] = useState(false);
   const [supplierError, setSupplierError] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [editingSupplier, setEditingSupplier] = useState(null); // supplier object or null
   const [newSupplier, setNewSupplier] = useState({
     name: '', contact_person: '', contact_email: '', contact_phone: '', street_address: '', city: '', province: '', postal_code: ''
@@ -69,6 +71,7 @@ export default function SupplierPortal() {
     try {
       await suppliersAPI.create(newSupplier);
       setNewSupplier({ name: '', contact_person: '', contact_email: '', contact_phone: '', street_address: '', city: '', province: '', postal_code: '' });
+      setShowAddModal(false);
       // Refresh list
       const res = await suppliersAPI.getAll();
       setSuppliers(res.data.suppliers);
@@ -77,14 +80,31 @@ export default function SupplierPortal() {
     }
   };
 
+  const handleAddSupplierClick = () => {
+    setShowAddModal(true);
+    setNewSupplier({ name: '', contact_person: '', contact_email: '', contact_phone: '', street_address: '', city: '', province: '', postal_code: '' });
+  };
+
+  const handleCloseModal = () => {
+    setShowAddModal(false);
+    setNewSupplier({ name: '', contact_person: '', contact_email: '', contact_phone: '', street_address: '', city: '', province: '', postal_code: '' });
+  };
+
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setEditingSupplier(null);
+  };
+
   const handleEditSupplier = (supplier) => {
     setEditingSupplier({ ...supplier });
+    setShowEditModal(true);
   };
 
   const handleUpdateSupplier = async (e) => {
     e.preventDefault();
     try {
       await suppliersAPI.update(editingSupplier.supplier_id, editingSupplier);
+      setShowEditModal(false);
       setEditingSupplier(null);
       // Refresh list
       const res = await suppliersAPI.getAll();
@@ -116,34 +136,8 @@ export default function SupplierPortal() {
         <div className="text-center text-red-500">{supplierError}</div>
       ) : (
         <>
-          {/* Create Supplier Form */}
-          <form className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4" onSubmit={handleCreateSupplier}>
-            <input className="border rounded px-2 py-1" required placeholder="Name" value={newSupplier.name} onChange={e => setNewSupplier(s => ({ ...s, name: e.target.value }))} />
-            <input className="border rounded px-2 py-1" placeholder="Contact Person" value={newSupplier.contact_person} onChange={e => setNewSupplier(s => ({ ...s, contact_person: e.target.value }))} />
-            <input className="border rounded px-2 py-1" placeholder="Email" value={newSupplier.contact_email} onChange={e => setNewSupplier(s => ({ ...s, contact_email: e.target.value }))} />
-            <input className="border rounded px-2 py-1" placeholder="Phone" value={newSupplier.contact_phone} onChange={e => setNewSupplier(s => ({ ...s, contact_phone: e.target.value }))} />
-            <input className="border rounded px-2 py-1" placeholder="Street Address" value={newSupplier.street_address} onChange={e => setNewSupplier(s => ({ ...s, street_address: e.target.value }))} />
-            <input className="border rounded px-2 py-1" placeholder="City" value={newSupplier.city} onChange={e => setNewSupplier(s => ({ ...s, city: e.target.value }))} />
-            <input className="border rounded px-2 py-1" placeholder="Province" value={newSupplier.province} onChange={e => setNewSupplier(s => ({ ...s, province: e.target.value }))} />
-            <input className="border rounded px-2 py-1" placeholder="Postal Code" value={newSupplier.postal_code} onChange={e => setNewSupplier(s => ({ ...s, postal_code: e.target.value }))} />
-            <button className="bg-custom-dark text-custom-cream rounded px-4 py-2 col-span-1 md:col-span-4" type="submit">Add Supplier</button>
-          </form>
 
-          {/* Edit Supplier Form */}
-          {editingSupplier && (
-            <form className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4" onSubmit={handleUpdateSupplier}>
-              <input className="border rounded px-2 py-1" required placeholder="Name" value={editingSupplier.name} onChange={e => setEditingSupplier(s => ({ ...s, name: e.target.value }))} />
-              <input className="border rounded px-2 py-1" placeholder="Contact Person" value={editingSupplier.contact_person} onChange={e => setEditingSupplier(s => ({ ...s, contact_person: e.target.value }))} />
-              <input className="border rounded px-2 py-1" placeholder="Email" value={editingSupplier.contact_email} onChange={e => setEditingSupplier(s => ({ ...s, contact_email: e.target.value }))} />
-              <input className="border rounded px-2 py-1" placeholder="Phone" value={editingSupplier.contact_phone} onChange={e => setEditingSupplier(s => ({ ...s, contact_phone: e.target.value }))} />
-              <input className="border rounded px-2 py-1" placeholder="Street Address" value={editingSupplier.street_address} onChange={e => setEditingSupplier(s => ({ ...s, street_address: e.target.value }))} />
-              <input className="border rounded px-2 py-1" placeholder="City" value={editingSupplier.city} onChange={e => setEditingSupplier(s => ({ ...s, city: e.target.value }))} />
-              <input className="border rounded px-2 py-1" placeholder="Province" value={editingSupplier.province} onChange={e => setEditingSupplier(s => ({ ...s, province: e.target.value }))} />
-              <input className="border rounded px-2 py-1" placeholder="Postal Code" value={editingSupplier.postal_code} onChange={e => setEditingSupplier(s => ({ ...s, postal_code: e.target.value }))} />
-              <button className="bg-custom-dark text-custom-cream rounded px-4 py-2 col-span-1 md:col-span-4" type="submit">Update Supplier</button>
-              <button className="bg-red-500 text-white rounded px-4 py-2 col-span-1 md:col-span-4" type="button" onClick={() => setEditingSupplier(null)}>Cancel</button>
-            </form>
-          )}
+
 
           {/* Suppliers Table */}
           <div className="overflow-x-auto">
@@ -173,13 +167,24 @@ export default function SupplierPortal() {
                     <td className="px-4 py-2">{supplier.province}</td>
                     <td className="px-4 py-2">{supplier.postal_code}</td>
                     <td className="px-4 py-2 space-x-2">
-                      <button className="bg-blue-500 text-white rounded px-2 py-1" onClick={() => handleEditSupplier(supplier)}>Edit</button>
-                      <button className="bg-red-500 text-white rounded px-2 py-1" onClick={() => handleDeleteSupplier(supplier.supplier_id)}>Delete</button>
+                      <button className="bg-blue-500 text-white rounded px-2 py-1 cursor-pointer" onClick={() => handleEditSupplier(supplier)}>Edit</button>
+                      <button className="bg-red-500 text-white rounded px-2 py-1 cursor-pointer" onClick={() => handleDeleteSupplier(supplier.supplier_id)}>Delete</button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Separator and Add Supplier Button */}
+          <hr className="my-8 border-gray-300" />
+          <div className="flex justify-center">
+            <button
+              onClick={handleAddSupplierClick}
+              className="bg-custom-dark text-custom-cream px-6 py-3 rounded-lg hover:bg-custom-mint transition font-poppins cursor-pointer"
+            >
+              Add Supplier
+            </button>
           </div>
         </>
       )}
@@ -281,7 +286,7 @@ export default function SupplierPortal() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 flex items-center justify-center space-x-2 px-4 py-2 rounded-lg font-medium transition font-kanit ${
+              className={`flex-1 flex items-center justify-center space-x-2 px-4 py-2 rounded-lg font-medium transition font-kanit cursor-pointer ${
                 activeTab === tab.id
                   ? 'bg-custom-dark text-custom-cream'
                   : 'text-gray-600 hover:text-custom-dark hover:bg-gray-100'
@@ -296,6 +301,258 @@ export default function SupplierPortal() {
 
       {/* Tab Content */}
       {renderContent()}
+
+      {/* Add Supplier Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white bg-opacity-90 backdrop-blur-md rounded-lg p-8 max-w-2xl w-full mx-4 shadow-2xl">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-custom-dark">Add New Supplier</h2>
+              <button
+                onClick={handleCloseModal}
+                className="text-gray-500 hover:text-gray-700 text-2xl font-bold cursor-pointer"
+              >
+                ×
+              </button>
+            </div>
+            
+            <form onSubmit={handleCreateSupplier} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">Name *</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter supplier name"
+                    value={newSupplier.name}
+                    onChange={e => setNewSupplier(s => ({ ...s, name: e.target.value }))}
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">Contact Person</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter contact person"
+                    value={newSupplier.contact_person}
+                    onChange={e => setNewSupplier(s => ({ ...s, contact_person: e.target.value }))}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">Email</label>
+                  <input
+                    type="email"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter email"
+                    value={newSupplier.contact_email}
+                    onChange={e => setNewSupplier(s => ({ ...s, contact_email: e.target.value }))}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">Phone</label>
+                  <input
+                    type="tel"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter phone number"
+                    value={newSupplier.contact_phone}
+                    onChange={e => setNewSupplier(s => ({ ...s, contact_phone: e.target.value }))}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">Street Address</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter street address"
+                    value={newSupplier.street_address}
+                    onChange={e => setNewSupplier(s => ({ ...s, street_address: e.target.value }))}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">City</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter city"
+                    value={newSupplier.city}
+                    onChange={e => setNewSupplier(s => ({ ...s, city: e.target.value }))}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">Province</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter province"
+                    value={newSupplier.province}
+                    onChange={e => setNewSupplier(s => ({ ...s, province: e.target.value }))}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">Postal Code</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter postal code"
+                    value={newSupplier.postal_code}
+                    onChange={e => setNewSupplier(s => ({ ...s, postal_code: e.target.value }))}
+                  />
+                </div>
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="submit"
+                  className="flex-1 bg-custom-dark text-custom-cream py-2 px-4 rounded-lg hover:bg-custom-mint transition font-poppins cursor-pointer"
+                >
+                  Add Supplier
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
+                  className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition font-poppins cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Supplier Modal */}
+      {showEditModal && editingSupplier && (
+        <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white bg-opacity-90 backdrop-blur-md rounded-lg p-8 max-w-2xl w-full mx-4 shadow-2xl">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-custom-dark">Edit Supplier</h2>
+              <button
+                onClick={handleCloseEditModal}
+                className="text-gray-500 hover:text-gray-700 text-2xl font-bold cursor-pointer"
+              >
+                ×
+              </button>
+            </div>
+            
+            <form onSubmit={handleUpdateSupplier} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">Name *</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter supplier name"
+                    value={editingSupplier.name}
+                    onChange={e => setEditingSupplier(s => ({ ...s, name: e.target.value }))}
+                    required
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">Contact Person</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter contact person"
+                    value={editingSupplier.contact_person}
+                    onChange={e => setEditingSupplier(s => ({ ...s, contact_person: e.target.value }))}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">Email</label>
+                  <input
+                    type="email"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter email"
+                    value={editingSupplier.contact_email}
+                    onChange={e => setEditingSupplier(s => ({ ...s, contact_email: e.target.value }))}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">Phone</label>
+                  <input
+                    type="tel"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter phone number"
+                    value={editingSupplier.contact_phone}
+                    onChange={e => setEditingSupplier(s => ({ ...s, contact_phone: e.target.value }))}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">Street Address</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter street address"
+                    value={editingSupplier.street_address}
+                    onChange={e => setEditingSupplier(s => ({ ...s, street_address: e.target.value }))}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">City</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter city"
+                    value={editingSupplier.city}
+                    onChange={e => setEditingSupplier(s => ({ ...s, city: e.target.value }))}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">Province</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter province"
+                    value={editingSupplier.province}
+                    onChange={e => setEditingSupplier(s => ({ ...s, province: e.target.value }))}
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-custom-dark font-medium mb-2">Postal Code</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                    placeholder="Enter postal code"
+                    value={editingSupplier.postal_code}
+                    onChange={e => setEditingSupplier(s => ({ ...s, postal_code: e.target.value }))}
+                  />
+                </div>
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="submit"
+                  className="flex-1 bg-custom-dark text-custom-cream py-2 px-4 rounded-lg hover:bg-custom-mint transition font-poppins cursor-pointer"
+                >
+                  Update Supplier
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCloseEditModal}
+                  className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition font-poppins cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
