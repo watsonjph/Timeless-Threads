@@ -20,17 +20,22 @@ const orderController = {
   // Admin dashboard stats
   async adminDashboardStats(req, res) {
     try {
+      console.log('Admin dashboard stats request received');
+      
       const [totalUsers, totalOrders, completedOrders, lowStock] = await Promise.all([
         User.getTotal(),
         Order.getTotalOrders(),
         Order.getCompletedOrders(),
         ProductVariant.getLowStock(),
       ]);
+      
+      console.log('Admin dashboard stats calculated:', { totalUsers, totalOrders, completedOrders, lowStockCount: lowStock.length });
+      
       // lowStock now includes stock_quantity and restock_threshold
       res.json({ totalUsers, totalOrders, completedOrders, lowStock });
     } catch (err) {
       console.error('Admin dashboard stats error:', err);
-      res.status(500).json({ error: 'Failed to fetch dashboard stats.' });
+      res.status(500).json({ error: 'Failed to fetch dashboard stats.', details: err.message });
     }
   },
 

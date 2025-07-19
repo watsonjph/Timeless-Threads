@@ -19,6 +19,15 @@ app.use(cors({
   origin: true,
   credentials: true
 }));
+
+// Add a test endpoint for debugging
+app.get('/api/test', (req, res) => {
+  res.json({ 
+    status: 'success', 
+    message: 'Production API is working',
+    timestamp: new Date().toISOString()
+  });
+});
 app.use(express.json());
 
 // Serve static files from uploads directory
