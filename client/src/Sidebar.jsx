@@ -134,7 +134,7 @@ export default function Sidebar({ onLogout }) {
     return (
       <button
         className={
-          'flex items-center h-16 px-4 gap-3 font-poppins text-base mb-2 w-full hover:bg-custom-mint text-custom-cream' +
+          'flex items-center h-16 px-4 gap-3 font-poppins text-base mb-2 w-full hover:bg-custom-mint text-custom-cream cursor-pointer' +
           (location.pathname === '/' ? ' bg-custom-dark font-bold shadow-sm' : '')
         }
         onClick={() => window.location.href = '/'}
