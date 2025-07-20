@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.js';
 import orderRoutes from './routes/orders.js';
 import supplierOrderRoutes from './routes/supplierOrders.js';
 import suppliersRoutes from './routes/suppliers.js';
+import productsRoutes from './routes/products.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/supplier-orders', supplierOrderRoutes);
 app.use('/api/suppliers', suppliersRoutes);
+app.use('/api/products', productsRoutes);
 
 app.get('/api', (req, res) => {
   res.json({

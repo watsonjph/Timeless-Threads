@@ -27,24 +27,70 @@ const ProductDetails = () => {
 
   const [reviews, setReviews] = useState([]);
   const [showCartModal, setShowCartModal] = useState(false);
+  const [stockData, setStockData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (product?.sku) {
       setReviews(hardcodedReviews[product.sku] || []);
+      fetchProductStock(product.sku);
     }
   }, [product?.sku]);
 
+  const fetchProductStock = async (sku) => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/products/stock/${sku}`);
+      if (response.ok) {
+        const data = await response.json();
+        setStockData(data);
+      } else {
+        console.error('Failed to fetch stock data');
+        // Fallback to hardcoded stock
+        setStockData({
+          variants: [{ stock_quantity: product.stock, in_stock: product.stock > 0 }]
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching stock:', error);
+      // Fallback to hardcoded stock
+      setStockData({
+        variants: [{ stock_quantity: product.stock, in_stock: product.stock > 0 }]
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const addToCart = () => {
+    // Check if product is in stock
+    if (stockData && !stockData.variants.some(v => v.in_stock)) {
+      alert('This product is currently out of stock.');
+      return;
+    }
+
     const isLoggedIn = !!localStorage.getItem('username');
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const existingIndex = cart.findIndex(item => item.sku === product.sku);
 
     if (existingIndex !== -1) {
-      if (cart[existingIndex].quantity < product.stock) {
+      // Check stock limit
+      const currentStock = stockData ? 
+        stockData.variants.reduce((total, v) => total + v.stock_quantity, 0) : 
+        product.stock;
+      
+      if (cart[existingIndex].quantity < currentStock) {
         cart[existingIndex].quantity += 1;
+      } else {
+        alert('Maximum available quantity reached.');
+        return;
       }
     } else {
-      cart.push({ ...product, quantity: 1 });
+      cart.push({ 
+        ...product, 
+        quantity: 1,
+        variant_id: stockData?.variants[0]?.variant_id // Include variant ID for backend
+      });
     }
 
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -107,16 +153,37 @@ const ProductDetails = () => {
             <h1 className="text-2xl font-bold">{product.name}</h1>
             <p className="text-xl mt-2 text-custom-dark">₱{product.price.toLocaleString()}</p>
             <p className="mt-1 text-sm text-gray-500">SKU: {product.sku}</p>
-            <p className="text-green-600 font-semibold mt-1">
-              Only {product.stock} unit{product.stock > 1 ? 's' : ''} left
-            </p>
+            {loading ? (
+              <p className="text-gray-500 font-semibold mt-1">Loading stock...</p>
+            ) : stockData ? (
+              <div className="mt-1">
+                {stockData.variants.some(v => v.in_stock) ? (
+                  <p className="text-green-600 font-semibold">
+                    In Stock - {stockData.variants.reduce((total, v) => total + v.stock_quantity, 0)} units available
+                  </p>
+                ) : (
+                  <p className="text-red-600 font-semibold">Out of Stock</p>
+                )}
+              </div>
+            ) : (
+              <p className="text-green-600 font-semibold mt-1">
+                Only {product.stock} unit{product.stock > 1 ? 's' : ''} left
+              </p>
+            )}
 
             <div className="mt-6 space-x-3">
               <button
                 onClick={addToCart}
-                className="bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 hover:shadow-md transition-all duration-300 ease-in-out transform hover:-translate-y-1"
+                disabled={loading || (stockData && !stockData.variants.some(v => v.in_stock))}
+                className={`px-4 py-2 rounded-full transition-all duration-300 ease-in-out transform hover:-translate-y-1 ${
+                  loading || (stockData && !stockData.variants.some(v => v.in_stock))
+                    ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                    : 'bg-black text-white hover:bg-gray-800 hover:shadow-md'
+                }`}
               >
-                Add to Cart
+                {loading ? 'Loading...' : 
+                 (stockData && !stockData.variants.some(v => v.in_stock)) ? 'Out of Stock' : 
+                 'Add to Cart'}
               </button>
             </div>
 
