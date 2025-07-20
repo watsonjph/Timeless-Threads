@@ -25,6 +25,7 @@ import Mens from './Mens';
 import Womens from './Womens';
 import Cart from './Cart';
 import Checkout from './Checkout';
+import OrderConfirmation from './OrderConfirmation';
 import FAQs from './FAQs';
 import Products from './Products';
 import FAQBubble from './components/FAQBubble';
@@ -390,6 +391,7 @@ function App() {
         <Route path="/womens" element={<Womens />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<PrivateRoute><Checkout /></PrivateRoute>} />
+        <Route path="/order-confirmation/:orderId" element={<PrivateRoute><OrderConfirmation /></PrivateRoute>} />
         <Route path="/faqs" element={<FAQs />} />
         <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
         <Route path="/verify-email" element={<VerifyEmail />} />

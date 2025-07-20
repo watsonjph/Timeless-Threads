@@ -7,6 +7,36 @@ export default function OrderHistory() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const getStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'verified':
+        return 'bg-green-100 text-green-800';
+      case 'completed':
+        return 'bg-blue-100 text-blue-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getDeliveryStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'confirmed':
+        return 'bg-green-100 text-green-800';
+      case 'delivery-in-progress':
+        return 'bg-sky-100 text-sky-800';
+      case 'delivered':
+        return 'bg-blue-100 text-blue-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   useEffect(() => {
     const userId = localStorage.getItem('userId');
     if (!userId) {
@@ -57,8 +87,16 @@ export default function OrderHistory() {
                     <tr key={order.order_id}>
                       <td className="px-6 py-4 whitespace-nowrap">{order.order_id}</td>
                       <td className="px-6 py-4 whitespace-nowrap">{new Date(order.order_date).toLocaleString()}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{order.status}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{order.delivery_status || '-'}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
+                          {order.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getDeliveryStatusColor(order.delivery_status)}`}>
+                          {order.delivery_status || 'Pending'}
+                        </span>
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap">₱{Number(order.total_amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                     </tr>
                   ))}

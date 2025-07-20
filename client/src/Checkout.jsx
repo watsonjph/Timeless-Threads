@@ -10,10 +10,10 @@ const Checkout = () => {
     address: '',
     contact: '',
     email: '',
-    paymentMethod: 'GCash',
-    gcashNumber: ''
+    paymentMethod: 'GCash'
   });
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [currentStep, setCurrentStep] = useState('details'); // 'details' or 'payment'
+  const [showQRModal, setShowQRModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
@@ -74,10 +74,10 @@ const Checkout = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleDetailsSubmit = (e) => {
     e.preventDefault();
 
-    const requiredFields = ['fullName', 'address', 'contact', 'email', 'gcashNumber'];
+    const requiredFields = ['fullName', 'address', 'contact', 'email'];
     for (const field of requiredFields) {
       if (!formData[field]) {
         alert('Please fill out all fields.');
@@ -85,9 +85,70 @@ const Checkout = () => {
       }
     }
 
-    localStorage.removeItem('cart');
-    setShowConfirmation(true);
-    setTimeout(() => navigate('/'), 4000); // auto-redirect after animation
+    setCurrentStep('payment');
+  };
+
+  const handlePaymentConfirm = async () => {
+    try {
+      // Create order in backend
+      const orderData = {
+        userId: localStorage.getItem('userId'),
+        items: cartItems.map(item => ({
+          variantId: item.variant_id || null, // Use variant_id from cart item, fallback to null
+          sku: item.sku, // Include SKU as fallback
+          quantity: item.quantity,
+          price: item.price
+        })),
+        shipping: {
+          fullName: formData.fullName,
+          address: formData.address,
+          contact: formData.contact,
+          email: formData.email
+        },
+        payment: {
+          method: formData.paymentMethod
+        },
+        totalAmount: totalPrice
+      };
+
+      console.log('Cart items:', cartItems);
+      console.log('Sending order data:', orderData);
+
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create order');
+      }
+
+      const orderResult = await response.json();
+      
+      // Clear cart
+      localStorage.removeItem('cart');
+      window.dispatchEvent(new CustomEvent('cartUpdated'));
+      
+      // Navigate to order confirmation
+      navigate(`/order-confirmation/${orderResult.orderId}`);
+    } catch (error) {
+      console.error('Order creation failed:', error);
+      alert('Failed to create order. Please try again.');
+    }
+  };
+
+  const handleCancel = () => {
+    setCurrentStep('details');
+  };
+
+  const openQRModal = () => {
+    setShowQRModal(true);
+  };
+
+  const closeQRModal = () => {
+    setShowQRModal(false);
   };
 
   return (
@@ -96,87 +157,179 @@ const Checkout = () => {
       <div className="p-8">
         <h1 className="text-3xl font-bold text-center text-custom-dark mb-8">Checkout</h1>
 
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-        {/* FORM */}
-        <form onSubmit={handleSubmit} autoComplete="on" className="bg-white p-6 rounded-lg shadow-lg space-y-4">
-          <h2 className="text-xl font-semibold text-custom-dark">Shipping & Payment</h2>
-          <input
-            name="fullName"
-            placeholder="Full Name"
-            value={formData.fullName}
-            onChange={handleChange}
-            className="w-full border border-gray-300 p-2 rounded"
-            autoComplete="name"
-          />
-          <input
-            name="address"
-            placeholder="Address"
-            value={formData.address}
-            onChange={handleChange}
-            className="w-full border border-gray-300 p-2 rounded"
-            autoComplete="street-address"
-          />
-          <input
-            name="contact"
-            placeholder="Contact Number"
-            value={formData.contact}
-            onChange={handleChange}
-            className="w-full border border-gray-300 p-2 rounded"
-            autoComplete="tel"
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full border border-gray-300 p-2 rounded"
-            autoComplete="email"
-          />
-          <select
-            name="paymentMethod"
-            value={formData.paymentMethod}
-            onChange={handleChange}
-            className="w-full border border-gray-300 p-2 rounded"
-          >
-            <option value="GCash">GCash</option>
-            <option value="Paymaya">Paymaya</option>
-            <option value="CashOnDelivery">Cash on Delivery</option>
-          </select>
-          {(formData.paymentMethod === 'GCash' || formData.paymentMethod === 'Paymaya') && (
-            <input
-              name="gcashNumber"
-              placeholder={`${formData.paymentMethod} Number`}
-              value={formData.gcashNumber}
-              onChange={handleChange}
-              className="w-full border border-gray-300 p-2 rounded"
-              autoComplete="off"
-            />
-          )}
-          <button
-            type="submit"
-            className="w-full bg-black text-white py-2 rounded-full hover:bg-gray-800 transition-all"
-          >
-            Place Order
-          </button>
-        </form>
+        {currentStep === 'details' ? (
+          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* SHIPPING FORM */}
+            <form onSubmit={handleDetailsSubmit} autoComplete="on" className="bg-white p-6 rounded-lg shadow-lg space-y-4">
+              <h2 className="text-xl font-semibold text-custom-dark">Shipping Details</h2>
+              <input
+                name="fullName"
+                placeholder="Full Name"
+                value={formData.fullName}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-2 rounded"
+                autoComplete="name"
+              />
+              <input
+                name="address"
+                placeholder="Address"
+                value={formData.address}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-2 rounded"
+                autoComplete="street-address"
+              />
+              <input
+                name="contact"
+                placeholder="Contact Number"
+                value={formData.contact}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-2 rounded"
+                autoComplete="tel"
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-2 rounded"
+                autoComplete="email"
+              />
+              
+              <h3 className="text-lg font-semibold text-custom-dark mt-6">Payment Method</h3>
+              <select
+                name="paymentMethod"
+                value={formData.paymentMethod}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-2 rounded"
+              >
+                <option value="GCash">GCash</option>
+                <option value="Maya">Maya</option>
+              </select>
+              
+              <button
+                type="submit"
+                className="w-full bg-black text-white py-3 rounded-full hover:bg-gray-800 transition-all font-semibold cursor-pointer"
+              >
+                Continue to Payment
+              </button>
+            </form>
 
-        {/* SUMMARY */}
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-xl font-semibold text-custom-dark mb-4">Order Summary</h2>
-          <ul className="space-y-4">
-            {cartItems.map((item, i) => (
-              <li key={i} className="flex justify-between items-center">
-                <span>{item.name} × {item.quantity}</span>
-                <span>₱{(item.price * item.quantity).toLocaleString()}</span>
-              </li>
-            ))}
-          </ul>
-          <div className="border-t mt-4 pt-4 text-lg font-bold text-right">
-            Total: ₱{totalPrice.toLocaleString()}
+            {/* ORDER SUMMARY */}
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h2 className="text-xl font-semibold text-custom-dark mb-4">Order Summary</h2>
+              <ul className="space-y-4">
+                {cartItems.map((item, i) => (
+                  <li key={i} className="flex justify-between items-center">
+                    <span>{item.name} × {item.quantity}</span>
+                    <span>₱{(item.price * item.quantity).toLocaleString()}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="border-t mt-4 pt-4 text-lg font-bold text-right">
+                Total: ₱{totalPrice.toLocaleString()}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        ) : (
+          /* PAYMENT INSTRUCTIONS PAGE */
+          <div className="max-w-4xl mx-auto">
+            {/* Back Button */}
+            <div className="mb-4">
+                          <button
+              onClick={handleCancel}
+              className="flex items-center text-custom-dark hover:text-gray-600 transition-colors duration-200 cursor-pointer"
+            >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to Shipping Details
+              </button>
+            </div>
+            
+            <div className="bg-white p-8 rounded-lg shadow-lg">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold text-custom-dark mb-2">Payment Instructions</h2>
+                <p className="text-gray-600">Please follow the steps below to complete your payment</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* LEFT SIDE - INSTRUCTIONS */}
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-custom-dark mb-3">Step 1: Scan QR Code</h3>
+                    <p className="text-gray-700 mb-4">
+                      Open your {formData.paymentMethod} app and scan the QR code on the right.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold text-custom-dark mb-3">Step 2: Send Payment</h3>
+                    <p className="text-gray-700 mb-4">
+                      Send the exact amount: <span className="font-bold text-lg">₱{totalPrice.toLocaleString()}</span>
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold text-custom-dark mb-3">Step 3: Confirm Payment</h3>
+                    <p className="text-gray-700 mb-4">
+                      After sending the payment, click the "I have paid" button below.
+                    </p>
+                  </div>
+
+                  {/* WARNING MESSAGE */}
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <h4 className="font-semibold text-yellow-800 mb-2">⚠️ Important Payment Notice</h4>
+                    <ul className="text-sm text-yellow-700 space-y-1">
+                      <li>• If payment received is below the required amount, your order will be cancelled</li>
+                      <li>• You will receive a refund minus processing fees</li>
+                      <li>• If payment is over the required amount, no refund will be given for the excess</li>
+                      <li>• Please ensure you send the exact amount: ₱{totalPrice.toLocaleString()}</li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* RIGHT SIDE - QR CODE */}
+                <div className="flex flex-col items-center">
+                  <div className="bg-gray-50 p-6 rounded-lg border-2 border-dashed border-gray-300">
+                    <img
+                      src={`/images/payment/${formData.paymentMethod.toLowerCase()}_payment.jpg`}
+                      alt={`${formData.paymentMethod} QR Code`}
+                      className="w-64 h-64 object-contain cursor-pointer hover:opacity-90 transition-opacity duration-200"
+                      onClick={openQRModal}
+                      onError={(e) => {
+                        e.target.src = '/images/payment/placeholder-qr.png';
+                        e.target.alt = 'QR Code Placeholder';
+                      }}
+                    />
+                  </div>
+                  <p className="text-sm text-gray-500 mt-4 text-center">
+                    Click the QR code to enlarge • Scan with your {formData.paymentMethod} app
+                  </p>
+                </div>
+              </div>
+
+              {/* ACTION BUTTONS */}
+              <div className="flex gap-4 mt-8 pt-6 border-t border-gray-200">
+                <button
+                  onClick={handleCancel}
+                  className="flex-1 bg-gray-500 text-white py-3 rounded-full hover:bg-gray-600 transition-all font-semibold cursor-pointer"
+                >
+                  Cancel Order
+                </button>
+                <button
+                  onClick={handlePaymentConfirm}
+                  className="flex-1 bg-green-600 text-white py-3 rounded-full hover:bg-green-700 transition-all font-semibold flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  I Have Paid ₱{totalPrice.toLocaleString()}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
       {/* Success Message Display */}
       {successMessage && (
@@ -185,91 +338,49 @@ const Checkout = () => {
         </div>
       )}
 
-      {/* ✅ Confirmation Animation */}
-      {showConfirmation && (
-        <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 animate-fadeIn">
-          <div className="bg-white p-8 rounded-lg text-center shadow-2xl transform scale-100 animate-scaleIn">
-            <h2 className="text-2xl font-bold text-green-600 mb-4">Order Placed Successfully!</h2>
-            <p className="text-custom-dark">Redirecting to homepage...</p>
+      {/* QR Code Modal */}
+      {showQRModal && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50"
+          onClick={closeQRModal}
+        >
+          <div className="bg-white p-8 rounded-lg max-w-md mx-4 relative" onClick={(e) => e.stopPropagation()}>
+            {/* Close Button */}
+            <button
+              onClick={closeQRModal}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors duration-200 cursor-pointer"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            
+            {/* Modal Content */}
+            <div className="text-center">
+              <h3 className="text-xl font-semibold text-custom-dark mb-4">
+                {formData.paymentMethod} QR Code
+              </h3>
+              <div className="bg-gray-50 p-6 rounded-lg border-2 border-dashed border-gray-300 mb-4">
+                <img
+                  src={`/images/payment/${formData.paymentMethod.toLowerCase()}_payment.jpg`}
+                  alt={`${formData.paymentMethod} QR Code`}
+                  className="w-80 h-80 object-contain mx-auto"
+                  onError={(e) => {
+                    e.target.src = '/images/payment/placeholder-qr.png';
+                    e.target.alt = 'QR Code Placeholder';
+                  }}
+                />
+              </div>
+              <p className="text-sm text-gray-600">
+                Scan this QR code with your {formData.paymentMethod} app
+              </p>
+              <p className="text-sm text-gray-500 mt-2">
+                Amount to send: <span className="font-bold text-custom-dark">₱{totalPrice.toLocaleString()}</span>
+              </p>
+            </div>
           </div>
         </div>
       )}
-
-      {/* Tailwind Animations */}
-      <style>
-        {`
-          @keyframes fadeIn {
-            from { opacity: 0 }
-            to { opacity: 1 }
-          }
-          @keyframes scaleIn {
-            from { transform: scale(0.9); opacity: 0 }
-            to { transform: scale(1); opacity: 1 }
-          }
-          .animate-fadeIn {
-            animation: fadeIn 0.3s ease forwards;
-          }
-          .animate-scaleIn {
-            animation: scaleIn 0.4s ease forwards;
-          }
-        `}
-      </style>
-
-            {/* Footer */}
-      <footer className="bg-white font-kanit border-t border-custom-medium mt-8">
-        <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {/* Left Side - Timeless Threads with Instagram */}
-            <div className="flex flex-col items-start space-y-2">
-              <h3 className="text-custom-dark text-xs font-semibold uppercase tracking-widest mb-1">
-                Timeless Threads
-              </h3>
-              <a href="#" className="text-custom-dark hover:text-custom-medium mt-1" aria-label="Instagram">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M7.75 2A5.75 5.75 0 002 7.75v8.5A5.75 5.75 0 007.75 22h8.5A5.75 5.75 0 0022 16.25v-8.5A5.75 5.75 0 0016.25 2h-8.5zm8.5 1.5A4.25 4.25 0 0120.5 7.75v8.5a4.25 4.25 0 01-4.25 4.25h-8.5A4.25 4.25 0 013.5 16.25v-8.5A4.25 4.25 0 017.75 3.5h8.5zm-6.5 2.75a4.75 4.75 0 100 9.5 4.75 4.75 0 000-9.5zm0 1.5a3.25 3.25 0 110 6.5 3.25 3.25 0 010-6.5zm6.75-.5a.75.75 0 100 1.5.75.75 0 000-1.5z"/>
-                </svg>
-              </a>
-            </div>
-
-            {/* Help Section */}
-            <div className="flex flex-col items-start space-y-2">
-              <h3 className="text-custom-dark text-xs font-semibold uppercase tracking-widest mb-2">
-                Help
-              </h3>
-              {['Shipping', 'Returns', 'FAQs', 'Sizing Guide', 'Product Care', 'Contact Us'].map((text, idx) => (
-                <a key={idx} href="#" className="text-custom-dark text-[11px] uppercase tracking-widest hover:underline">
-                  {text}
-                </a>
-              ))}
-            </div>
-
-            {/* About and Contact Info */}
-            <div className="flex flex-col items-start space-y-2">
-              <h3 className="text-custom-dark text-xs font-semibold uppercase tracking-widest mb-2">
-                About Us
-              </h3>
-              <h4 className="text-custom-dark text-[11px] uppercase tracking-widest mt-2 mb-1 font-semibold">Contact Info</h4>
-              <span className="text-custom-dark text-[11px] italic">+63 1234567890</span>
-            </div>
-
-            {/* Payment Options */}
-            <div className="flex flex-col items-start space-y-4 w-full">
-              <h3 className="text-custom-dark text-xs font-semibold uppercase tracking-widest mb-2 invisible">Payment Options</h3>
-              <div className="flex space-x-3 mt-2">
-                <svg className="w-6 h-6 text-custom-dark" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M4.5 3A1.5 1.5 0 003 4.5v15A1.5 1.5 0 004.5 21h15a1.5 1.5 0 001.5-1.5v-15A1.5 1.5 0 0019.5 3h-15zM6 8h12v2H6V8zm0 4h8v2H6v-2z" />
-                </svg>
-                <span className="bg-gray-200 rounded px-2 py-1 text-custom-dark text-xs font-bold flex items-center" style={{ height: '22px' }}>GCash</span>
-              </div>
-            </div>
-          </div>
-          <div className="mt-8 text-custom-dark text-[10px] font-kanit flex flex-wrap items-center gap-2">
-            <span>&copy; 2025 TIMELESS THREADS</span>
-            <a href="#" className="hover:underline">Privacy</a>
-            <a href="#" className="hover:underline">Terms & Conditions</a>
-          </div>
-        </div>
-      </footer>
       </div>
     </div>
   );

@@ -31,6 +31,21 @@ export default function SupplierPortal() {
     name: '', contact_person: '', contact_email: '', contact_phone: '', street_address: '', city: '', province: '', postal_code: ''
   });
 
+  const getStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'shipped':
+        return 'bg-green-100 text-green-800';
+      case 'delivered':
+        return 'bg-blue-100 text-blue-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   // Fetch supplier orders when Orders tab is active
   useEffect(() => {
     if (activeTab === 'orders') {
@@ -207,7 +222,11 @@ export default function SupplierPortal() {
         <td className="px-4 py-2">{loading ? '...' : items.map(i => `${i.size || ''} ${i.color || ''}`.trim()).join(', ')}</td>
         <td className="px-4 py-2">{loading ? '...' : items.map(i => i.quantity_ordered).join(', ')}</td>
         <td className="px-4 py-2">{new Date(order.order_date).toLocaleString()}</td>
-        <td className="px-4 py-2 font-semibold">{order.status}</td>
+        <td className="px-4 py-2 font-semibold">
+          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
+            {order.status}
+          </span>
+        </td>
         <td className="px-4 py-2">
           {order.status === 'Pending' ? (
             <select
