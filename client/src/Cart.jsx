@@ -44,6 +44,35 @@ const Cart = () => {
     updatedCart.splice(index, 1);
     localStorage.setItem('cart', JSON.stringify(updatedCart));
     setCartItems(updatedCart);
+    
+    // Dispatch custom event to notify navbar of cart update
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
+  };
+
+  const updateQuantity = (index, newQuantity) => {
+    if (newQuantity < 1) return; // Don't allow quantity less than 1
+    
+    const updatedCart = [...cartItems];
+    updatedCart[index].quantity = newQuantity;
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
+    setCartItems(updatedCart);
+    
+    // Dispatch custom event to notify navbar of cart update
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
+  };
+
+  const increaseQuantity = (index) => {
+    const item = cartItems[index];
+    const newQuantity = item.quantity + 1;
+    updateQuantity(index, newQuantity);
+  };
+
+  const decreaseQuantity = (index) => {
+    const item = cartItems[index];
+    const newQuantity = item.quantity - 1;
+    if (newQuantity >= 1) {
+      updateQuantity(index, newQuantity);
+    }
   };
 
   const totalPrice = cartItems.reduce(
@@ -97,15 +126,40 @@ const Cart = () => {
                       <p className="text-sm text-gray-600">
                         ₱{item.price.toLocaleString()}
                       </p>
-                      <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                      <p className="text-sm text-gray-600 font-semibold">
+                        Total: ₱{(item.price * item.quantity).toLocaleString()}
+                      </p>
                     </div>
                   </Link>
-                  <button
-                    onClick={() => removeFromCart(index)}
-                    className="text-red-500 hover:text-red-700 font-bold transition"
-                  >
-                    Remove
-                  </button>
+                  
+                  <div className="flex items-center gap-4">
+                    {/* Quantity Controls */}
+                    <div className="flex items-center border border-gray-300 rounded-lg">
+                      <button
+                        onClick={() => decreaseQuantity(index)}
+                        className="px-3 py-1 text-gray-600 hover:text-black hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
+                        disabled={item.quantity <= 1}
+                      >
+                        -
+                      </button>
+                      <span className="px-3 py-1 text-custom-dark font-semibold min-w-[2rem] text-center">
+                        {item.quantity}
+                      </span>
+                      <button
+                        onClick={() => increaseQuantity(index)}
+                        className="px-3 py-1 text-gray-600 hover:text-black hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
+                      >
+                        +
+                      </button>
+                    </div>
+                    
+                    <button
+                      onClick={() => removeFromCart(index)}
+                      className="text-red-500 hover:text-red-700 font-bold transition cursor-pointer"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
               );
             })}
@@ -130,7 +184,6 @@ const Cart = () => {
         </Link>
       </main>
 
-      {/* Footer remains unchanged */}
       <footer className="bg-white font-kanit border-t border-custom-medium mt-8">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">

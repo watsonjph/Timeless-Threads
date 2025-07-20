@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
+import CartModal from './components/CartModal';
 import hardcodedReviews from './Reviews';
 import {
   productsTop,
@@ -25,6 +26,7 @@ const ProductDetails = () => {
   );
 
   const [reviews, setReviews] = useState([]);
+  const [showCartModal, setShowCartModal] = useState(false);
 
   useEffect(() => {
     if (product?.sku) {
@@ -37,7 +39,6 @@ const ProductDetails = () => {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const existingIndex = cart.findIndex(item => item.sku === product.sku);
 
-
     if (existingIndex !== -1) {
       if (cart[existingIndex].quantity < product.stock) {
         cart[existingIndex].quantity += 1;
@@ -46,12 +47,11 @@ const ProductDetails = () => {
       cart.push({ ...product, quantity: 1 });
     }
 
-  localStorage.setItem('cart', JSON.stringify(cart));
-  alert(`${product.name} added to cart.`);
-
-
     localStorage.setItem('cart', JSON.stringify(cart));
-    alert(`${product.name} added to cart.` + (!isLoggedIn ? ' Please log in to checkout.' : ''));
+    setShowCartModal(true);
+    
+    // Dispatch custom event to notify navbar of cart update
+    window.dispatchEvent(new CustomEvent('cartUpdated'));
   };
 
     
@@ -71,6 +71,11 @@ const ProductDetails = () => {
 
   return (
     <div className="font-poppins min-h-screen bg-custom-cream">
+      <CartModal 
+        isVisible={showCartModal}
+        onClose={() => setShowCartModal(false)}
+        productName={product.name}
+      />
       <Navbar alwaysHovered={true} />
       <div className="p-8 max-w-4xl mx-auto">
         <button
