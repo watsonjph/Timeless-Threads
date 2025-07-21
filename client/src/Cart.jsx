@@ -28,18 +28,22 @@ const Cart = () => {
     // Fetch latest stock for each item
     const fetchStockForCart = async () => {
       const updatedCart = await Promise.all(storedCart.map(async (item) => {
+        // Find product info for image and display
+        const match = allProducts.find((prod) => prod.sku === item.sku);
+        const folder = match?.type ? match.type.charAt(0).toUpperCase() + match.type.slice(1) : '';
+        const imagePath = match ? `/images/products/${folder}/${match.image}` : '';
         try {
           const res = await fetch(`/api/products/stock/${item.sku}`);
           if (res.ok) {
             const data = await res.json();
             const totalStock = data.variants.reduce((total, v) => total + v.stock_quantity, 0);
-            return { ...item, availableStock: totalStock };
+            return { ...item, availableStock: totalStock, image: imagePath };
           } else {
             // fallback to previous availableStock or hardcoded stock
-            return { ...item, availableStock: item.availableStock || item.stock };
+            return { ...item, availableStock: item.availableStock || item.stock, image: imagePath };
           }
         } catch (err) {
-          return { ...item, availableStock: item.availableStock || item.stock };
+          return { ...item, availableStock: item.availableStock || item.stock, image: imagePath };
         }
       }));
       setCartItems(updatedCart);
