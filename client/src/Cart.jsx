@@ -25,18 +25,27 @@ const Cart = () => {
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    const updatedCart = storedCart.map((item) => {
-      const match = allProducts.find((prod) => prod.sku === item.sku);
-      const folder = match?.type
-        ? match.type.charAt(0).toUpperCase() + match.type.slice(1)
-        : '';
-      const imagePath = match ? `/images/products/${folder}/${match.image}` : '';
+    // Fetch latest stock for each item
+    const fetchStockForCart = async () => {
+      const updatedCart = await Promise.all(storedCart.map(async (item) => {
+        try {
+          const res = await fetch(`/api/products/stock/${item.sku}`);
+          if (res.ok) {
+            const data = await res.json();
+            const totalStock = data.variants.reduce((total, v) => total + v.stock_quantity, 0);
+            return { ...item, availableStock: totalStock };
+          } else {
+            // fallback to previous availableStock or hardcoded stock
+            return { ...item, availableStock: item.availableStock || item.stock };
+          }
+        } catch (err) {
+          return { ...item, availableStock: item.availableStock || item.stock };
+        }
+      }));
+      setCartItems(updatedCart);
+    };
 
-
-      return match ? { ...item, image: imagePath } : item;
-    });
-
-    setCartItems(updatedCart);
+    fetchStockForCart();
   }, []);
 
   const removeFromCart = (index) => {
@@ -63,6 +72,11 @@ const Cart = () => {
 
   const increaseQuantity = (index) => {
     const item = cartItems[index];
+    const maxStock = item.availableStock !== undefined ? item.availableStock : item.stock;
+    if (item.quantity >= maxStock) {
+      alert('Maximum available quantity reached.');
+      return;
+    }
     const newQuantity = item.quantity + 1;
     updateQuantity(index, newQuantity);
   };

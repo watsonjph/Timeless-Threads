@@ -29,6 +29,7 @@ const ProductDetails = () => {
   const [showCartModal, setShowCartModal] = useState(false);
   const [stockData, setStockData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (product?.sku) {
@@ -40,23 +41,18 @@ const ProductDetails = () => {
   const fetchProductStock = async (sku) => {
     try {
       setLoading(true);
+      setError('');
       const response = await fetch(`/api/products/stock/${sku}`);
       if (response.ok) {
         const data = await response.json();
         setStockData(data);
       } else {
-        console.error('Failed to fetch stock data');
-        // Fallback to hardcoded stock
-        setStockData({
-          variants: [{ stock_quantity: product.stock, in_stock: product.stock > 0 }]
-        });
+        setError('Failed to fetch stock data from server.');
+        setStockData(null);
       }
     } catch (error) {
-      console.error('Error fetching stock:', error);
-      // Fallback to hardcoded stock
-      setStockData({
-        variants: [{ stock_quantity: product.stock, in_stock: product.stock > 0 }]
-      });
+      setError('Error fetching stock: ' + error.message);
+      setStockData(null);
     } finally {
       setLoading(false);
     }
@@ -155,6 +151,8 @@ const ProductDetails = () => {
             <p className="mt-1 text-sm text-gray-500">SKU: {product.sku}</p>
             {loading ? (
               <p className="text-gray-500 font-semibold mt-1">Loading stock...</p>
+            ) : error ? (
+              <p className="text-red-600 font-semibold mt-1">{error}</p>
             ) : stockData ? (
               <div className="mt-1">
                 {stockData.variants.some(v => v.in_stock) ? (
