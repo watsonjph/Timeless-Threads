@@ -98,6 +98,8 @@ CREATE TABLE `product_reviews` (
 CREATE TABLE `orders` (
   `order_id` INT(11) NOT NULL AUTO_INCREMENT,
   `user_id` INT(11) NOT NULL,
+  `shipping_full_name` VARCHAR(255) DEFAULT NULL,
+  `shipping_contact_number` VARCHAR(50) DEFAULT NULL,
   `order_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `status` ENUM('Pending', 'Verified', 'Completed', 'Cancelled') NOT NULL DEFAULT 'Pending',
   `payment_verified` BOOLEAN DEFAULT FALSE,

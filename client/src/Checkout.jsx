@@ -7,7 +7,11 @@ const Checkout = () => {
   const [cartItems, setCartItems] = useState([]);
   const [formData, setFormData] = useState({
     fullName: '',
-    address: '',
+    streetAddress: '',
+    barangay: '',
+    city: '',
+    province: '',
+    postalCode: '',
     contact: '',
     email: '',
     paymentMethod: 'GCash'
@@ -15,6 +19,9 @@ const Checkout = () => {
   const [currentStep, setCurrentStep] = useState('details'); // 'details' or 'payment'
   const [showQRModal, setShowQRModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [showRefModal, setShowRefModal] = useState(false);
+  const [referenceNumber, setReferenceNumber] = useState('');
+  const [acknowledged, setAcknowledged] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -77,7 +84,7 @@ const Checkout = () => {
   const handleDetailsSubmit = (e) => {
     e.preventDefault();
 
-    const requiredFields = ['fullName', 'address', 'contact', 'email'];
+    const requiredFields = ['fullName', 'streetAddress', 'barangay', 'city', 'province', 'postalCode', 'contact', 'email'];
     for (const field of requiredFields) {
       if (!formData[field]) {
         alert('Please fill out all fields.');
@@ -88,7 +95,11 @@ const Checkout = () => {
     setCurrentStep('payment');
   };
 
-  const handlePaymentConfirm = async () => {
+  const handlePaymentConfirm = () => {
+    setShowRefModal(true);
+  };
+
+  const handleCompletePurchase = async () => {
     try {
       // Create order in backend
       const orderData = {
@@ -100,19 +111,21 @@ const Checkout = () => {
           price: item.price
         })),
         shipping: {
-          fullName: formData.fullName,
-          address: formData.address,
-          contact: formData.contact,
+          fullName: formData.fullName, // Will be stored as shipping_full_name
+          contact: formData.contact,   // Will be stored as shipping_contact_number
+          address: formData.streetAddress, // Will be stored as shipping_street_address
+          barangay: formData.barangay,
+          city: formData.city,
+          province: formData.province,
+          postalCode: formData.postalCode,
           email: formData.email
         },
         payment: {
-          method: formData.paymentMethod
+          method: formData.paymentMethod,
+          referenceNumber: referenceNumber.trim()
         },
         totalAmount: totalPrice
       };
-
-      console.log('Cart items:', cartItems);
-      console.log('Sending order data:', orderData);
 
       const response = await fetch('/api/orders', {
         method: 'POST',
@@ -126,11 +139,12 @@ const Checkout = () => {
       }
 
       const orderResult = await response.json();
-      
+      setShowRefModal(false);
+      setReferenceNumber('');
+      setAcknowledged(false);
       // Clear cart
       localStorage.removeItem('cart');
       window.dispatchEvent(new CustomEvent('cartUpdated'));
-      
       // Navigate to order confirmation
       navigate(`/order-confirmation/${orderResult.orderId}`);
     } catch (error) {
@@ -171,12 +185,40 @@ const Checkout = () => {
                 autoComplete="name"
               />
               <input
-                name="address"
-                placeholder="Address"
-                value={formData.address}
+                name="streetAddress"
+                placeholder="Street Address"
+                value={formData.streetAddress}
                 onChange={handleChange}
                 className="w-full border border-gray-300 p-2 rounded"
                 autoComplete="street-address"
+              />
+              <input
+                name="barangay"
+                placeholder="Barangay"
+                value={formData.barangay}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-2 rounded"
+              />
+              <input
+                name="city"
+                placeholder="City"
+                value={formData.city}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-2 rounded"
+              />
+              <input
+                name="province"
+                placeholder="Province"
+                value={formData.province}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-2 rounded"
+              />
+              <input
+                name="postalCode"
+                placeholder="Postal Code"
+                value={formData.postalCode}
+                onChange={handleChange}
+                className="w-full border border-gray-300 p-2 rounded"
               />
               <input
                 name="contact"
@@ -377,6 +419,58 @@ const Checkout = () => {
               <p className="text-sm text-gray-500 mt-2">
                 Amount to send: <span className="font-bold text-custom-dark">₱{totalPrice.toLocaleString()}</span>
               </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reference Number Modal */}
+      {showRefModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg max-w-md w-full mx-4 shadow-2xl relative">
+            <button
+              onClick={() => { setShowRefModal(false); setReferenceNumber(''); setAcknowledged(false); }}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold cursor-pointer"
+            >
+              ×
+            </button>
+            <h2 className="text-2xl font-bold text-custom-dark mb-4">Payment Reference Number</h2>
+            <p className="mb-4 text-gray-700">Please enter the reference number from your payment receipt and confirm you have sent the exact amount.</p>
+            <input
+              type="text"
+              className="w-full border border-gray-300 p-2 rounded mb-4"
+              placeholder="Reference Number"
+              value={referenceNumber}
+              onChange={e => setReferenceNumber(e.target.value)}
+            />
+            <div className="flex items-center mb-6">
+              <input
+                type="checkbox"
+                id="acknowledge"
+                checked={acknowledged}
+                onChange={e => setAcknowledged(e.target.checked)}
+                className="mr-2"
+              />
+              <label htmlFor="acknowledge" className="text-gray-700 select-none">
+                I acknowledge and confirm that I have sent the exact amount
+              </label>
+            </div>
+            <div className="flex gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => { setShowRefModal(false); setReferenceNumber(''); setAcknowledged(false); }}
+                className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition font-poppins"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleCompletePurchase}
+                className={`flex-1 py-2 px-4 rounded-lg font-poppins text-white ${referenceNumber && acknowledged ? 'bg-green-600 hover:bg-green-700 cursor-pointer' : 'bg-gray-400 cursor-not-allowed'}`}
+                disabled={!(referenceNumber && acknowledged)}
+              >
+                Complete Purchase
+              </button>
             </div>
           </div>
         </div>

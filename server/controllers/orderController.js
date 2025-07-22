@@ -98,7 +98,8 @@ const orderController = {
       await Order.createPayment({
         orderId,
         amount: totalAmount,
-        status: 'pending'
+        status: 'pending',
+        referenceNumber: payment.referenceNumber || null
       });
 
       res.status(201).json({ 
