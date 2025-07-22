@@ -3,10 +3,11 @@ import pool from '../config/db.config.js';
 const Order = {
   async getOrdersByUserId(userId) { // sort desc so ang naa kay recent orders
     const [rows] = await pool.query(
-      `SELECT order_id, order_date, status, total_amount, delivery_status
-       FROM orders
-       WHERE user_id = ?
-       ORDER BY order_date DESC`,
+      `SELECT o.order_id, o.order_date, o.status, o.total_amount, f.status AS delivery_status
+       FROM orders o
+       LEFT JOIN order_fulfillment f ON f.order_id = o.order_id
+       WHERE o.user_id = ?
+       ORDER BY o.order_date DESC`,
       [userId]
     );
     return rows;
@@ -76,15 +77,87 @@ const Order = {
     return result.insertId;
   },
 
+  async updateStatus(orderId, status) {
+    const [result] = await pool.query(
+      `UPDATE orders SET status = ? WHERE order_id = ?`,
+      [status, orderId]
+    );
+    return result.affectedRows > 0;
+  },
+
+  async updateOrder(orderId, fields) {
+    // Only allow updating certain fields
+    const allowed = ['status', 'payment_verified', 'shipping_street_address', 'shipping_barangay', 'shipping_city', 'shipping_province', 'shipping_postal_code'];
+    const updates = [];
+    const values = [];
+    for (const key of allowed) {
+      if (fields[key] !== undefined) {
+        updates.push(`${key} = ?`);
+        values.push(fields[key]);
+      }
+    }
+    if (updates.length === 0) return false;
+    values.push(orderId);
+    const [result] = await pool.query(
+      `UPDATE orders SET ${updates.join(', ')} WHERE order_id = ?`,
+      values
+    );
+    return result.affectedRows > 0;
+  },
+
+  async deleteOrder(orderId) {
+    const [result] = await pool.query(
+      `DELETE FROM orders WHERE order_id = ?`,
+      [orderId]
+    );
+    return result.affectedRows > 0;
+  },
+
+  async updateFulfillmentStatus(orderId, status) {
+    // Update the latest fulfillment row for this order
+    const [rows] = await pool.query(
+      `SELECT order_fulfillment_id FROM order_fulfillment WHERE order_id = ? ORDER BY order_fulfillment_id DESC LIMIT 1`,
+      [orderId]
+    );
+    if (!rows.length) return false;
+    const fulfillmentId = rows[0].order_fulfillment_id;
+    const [result] = await pool.query(
+      `UPDATE order_fulfillment SET status = ? WHERE order_fulfillment_id = ?`,
+      [status, fulfillmentId]
+    );
+    return result.affectedRows > 0;
+  },
+
+  async createFulfillment(orderId) {
+    const [result] = await pool.query(
+      `INSERT INTO order_fulfillment (order_id, status) VALUES (?, 'Pending')`,
+      [orderId]
+    );
+    return result.insertId;
+  },
+
   async getTotalOrders() {
     const [rows] = await pool.query(`SELECT COUNT(*) as total FROM orders`);
     return rows[0].total;
   },
 
   async getCompletedOrders() {
-    const [rows] = await pool.query(`SELECT COUNT(*) as completed FROM orders WHERE delivery_status = 'Delivered'`);
+    const [rows] = await pool.query(`SELECT COUNT(*) as completed FROM orders WHERE status = 'Completed'`);
     return rows[0].completed;
   },
+
+  async getAllOrders() {
+    const [rows] = await pool.query(
+      `SELECT o.order_id, o.user_id, o.order_date, o.status, f.status AS delivery_status, o.payment_verified, o.payment_method, o.shipping_street_address, o.shipping_barangay, o.shipping_city, o.shipping_province, o.shipping_postal_code, u.username, u.email
+       FROM orders o
+       JOIN users u ON o.user_id = u.user_id
+       LEFT JOIN order_fulfillment f ON f.order_id = o.order_id
+       ORDER BY o.order_date DESC`
+    );
+    return rows;
+  },
 };
+
+Order.pool = pool;
 
 export default Order; 

@@ -55,6 +55,7 @@ export const healthCheck = () => api.get('/');
 // Orders API calls
 export const ordersAPI = {
   getUserOrders: (userId) => api.get(`/orders/user/${userId}`),
+  markOrderCompleted: (orderId) => api.post(`/orders/${orderId}/complete`),
 };
 
 // Supplier Orders API calls
@@ -85,6 +86,13 @@ export const adminUsersAPI = {
 export const dashboardAPI = {
   getAdminStats: () => api.get('/orders/admin-dashboard-stats'),
   getSupplierStats: (supplierId) => api.get('/orders/supplier-dashboard-stats', { params: { supplierId } }),
+};
+
+export const adminOrdersAPI = {
+  getAll: () => api.get('/orders/admin/all'),
+  update: (orderId, data) => api.patch(`/orders/${orderId}`, data),
+  updateFulfillment: (orderId, status) => api.patch(`/orders/${orderId}/fulfillment`, { status }),
+  delete: (orderId) => api.delete(`/orders/${orderId}`),
 };
 
 

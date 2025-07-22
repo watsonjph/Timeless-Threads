@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { adminUsersAPI } from './api/apiService';
+import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 
 export default function UserManagement() {
   const [users, setUsers] = useState([]);
@@ -268,9 +269,23 @@ export default function UserManagement() {
                     {formatDate(user.createdAt)}
                   </td>
                                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                      <button className="bg-blue-500 text-white rounded px-2 py-1 cursor-pointer" onClick={() => handleEditUser(user)} disabled={user.role === 'admin'}>Edit</button>
-                      <button className="bg-red-500 text-white rounded px-2 py-1 cursor-pointer" onClick={() => handleDeleteUser(user.user_id)} disabled={user.role === 'admin'}>Delete</button>
-                    </td>
+                    <button
+                      className="bg-blue-500 text-white rounded px-2 py-1 cursor-pointer hover:bg-blue-600"
+                      title="Edit User"
+                      onClick={() => handleEditUser(user)}
+                      disabled={user.role === 'admin'}
+                    >
+                      <FiEdit2 />
+                    </button>
+                    <button
+                      className="bg-red-500 text-white rounded px-2 py-1 cursor-pointer hover:bg-red-600"
+                      title="Delete User"
+                      onClick={() => handleDeleteUser(user.user_id)}
+                      disabled={user.role === 'admin'}
+                    >
+                      <FiTrash2 />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

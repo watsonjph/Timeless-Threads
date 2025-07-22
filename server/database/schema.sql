@@ -101,7 +101,6 @@ CREATE TABLE `orders` (
   `order_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `status` ENUM('Pending', 'Verified', 'Completed', 'Cancelled') NOT NULL DEFAULT 'Pending',
   `payment_verified` BOOLEAN DEFAULT FALSE,
-  `delivery_status` VARCHAR(100),
   `total_amount` DECIMAL(10,2),
   `payment_method` VARCHAR(50) DEFAULT NULL,
   `shipping_street_address` VARCHAR(255),

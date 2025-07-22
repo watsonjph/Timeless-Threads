@@ -1,7 +1,7 @@
 // WILL FIX SPACING LATER, ALSO ADD ANIMATIONS!!
 import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiSettings, FiMenu, FiX, FiUsers, FiGrid, FiUserCheck, FiTruck, FiShoppingBag } from 'react-icons/fi';
+import { FiSettings, FiMenu, FiX, FiUsers, FiGrid, FiUserCheck, FiTruck, FiShoppingBag, FiClipboard } from 'react-icons/fi';
 import logo from '/images/Timeless.png'
 import logoInverted from '/images/Timeless-Inverted.png'
 
@@ -117,6 +117,34 @@ export default function Sidebar({ onLogout }) {
     );
   };
 
+  // Render the Order Management link (admin only)
+  const renderOrderManagement = () => {
+    if (role !== 'admin') return null;
+    if (collapsed) {
+      return (
+        <div
+          className={ICON_CONTAINER_CLASSES + ' font-poppins text-base pointer-events-auto select-none w-full cursor-pointer'}
+          title="Order Management"
+          onClick={() => window.location.href = '/order-management'}
+        >
+          <FiClipboard size={ICON_SIZE} />
+        </div>
+      );
+    }
+    return (
+      <Link
+        to="/order-management"
+        tabIndex={0}
+        className={`flex items-center h-16 px-4 gap-3 font-poppins text-base w-full hover:bg-custom-mint text-custom-cream cursor-pointer` +
+          (location.pathname === '/order-management' ? ' bg-custom-dark font-bold shadow-sm' : '')}
+        title="Order Management"
+      >
+        <FiClipboard size={ICON_SIZE} />
+        <span className={textClass}>Order Management</span>
+      </Link>
+    );
+  };
+
   // Render the Access Shop button
   const renderAccessShop = () => {
     if (role !== 'admin' && role !== 'supplier') return null;
@@ -211,6 +239,7 @@ export default function Sidebar({ onLogout }) {
         {/* Navigation Links */}
         <nav className="mt-6 flex-1">
           {filterNavLinksByRole(role).map(renderNavItem)}
+          {renderOrderManagement()}
         </nav>
         {/* Access Shop Button */}
         {renderAccessShop()}

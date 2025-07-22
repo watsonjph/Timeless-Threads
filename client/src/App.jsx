@@ -32,6 +32,7 @@ import FAQBubble from './components/FAQBubble';
 import DashboardHome from './DashboardHome';
 import AboutStrip from './components/AboutStrip';
 import { useEffect } from 'react';
+import OrderManagement from './OrderManagement';
 
 
 
@@ -398,6 +399,7 @@ function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/account" element={<PrivateRoute><Account /></PrivateRoute>} />
         <Route path="/order-history" element={<PrivateRoute><OrderHistory /></PrivateRoute>} />
+        <Route path="/order-management" element={<OrderManagement />} />
 
 
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>

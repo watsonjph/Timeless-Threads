@@ -37,6 +37,17 @@ export default function OrderHistory() {
     }
   };
 
+  const handleOrderReceived = async (orderId) => {
+    try {
+      await ordersAPI.markOrderCompleted(orderId);
+      setOrders(orders => orders.map(order =>
+        order.order_id === orderId ? { ...order, status: 'Completed' } : order
+      ));
+    } catch (err) {
+      alert('Failed to mark order as completed.');
+    }
+  };
+
   useEffect(() => {
     const userId = localStorage.getItem('userId');
     if (!userId) {
@@ -78,7 +89,7 @@ export default function OrderHistory() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order #</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delivery</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delivery Status</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
                   </tr>
                 </thead>
@@ -91,6 +102,15 @@ export default function OrderHistory() {
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
                           {order.status}
                         </span>
+                        {/* Show button if delivered but not completed */}
+                        {order.delivery_status?.toLowerCase() === 'delivered' && order.status.toLowerCase() !== 'completed' && (
+                          <button
+                            className="ml-2 px-4 py-1 text-xs bg-custom-dark text-custom-cream rounded-lg hover:bg-custom-mint transition font-poppins"
+                            onClick={() => handleOrderReceived(order.order_id)}
+                          >
+                            Order Received
+                          </button>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getDeliveryStatusColor(order.delivery_status)}`}>
