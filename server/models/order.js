@@ -52,9 +52,10 @@ const Order = {
 
   async create({ userId, totalAmount, shipping, payment }) {
     const [result] = await pool.query(
-      `INSERT INTO orders (user_id, total_amount, payment_method, shipping_street_address, status, delivery_status) 
-       VALUES (?, ?, ?, ?, 'Pending', 'Pending')`,
-      [userId, totalAmount, payment.method, shipping.address]
+      `INSERT INTO orders (
+        user_id, shipping_full_name, shipping_contact_number, total_amount, payment_method, shipping_street_address, shipping_barangay, shipping_city, shipping_province, shipping_postal_code, status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending')`,
+      [userId, shipping.fullName, shipping.contact, totalAmount, payment.method, shipping.address, shipping.barangay, shipping.city, shipping.province, shipping.postalCode]
     );
     return result.insertId;
   },
@@ -68,11 +69,11 @@ const Order = {
     return result.insertId;
   },
 
-  async createPayment({ orderId, amount, status }) {
+  async createPayment({ orderId, amount, status, referenceNumber }) {
     const [result] = await pool.query(
-      `INSERT INTO payments (order_id, amount, status) 
-       VALUES (?, ?, ?)`,
-      [orderId, amount, status]
+      `INSERT INTO payments (order_id, amount, reference_number, status) 
+       VALUES (?, ?, ?, ?)`,
+      [orderId, amount, referenceNumber || null, status]
     );
     return result.insertId;
   },
