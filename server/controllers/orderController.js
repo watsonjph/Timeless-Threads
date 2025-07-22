@@ -294,6 +294,7 @@ const orderController = {
 
   async cancelOrder(req, res) {
     const orderId = req.params.orderId;
+    const { verification_notes } = req.body;
     try {
       // Set order status to Cancelled
       await Order.updateStatus(orderId, 'Cancelled');
@@ -302,7 +303,7 @@ const orderController = {
       // Set payment status to failed
       const [payments] = await Order.pool.query('SELECT payment_id FROM payments WHERE order_id = ?', [orderId]);
       if (payments.length > 0) {
-        await Order.updatePaymentVerification(payments[0].payment_id, { amount_received: null, verification_notes: null, status: 'failed' });
+        await Order.updatePaymentVerification(payments[0].payment_id, { amount_received: null, verification_notes: verification_notes || null, status: 'failed' });
         // Send cancellation email
         const orderInfo = await Order.getOrderAndUserByPaymentId(payments[0].payment_id);
         await sendEmail({
@@ -312,7 +313,7 @@ const orderController = {
           html: `
             <h2>Order Cancelled</h2>
             <p>Your payment was <b>rejected</b> and your order has been cancelled.</p>
-            <p><b>Reason:</b> ${orderInfo.verification_notes || 'No notes provided.'}</p>
+            <p><b>Reason:</b> ${orderInfo.verification_notes || verification_notes || 'No notes provided.'}</p>
             <p>If you have questions, please contact support.</p>
           `
         });

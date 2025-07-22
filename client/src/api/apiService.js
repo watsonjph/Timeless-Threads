@@ -95,7 +95,7 @@ export const adminOrdersAPI = {
   delete: (orderId) => api.delete(`/orders/${orderId}`),
   getPending: () => api.get('/orders/admin/pending'),
   verifyPayment: (paymentId, data) => api.patch(`/payments/${paymentId}/verify`, data),
-  cancelOrder: (orderId) => api.patch(`/orders/${orderId}/cancel`),
+  cancelOrder: (orderId, data) => api.patch(`/orders/${orderId}/cancel`, data),
   updatePaymentStatusAndDisputed: (paymentId, data) => api.patch(`/payments/${paymentId}/status-disputed`, data),
 };
 

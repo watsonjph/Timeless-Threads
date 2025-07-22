@@ -74,7 +74,7 @@ export default function OrderApproval() {
   const handleCancelOrder = async () => {
     setActionLoading(true);
     try {
-      await adminOrdersAPI.cancelOrder(viewOrder.order_id);
+      await adminOrdersAPI.cancelOrder(viewOrder.order_id, { verification_notes: notes });
       setShowViewModal(false);
       fetchOrders();
     } catch {
