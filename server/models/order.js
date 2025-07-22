@@ -149,13 +149,43 @@ const Order = {
 
   async getAllOrders() {
     const [rows] = await pool.query(
-      `SELECT o.order_id, o.user_id, o.order_date, o.status, f.status AS delivery_status, o.payment_verified, o.payment_method, o.shipping_street_address, o.shipping_barangay, o.shipping_city, o.shipping_province, o.shipping_postal_code, u.username, u.email
+      `SELECT o.order_id, o.user_id, o.order_date, o.status, f.status AS delivery_status, o.payment_verified, o.payment_method, o.shipping_street_address, o.shipping_barangay, o.shipping_city, o.shipping_province, o.shipping_postal_code, u.username, u.email,
+        p.amount, p.amount_received, p.status AS payment_status, p.disputed, p.verification_notes
        FROM orders o
        JOIN users u ON o.user_id = u.user_id
        LEFT JOIN order_fulfillment f ON f.order_id = o.order_id
+       LEFT JOIN payments p ON p.order_id = o.order_id
        ORDER BY o.order_date DESC`
     );
     return rows;
+  },
+
+  async getPendingOrdersWithPayment() {
+    const [rows] = await pool.query(`
+      SELECT o.order_id, o.user_id, o.order_date, o.payment_method,
+             p.payment_id, p.amount, p.reference_number
+      FROM orders o
+      LEFT JOIN payments p ON o.order_id = p.order_id
+      WHERE o.status = 'Pending'
+      ORDER BY o.order_date DESC
+    `);
+    return rows;
+  },
+
+  async updatePaymentVerification(paymentId, { amount_received, verification_notes, status }) {
+    const [result] = await pool.query(
+      `UPDATE payments SET amount_received = ?, verification_notes = ?, status = ? WHERE payment_id = ?`,
+      [amount_received, verification_notes, status, paymentId]
+    );
+    return result.affectedRows > 0;
+  },
+
+  async updatePaymentStatusAndDisputed(paymentId, { payment_status, disputed }) {
+    const [result] = await pool.query(
+      `UPDATE payments SET status = ?, disputed = ? WHERE payment_id = ?`,
+      [payment_status, disputed, paymentId]
+    );
+    return result.affectedRows > 0;
   },
 };
 

@@ -66,6 +66,14 @@ const ProductVariant = {
     );
     return result.affectedRows > 0;
   },
+
+  async incrementStock(variantId, quantity) {
+    const [result] = await pool.query(
+      `UPDATE product_inventory SET stock_quantity = stock_quantity + ? WHERE variant_id = ?`,
+      [quantity, variantId]
+    );
+    return result.affectedRows > 0;
+  },
 };
 
 export default ProductVariant; 

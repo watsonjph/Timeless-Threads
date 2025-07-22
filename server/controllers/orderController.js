@@ -182,6 +182,64 @@ const orderController = {
     }
   },
 
+  async getPendingOrdersForApproval(req, res) {
+    try {
+      const orders = await Order.getPendingOrdersWithPayment();
+      res.json({ orders });
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to fetch pending orders.' });
+    }
+  },
+
+  async verifyPayment(req, res) {
+    const paymentId = req.params.paymentId;
+    const { amount_received, verification_notes, status } = req.body;
+    if (!amount_received || !status) return res.status(400).json({ error: 'Amount received and status are required.' });
+    try {
+      const updated = await Order.updatePaymentVerification(paymentId, { amount_received, verification_notes, status });
+      if (!updated) return res.status(404).json({ error: 'Payment not found or not updated.' });
+      res.json({ success: true });
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to verify payment.' });
+    }
+  },
+
+  async updatePaymentStatusAndDisputed(req, res) {
+    const paymentId = req.params.paymentId;
+    const { payment_status, disputed } = req.body;
+    if (!payment_status || typeof disputed === 'undefined') return res.status(400).json({ error: 'Payment status and disputed are required.' });
+    try {
+      const updated = await Order.updatePaymentStatusAndDisputed(paymentId, { payment_status, disputed });
+      if (!updated) return res.status(404).json({ error: 'Payment not found or not updated.' });
+      res.json({ success: true });
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to update payment status/disputed.' });
+    }
+  },
+
+  async cancelOrder(req, res) {
+    const orderId = req.params.orderId;
+    try {
+      // Set order status to Cancelled
+      await Order.updateStatus(orderId, 'Cancelled');
+      // Set order_fulfillment status to Cancelled
+      await Order.updateFulfillmentStatus(orderId, 'Cancelled');
+      // Set payment status to failed
+      const [payments] = await Order.pool.query('SELECT payment_id FROM payments WHERE order_id = ?', [orderId]);
+      if (payments.length > 0) {
+        await Order.updatePaymentVerification(payments[0].payment_id, { amount_received: null, verification_notes: null, status: 'failed' });
+      }
+      // Restore inventory for all order items
+      const [items] = await Order.pool.query('SELECT variant_id, quantity FROM order_items WHERE order_id = ?', [orderId]);
+      for (const item of items) {
+        await ProductVariant.incrementStock(item.variant_id, item.quantity);
+      }
+      res.json({ success: true });
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to cancel order.' });
+    }
+  },
+
   // Admin dashboard stats
   async adminDashboardStats(req, res) {
     try {

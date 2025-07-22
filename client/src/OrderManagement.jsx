@@ -12,6 +12,7 @@ export default function OrderManagement() {
   const navigate = useNavigate();
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingOrder, setEditingOrder] = useState(null);
+  const [editingPayment, setEditingPayment] = useState({ payment_status: '', disputed: false });
 
   useEffect(() => {
     // Admin-only access
@@ -72,6 +73,8 @@ export default function OrderManagement() {
         return 'bg-sky-100 text-sky-800';
       case 'delivered':
         return 'bg-blue-100 text-blue-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -79,6 +82,10 @@ export default function OrderManagement() {
 
   const handleEditOrder = (order) => {
     setEditingOrder({ ...order });
+    setEditingPayment({
+      payment_status: order.payment_status || 'pending',
+      disputed: !!order.disputed
+    });
     setShowEditModal(true);
   };
 
@@ -105,9 +112,17 @@ export default function OrderManagement() {
       if (editingOrder.delivery_status) {
         await adminOrdersAPI.updateFulfillment(editingOrder.order_id, editingOrder.delivery_status);
       }
+      // Update payment status/disputed
+      if (editingOrder.payment_id) {
+        await adminOrdersAPI.updatePaymentStatusAndDisputed(editingOrder.payment_id, {
+          payment_status: editingPayment.payment_status,
+          disputed: editingPayment.disputed
+        });
+      }
       setUpdateMessage('Order updated successfully!');
       setShowEditModal(false);
       setEditingOrder(null);
+      setEditingPayment({ payment_status: '', disputed: false });
       fetchOrders();
       setTimeout(() => setUpdateMessage(''), 3000);
     } catch {
@@ -181,11 +196,16 @@ export default function OrderManagement() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delivery Status</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Verified</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Method</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount Received</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Disputed</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Barangay</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">City</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Province</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Postal Code</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Verification Notes</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
@@ -207,11 +227,16 @@ export default function OrderManagement() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">{order.payment_verified ? 'Yes' : 'No'}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{order.payment_method || '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{order.amount ? `₱${Number(order.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}` : '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{order.amount_received ? `₱${Number(order.amount_received).toLocaleString(undefined, { minimumFractionDigits: 2 })}` : '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{order.payment_status || '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{order.disputed ? 'True' : 'False'}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{order.shipping_street_address || '-'}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{order.shipping_barangay || '-'}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{order.shipping_city || '-'}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{order.shipping_province || '-'}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{order.shipping_postal_code || '-'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{order.verification_notes || '-'}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                       <button
                         className="bg-blue-500 text-white rounded px-2 py-1 cursor-pointer hover:bg-blue-600"
@@ -292,6 +317,33 @@ export default function OrderManagement() {
                   <option value="Confirmed">Confirmed</option>
                   <option value="Delivery-In-Progress">Delivery-In-Progress</option>
                   <option value="Delivered">Delivered</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-custom-dark font-medium mb-2">Payment Status</label>
+                <select
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                  value={editingPayment.payment_status}
+                  onChange={e => setEditingPayment(s => ({ ...s, payment_status: e.target.value }))}
+                  required
+                >
+                  <option value="pending">pending</option>
+                  <option value="receipt_uploaded">receipt_uploaded</option>
+                  <option value="verified">verified</option>
+                  <option value="failed">failed</option>
+                  <option value="disputed">disputed</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-custom-dark font-medium mb-2">Disputed</label>
+                <select
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-custom-dark"
+                  value={editingPayment.disputed ? 'true' : 'false'}
+                  onChange={e => setEditingPayment(s => ({ ...s, disputed: e.target.value === 'true' }))}
+                  required
+                >
+                  <option value="false">False</option>
+                  <option value="true">True</option>
                 </select>
               </div>
               <div>

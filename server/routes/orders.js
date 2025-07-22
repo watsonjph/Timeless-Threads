@@ -11,6 +11,9 @@ router.get('/supplier-dashboard-stats', orderController.supplierDashboardStats);
 // GET /api/orders/admin/all - get all orders (admin)
 router.get('/admin/all', orderController.getAllOrders);
 
+// GET /api/orders/admin/pending - get all pending orders for approval (admin)
+router.get('/admin/pending', orderController.getPendingOrdersForApproval);
+
 // GET /api/orders/user/:userId - get all orders for a user
 router.get('/user/:userId', orderController.getUserOrders);
 
@@ -29,5 +32,12 @@ router.get('/:orderId', orderController.getOrderById);
 
 // POST /api/orders - create a new order
 router.post('/', orderController.createOrder);
+
+// PATCH /api/payments/:paymentId/verify - verify payment (admin)
+router.patch('/payments/:paymentId/verify', orderController.verifyPayment);
+// PATCH /api/orders/:orderId/cancel - cancel order (admin)
+router.patch('/:orderId/cancel', orderController.cancelOrder);
+// PATCH /api/payments/:paymentId/status-disputed - update payment status and disputed (admin)
+router.patch('/payments/:paymentId/status-disputed', orderController.updatePaymentStatusAndDisputed);
 
 export default router; 

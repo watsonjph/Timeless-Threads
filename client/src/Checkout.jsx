@@ -426,8 +426,8 @@ const Checkout = () => {
 
       {/* Reference Number Modal */}
       {showRefModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-lg max-w-md w-full mx-4 shadow-2xl relative">
+        <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white bg-opacity-90 backdrop-blur-md rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl relative">
             <button
               onClick={() => { setShowRefModal(false); setReferenceNumber(''); setAcknowledged(false); }}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold cursor-pointer"
@@ -459,7 +459,7 @@ const Checkout = () => {
               <button
                 type="button"
                 onClick={() => { setShowRefModal(false); setReferenceNumber(''); setAcknowledged(false); }}
-                className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition font-poppins"
+                className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition font-poppins cursor-pointer"
               >
                 Cancel
               </button>

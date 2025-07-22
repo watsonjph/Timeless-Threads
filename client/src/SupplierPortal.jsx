@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supplierOrdersAPI, suppliersAPI } from './api/apiService';
+import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 
 export default function SupplierPortal() {
   const role = localStorage.getItem('role');
@@ -182,8 +183,20 @@ export default function SupplierPortal() {
                     <td className="px-4 py-2">{supplier.province}</td>
                     <td className="px-4 py-2">{supplier.postal_code}</td>
                     <td className="px-4 py-2 space-x-2">
-                      <button className="bg-blue-500 text-white rounded px-2 py-1 cursor-pointer" onClick={() => handleEditSupplier(supplier)}>Edit</button>
-                      <button className="bg-red-500 text-white rounded px-2 py-1 cursor-pointer" onClick={() => handleDeleteSupplier(supplier.supplier_id)}>Delete</button>
+                      <button
+                        className="bg-blue-500 text-white rounded px-2 py-1 cursor-pointer hover:bg-blue-600"
+                        title="Edit Supplier"
+                        onClick={() => handleEditSupplier(supplier)}
+                      >
+                        <FiEdit2 />
+                      </button>
+                      <button
+                        className="bg-red-500 text-white rounded px-2 py-1 cursor-pointer hover:bg-red-600"
+                        title="Delete Supplier"
+                        onClick={() => handleDeleteSupplier(supplier.supplier_id)}
+                      >
+                        <FiTrash2 />
+                      </button>
                     </td>
                   </tr>
                 ))}
