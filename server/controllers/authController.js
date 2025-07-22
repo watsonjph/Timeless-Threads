@@ -11,8 +11,8 @@ const authController = {
 
     const { email, username, firstName, lastName, password } = req.body;
 
-    if (!email || !username || !firstName || !lastName || !password) {
-      return res.status(400).json({ error: 'All fields are required.' });
+    if (!email || !username || !password) {
+      return res.status(400).json({ error: 'Email, username, and password are required.' });
     }
     try {
       const existing = await User.findByEmail(email);
