@@ -149,7 +149,7 @@ const Order = {
 
   async getAllOrders() {
     const [rows] = await pool.query(
-      `SELECT o.order_id, o.user_id, o.order_date, o.status, f.status AS delivery_status, o.payment_verified, o.payment_method, o.shipping_street_address, o.shipping_barangay, o.shipping_city, o.shipping_province, o.shipping_postal_code, u.username, u.email,
+      `SELECT o.order_id, o.user_id, o.order_date, o.status, f.order_fulfillment_id, f.status AS delivery_status, f.shipped_date, f.delivery_date, f.tracking_number, o.payment_verified, o.payment_method, o.shipping_street_address, o.shipping_barangay, o.shipping_city, o.shipping_province, o.shipping_postal_code, u.username, u.email,
         p.amount, p.amount_received, p.status AS payment_status, p.disputed, p.verification_notes
        FROM orders o
        JOIN users u ON o.user_id = u.user_id
@@ -186,6 +186,23 @@ const Order = {
       [payment_status, disputed, paymentId]
     );
     return result.affectedRows > 0;
+  },
+
+  async getOrderAndUserByPaymentId(paymentId) {
+    const [rows] = await pool.query(
+      `SELECT o.order_id, o.user_id, o.order_date, o.status, o.payment_method, o.shipping_full_name, o.shipping_contact_number, o.shipping_street_address, o.shipping_barangay, o.shipping_city, o.shipping_province, o.shipping_postal_code, u.email, p.verification_notes
+       FROM payments p
+       JOIN orders o ON p.order_id = o.order_id
+       JOIN users u ON o.user_id = u.user_id
+       WHERE p.payment_id = ?`,
+      [paymentId]
+    );
+    return rows[0];
+  },
+
+  async getPendingOrdersCount() {
+    const [rows] = await pool.query(`SELECT COUNT(*) as count FROM orders WHERE status = 'Pending'`);
+    return rows[0].count;
   },
 };
 
