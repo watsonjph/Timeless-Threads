@@ -134,7 +134,7 @@ CREATE TABLE `payments` (
   `amount` DECIMAL(10,2),
   `reference_number` VARCHAR(100),
   `fee` DECIMAL(10,2),
-  `net_amount` DECIMAL(10,2),
+  `amount_received` DECIMAL(10,2),
   `status` ENUM('pending', 'receipt_uploaded', 'verified', 'failed', 'disputed') DEFAULT 'pending',
   `receipt_image_path` TEXT,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -150,7 +150,7 @@ CREATE TABLE `payments` (
 CREATE TABLE `order_fulfillment` (
   `order_fulfillment_id` INT(11) NOT NULL AUTO_INCREMENT,
   `order_id` INT(11) NOT NULL,
-  `status` ENUM('Pending', 'Confirmed', 'Delivery-In-Progress', 'Delivered') DEFAULT 'Pending',
+  `status` ENUM('Pending', 'Confirmed', 'Delivery-In-Progress', 'Delivered', 'Cancelled') DEFAULT 'Pending',
   `shipped_date` TIMESTAMP NULL DEFAULT NULL,
   `delivery_date` TIMESTAMP NULL DEFAULT NULL,
   `tracking_number` VARCHAR(100),

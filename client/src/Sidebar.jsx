@@ -1,7 +1,7 @@
 // WILL FIX SPACING LATER, ALSO ADD ANIMATIONS!!
 import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiSettings, FiMenu, FiX, FiUsers, FiGrid, FiUserCheck, FiTruck, FiShoppingBag, FiClipboard } from 'react-icons/fi';
+import { FiSettings, FiMenu, FiX, FiUsers, FiGrid, FiUserCheck, FiTruck, FiShoppingBag, FiClipboard, FiCheckSquare } from 'react-icons/fi';
 import logo from '/images/Timeless.png'
 import logoInverted from '/images/Timeless-Inverted.png'
 
@@ -44,7 +44,7 @@ export default function Sidebar({ onLogout }) {
     : 'opacity-100 overflow-visible';
 
   const ICON_CONTAINER_CLASSES = "h-16 flex items-center justify-center px-4";
-  const ICON_SIZE = 24;
+  const ICON_SIZE = 22; // Use a consistent icon size everywhere
 
   // Handler for sidebar click when collapsed (expands sidebar unless hamburger is clicked)
   const handleSidebarClick = (e) => {
@@ -96,7 +96,7 @@ export default function Sidebar({ onLogout }) {
           className={ICON_CONTAINER_CLASSES + " font-poppins text-base pointer-events-none select-none w-full"}
           title={link.label}
         >
-          <Icon size={ICON_SIZE} />
+          <Icon size={ICON_SIZE} className="align-middle" />
         </div>
       );
     }
@@ -111,8 +111,36 @@ export default function Sidebar({ onLogout }) {
             : 'hover:bg-custom-mint')}
         title={link.label}
       >
-        <Icon size={ICON_SIZE} />
+        <Icon size={ICON_SIZE} className="align-middle" />
         <span className={textClass}>{link.label}</span>
+      </Link>
+    );
+  };
+
+  // Render the Order Approval link (admin only)
+  const renderOrderApproval = () => {
+    if (role !== 'admin') return null;
+    if (collapsed) {
+      return (
+        <div
+          className={ICON_CONTAINER_CLASSES + ' font-poppins text-base pointer-events-auto select-none w-full cursor-pointer'}
+          title="Order Approval"
+          onClick={() => window.location.href = '/order-approval'}
+        >
+          <FiCheckSquare size={ICON_SIZE} className="align-middle" />
+        </div>
+      );
+    }
+    return (
+      <Link
+        to="/order-approval"
+        tabIndex={0}
+        className={`flex items-center h-16 px-4 gap-3 font-poppins text-base w-full hover:bg-custom-mint text-custom-cream cursor-pointer` +
+          (location.pathname === '/order-approval' ? ' bg-custom-dark font-bold shadow-sm' : '')}
+        title="Order Approval"
+      >
+        <FiCheckSquare size={ICON_SIZE} className="align-middle" />
+        <span className={textClass}>Order Approval</span>
       </Link>
     );
   };
@@ -127,7 +155,7 @@ export default function Sidebar({ onLogout }) {
           title="Order Management"
           onClick={() => window.location.href = '/order-management'}
         >
-          <FiClipboard size={ICON_SIZE} />
+          <FiClipboard size={ICON_SIZE} className="align-middle" />
         </div>
       );
     }
@@ -139,7 +167,7 @@ export default function Sidebar({ onLogout }) {
           (location.pathname === '/order-management' ? ' bg-custom-dark font-bold shadow-sm' : '')}
         title="Order Management"
       >
-        <FiClipboard size={ICON_SIZE} />
+        <FiClipboard size={ICON_SIZE} className="align-middle" />
         <span className={textClass}>Order Management</span>
       </Link>
     );
@@ -155,7 +183,7 @@ export default function Sidebar({ onLogout }) {
           title="Access Shop"
           onClick={() => window.location.href = '/'}
         >
-          <FiShoppingBag size={ICON_SIZE} />
+          <FiShoppingBag size={ICON_SIZE} className="align-middle" />
         </div>
       );
     }
@@ -168,7 +196,7 @@ export default function Sidebar({ onLogout }) {
         onClick={() => window.location.href = '/'}
         tabIndex={0}
       >
-        <FiShoppingBag size={ICON_SIZE} />
+        <FiShoppingBag size={ICON_SIZE} className="align-middle" />
         <span className={textClass}>Access Shop</span>
       </button>
     );
@@ -219,6 +247,20 @@ export default function Sidebar({ onLogout }) {
     );
   };
 
+  // Render the navigation links in the correct order for admin
+  const renderAdminNav = () => {
+    if (role !== 'admin') return null;
+    return (
+      <>
+        {renderNavItem({ to: '/dashboard', label: 'Dashboard', icon: FiGrid })}
+        {renderOrderApproval()}
+        {renderNavItem({ to: '/supplier-portal', label: 'Supplier Portal', icon: FiTruck })}
+        {renderNavItem({ to: '/user-management', label: 'User Management', icon: FiUserCheck })}
+        {renderOrderManagement()}
+      </>
+    );
+  };
+
   return (
     <aside
       ref={sidebarRef}
@@ -238,8 +280,7 @@ export default function Sidebar({ onLogout }) {
         </div>
         {/* Navigation Links */}
         <nav className="mt-6 flex-1">
-          {filterNavLinksByRole(role).map(renderNavItem)}
-          {renderOrderManagement()}
+          {role === 'admin' ? renderAdminNav() : filterNavLinksByRole(role).map(renderNavItem)}
         </nav>
         {/* Access Shop Button */}
         {renderAccessShop()}

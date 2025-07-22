@@ -57,6 +57,23 @@ const DashboardHome = () => {
             </div>
           </div>
         </div>
+        {/* New Orders to Approve Section */}
+        <div className="bg-white rounded-xl p-6 shadow-md mb-8">
+          <h2 className="text-xl font-semibold text-custom-dark mb-3 font-kanit">New Orders to Approve</h2>
+          {adminStats.newOrdersCount > 0 ? (
+            <div className="flex items-center gap-6">
+              <span className="text-2xl font-bold text-custom-dark">{adminStats.newOrdersCount}</span>
+              <button
+                onClick={() => window.location.href = '/order-approval'}
+                className="bg-custom-dark text-custom-cream px-6 py-2 rounded-lg hover:bg-custom-mint transition font-poppins cursor-pointer"
+              >
+                Go to Order Approval
+              </button>
+            </div>
+          ) : (
+            <div className="text-custom-dark">There are no New Orders for now.</div>
+          )}
+        </div>
         <div className="bg-white rounded-xl p-6 shadow-md mt-8">
           <h2 className="text-xl font-semibold text-custom-dark mb-3 font-kanit">Low Stock Products (Below Restock Threshold)</h2>
           {adminStats.lowStock.length === 0 ? (
