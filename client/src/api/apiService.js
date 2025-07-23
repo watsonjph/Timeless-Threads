@@ -64,6 +64,7 @@ export const supplierOrdersAPI = {
   getById: (id) => api.get(`/supplier-orders/${id}`),
   create: (data) => api.post('/supplier-orders', data),
   updateStatus: (id, status) => api.patch(`/supplier-orders/${id}/status`, { status }),
+  delete: (id) => api.delete(`/supplier-orders/${id}`),
 };
 
 // Suppliers API calls

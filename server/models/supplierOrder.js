@@ -57,6 +57,13 @@ const SupplierOrder = {
     );
     return rows[0].completed;
   },
+  async remove(supplierOrderId) {
+    const [result] = await pool.query(
+      `DELETE FROM supplier_orders WHERE supplier_order_id = ?`,
+      [supplierOrderId]
+    );
+    return result.affectedRows > 0;
+  },
 };
 
 export default SupplierOrder; 

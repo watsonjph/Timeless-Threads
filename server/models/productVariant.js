@@ -76,4 +76,5 @@ const ProductVariant = {
   },
 };
 
-export default ProductVariant; 
+export default ProductVariant;
+ProductVariant.pool = pool; 

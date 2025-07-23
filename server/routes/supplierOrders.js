@@ -15,5 +15,7 @@ router.post('/', supplierOrderController.create);
 
 // PATCH /api/supplier-orders/:id/status - update status (supplier/admin)
 router.patch('/:id/status', supplierOrderController.updateStatus);
+// DELETE /api/supplier-orders/:id - delete supplier order
+router.delete('/:id', supplierOrderController.delete);
 
 export default router; 
