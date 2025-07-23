@@ -12,6 +12,7 @@ import suppliersRoutes from './routes/suppliers.js';
 import orderRoutes from './routes/orders.js';
 import supplierOrderRoutes from './routes/supplierOrders.js';
 import productsRoutes from './routes/products.js';
+import paymentsRoutes from './routes/payments.js';
 
 const app = express();
 
@@ -40,6 +41,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/supplier-orders', supplierOrderRoutes);
 app.use('/api/suppliers', suppliersRoutes);
 app.use('/api/products', productsRoutes);
+app.use('/api/payments', paymentsRoutes);
 
 // Serve static files from the frontend build
 const clientDistPath = path.join(__dirname, '../client/dist');

@@ -256,9 +256,14 @@ const orderController = {
     try {
       const updated = await Order.updatePaymentVerification(paymentId, { amount_received, verification_notes, status });
       if (!updated) return res.status(404).json({ error: 'Payment not found or not updated.' });
-      // Send email if approved
+      // If payment is verified, update order and fulfillment statuses
       if (status === 'verified') {
         const orderInfo = await Order.getOrderAndUserByPaymentId(paymentId);
+        if (orderInfo && orderInfo.order_id) {
+          await Order.updateStatus(orderInfo.order_id, 'Verified');
+          await Order.updateFulfillmentStatus(orderInfo.order_id, 'Confirmed');
+          await Order.updateOrder(orderInfo.order_id, { payment_verified: true });
+        }
         await sendEmail({
           to: orderInfo.email,
           subject: `Order Approved - Timeless Threads (Order #${orderInfo.order_id})`,

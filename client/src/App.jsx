@@ -34,6 +34,7 @@ import AboutStrip from './components/AboutStrip';
 import { useEffect } from 'react';
 import OrderManagement from './OrderManagement';
 import OrderApproval from './OrderApproval';
+import ProductManagement from './ProductManagement';
 
 
 
@@ -424,6 +425,11 @@ function App() {
           <Route path="/user-management" element={
             <RoleRoute allowedRoles={["admin"]}>
               <UserManagement />
+            </RoleRoute>
+          } />
+          <Route path="/product-management" element={
+            <RoleRoute allowedRoles={["admin"]}>
+              <ProductManagement />
             </RoleRoute>
           } />
         </Route>
