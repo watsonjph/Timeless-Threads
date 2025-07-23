@@ -225,6 +225,12 @@ export default function Navbar({ alwaysHovered = false }) {
                   >
                     Order History
                   </Link>
+                  <Link
+                    to="/product-review"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    Product Review
+                  </Link>
                   <hr className="my-1" />
                   <button
                     onClick={handleLogout}

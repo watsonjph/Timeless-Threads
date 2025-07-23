@@ -2,6 +2,7 @@
 
 const productsTop = [
   {
+    product_id: 1,
     name: 'Regular Fit Solid Cotton Shirt',
     price: 1350,
     sku: 'REG1350M',
@@ -29,6 +30,7 @@ const productsTop = [
 //     care: ['Wash at max 40°C', 'Do not bleach', 'Tumble dry low', 'Iron at medium temperature'],
   },
   {
+    product_id: 2,
     name: 'Custom Slim Fit Mesh Polo Shirt',
     price: 1325,
     sku: 'CSF1325M',
@@ -46,6 +48,7 @@ const productsTop = [
     care: ['Wash cold', 'Do not bleach', 'Line dry', 'Cool iron if needed'],
   },
   {
+    product_id: 3,
     name: 'Custom Slim Fit Jersey Crewneck T-Shirt',
     price: 1295,
     sku: 'CSF1295M',
@@ -67,6 +70,7 @@ const productsTop = [
     care: ['Machine wash warm', 'Do not bleach', 'Tumble dry low'],
   },
   {
+    product_id: 4,
     name: 'Untucked Oxford Shirt',
     price: 1800,
     sku: 'OXF1800M',
@@ -82,6 +86,7 @@ const productsTop = [
     care: ['Cold wash', 'Do not bleach', 'Iron medium'],
   },
   {
+    product_id: 5,
     name: 'Paris Polo Shirt Regular Fit Stretch',
     price: 1950,
     sku: 'PPS1950M',
@@ -103,6 +108,7 @@ const productsTop = [
     care: ['Delicate wash 30°C', 'Do not bleach', 'Dry flat'],
   },
   {
+    product_id: 6,
     name: 'Custom Slim Fit Soft Cotton Polo Shirt',
     price: 1950,
     sku: 'CSSC1950M',
@@ -122,6 +128,7 @@ const productsTop = [
 
   // NEW MENSWEAR
   {
+    product_id: 7,
     name: 'Baggy Chino Pants',
     price: 1690,
     sku: 'BCP1690M',
@@ -134,6 +141,7 @@ const productsTop = [
     care: ['Cold wash', 'Do not bleach', 'Line dry'],
   },
   {
+    product_id: 8,
     name: 'Cargo Shorts',
     price: 1250,
     sku: 'CS1250M',
@@ -146,6 +154,7 @@ const productsTop = [
     care: ['Machine wash', 'Tumble dry low'],
   },
   {
+    product_id: 9,
     name: 'Jogger Shorts',
     price: 1100,
     sku: 'JS1100M',
@@ -158,6 +167,7 @@ const productsTop = [
     care: ['Wash cold', 'Avoid bleach', 'Dry flat'],
   },
   {
+    product_id: 10,
     name: 'Straight Jeans',
     price: 1850,
     sku: 'SJ1850M',
@@ -170,6 +180,7 @@ const productsTop = [
     care: ['Machine wash cold', 'Hang dry'],
   },
   {
+    product_id: 11,
     name: 'Slim Travel Jean',
     price: 1990,
     sku: 'STJ1990M',
@@ -187,6 +198,7 @@ const productsTop = [
 const productsBottom = [
   // NEW WOMENSWEAR
   {
+    product_id: 12,
     name: 'Drawstring Jean',
     price: 1490,
     sku: 'DJ1490W',
@@ -199,6 +211,7 @@ const productsBottom = [
     care: ['Machine wash cold'],
   },
   {
+    product_id: 13,
     name: 'Tura Pants',
     price: 1590,
     sku: 'TP1590W',
@@ -211,6 +224,7 @@ const productsBottom = [
     care: ['Cold gentle wash'],
   },
   {
+    product_id: 14,
     name: 'Lou Pants',
     price: 1550,
     sku: 'LP1550W',
@@ -223,6 +237,7 @@ const productsBottom = [
     care: ['Wash with similar colors'],
   },
   {
+    product_id: 15,
     name: 'Veron Skirt',
     price: 1300,
     sku: 'VS1300W',
@@ -235,6 +250,7 @@ const productsBottom = [
     care: ['Do not bleach'],
   },
   {
+    product_id: 16,
     name: 'Cable Knit Sweater',
     price: 1700,
     sku: 'CKS1700W',
@@ -247,6 +263,7 @@ const productsBottom = [
     care: ['Cold wash'],
   },
   {
+    product_id: 17,
     name: 'Cotton Shirt',
     price: 1250,
     sku: 'CS1250W',
@@ -259,6 +276,7 @@ const productsBottom = [
     care: ['Iron low heat'],
   },
   {
+    product_id: 18,
     name: 'Rib Vest',
     price: 950,
     sku: 'RV950W',
@@ -271,6 +289,7 @@ const productsBottom = [
     care: ['Wash inside out'],
   },
   {
+    product_id: 19,
     name: 'Rib Short Sleeve',
     price: 990,
     sku: 'RSS990W',
@@ -287,6 +306,7 @@ const productsBottom = [
 
 const footwearProducts = [
   {
+    product_id: 20,
     name: 'Armani Sneakers',
     price: 3150,
     sku: 'AS3150U',
@@ -299,6 +319,7 @@ const footwearProducts = [
     care: ['Wipe with damp cloth', 'Do not machine wash'],
   },
   {
+    product_id: 21,
     name: 'City MK Sneakers',
     price: 2990,
     sku: 'CMK2990U',
@@ -311,6 +332,7 @@ const footwearProducts = [
     care: ['Spot clean only', 'Air dry'],
   },
   {
+    product_id: 22,
     name: 'Evo Leather Sneakers',
     price: 2890,
     sku: 'ELS2890U',
@@ -323,6 +345,7 @@ const footwearProducts = [
     care: ['Wipe clean', 'Avoid soaking'],
   },
   {
+    product_id: 23,
     name: '2-Pack Sport Socks',
     price: 750,
     sku: '2PSS750W',
@@ -355,6 +378,7 @@ const footwearProducts = [
 //     care: ['Wash with like colors', 'Avoid fabric softener', 'Air dry'],
   },
   {
+    product_id: 24,
     name: 'Striped Ribbed Sock',
     price: 450,
     sku: 'SRS450W',
@@ -373,6 +397,7 @@ const footwearProducts = [
 //     care: ['Wash inside out', 'Do not bleach', 'Hang dry'],
   },
   {
+    product_id: 25,
     name: 'Corgi Dog Socks Khaki',
     price: 450,
     sku: 'CDSK450W',
@@ -391,6 +416,7 @@ const footwearProducts = [
 //     care: ['Delicate cycle only', 'No bleach', 'Line dry only'],
   },
   {
+    product_id: 26,
     name: 'Pug Dog Sock Green',
     price: 450,
     sku: 'PDSG450W',
@@ -403,6 +429,7 @@ const footwearProducts = [
     care: ['Gentle wash', 'Do not iron', 'Dry flat'],
   },
   {
+    product_id: 27,
     name: 'Breathable Jersey Tennis Socks',
     price: 750,
     sku: 'BJT750W',
@@ -419,6 +446,7 @@ const footwearProducts = [
 
 const accessoriesProducts = [
   {
+    product_id: 28,
     name: 'Ferrari Sunglasses',
     price: 1490,
     sku: 'FS1490A',
@@ -431,6 +459,7 @@ const accessoriesProducts = [
     care: ['Wipe with microfiber cloth', 'Store in case when not in use'],
   },
   {
+    product_id: 29,
     name: 'Gold Sunglasses',
     price: 1490,
     sku: 'GS1490A',
@@ -443,6 +472,7 @@ const accessoriesProducts = [
     care: ['Clean with lens-safe solution', 'Avoid scratching surfaces'],
   },
   {
+    product_id: 30,
     name: 'LA Dodgers Cap',
     price: 850,
     sku: 'LADC850A',
@@ -455,6 +485,7 @@ const accessoriesProducts = [
     care: ['Hand wash only', 'Air dry', 'Do not bleach'],
   },
   {
+    product_id: 31,
     name: 'NY Yankees Cap',
     price: 850,
     sku: 'NYYC850A',

@@ -3,6 +3,7 @@ import authController from '../controllers/authController.js';
 import User from '../models/user.js';
 import multer from 'multer';
 import path from 'path';
+import db from '../config/db.config.js';
 
 const router = express.Router();
 
@@ -23,7 +24,9 @@ router.get('/user/:id', async (req, res) => {
       email: user.email, 
       username: user.username,
       has_profile_pic: user.has_profile_pic,
-      profile_pic_url: user.profile_pic_url
+      profile_pic_url: user.profile_pic_url,
+      firstName: user.firstName,
+      lastName: user.lastName
     });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch user.' });
@@ -133,5 +136,23 @@ router.post('/user/:id/profile-pic', upload.single('profilePic'), async (req, re
 
 // Serve uploaded images statically
 router.use('/uploads', express.static(path.join(process.cwd(), 'server', 'uploads')));
+
+// Get all reviews by a user
+router.get('/users/:userId/reviews', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const [reviews] = await db.query(
+      `SELECT r.*, p.name as product_name
+       FROM product_reviews r
+       LEFT JOIN products p ON r.product_id = p.product_id
+       WHERE r.user_id = ?`,
+      [userId]
+    );
+    res.json({ reviews });
+  } catch (err) {
+    console.error('Error in /users/:userId/reviews:', err);
+    res.status(500).json({ error: 'Failed to fetch user reviews.' });
+  }
+});
 
 export default router; 

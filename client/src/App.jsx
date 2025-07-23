@@ -35,6 +35,7 @@ import { useEffect } from 'react';
 import OrderManagement from './OrderManagement';
 import OrderApproval from './OrderApproval';
 import ProductManagement from './ProductManagement';
+import ProductReview from './ProductReview';
 
 
 
@@ -403,6 +404,7 @@ function App() {
         <Route path="/order-history" element={<PrivateRoute><OrderHistory /></PrivateRoute>} />
         <Route path="/order-management" element={<OrderManagement />} />
         <Route path="/order-approval" element={<OrderApproval />} />
+        <Route path="/product-review" element={<PrivateRoute><ProductReview /></PrivateRoute>} />
 
 
         <Route element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>

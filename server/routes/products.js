@@ -292,4 +292,42 @@ router.delete('/inventory/:pdInventoryId', async (req, res) => {
   }
 });
 
+// Fetch reviews for a product by product_id
+router.get('/:productId/reviews', async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const [reviews] = await db.query(`
+      SELECT r.review_id, r.rating, r.review_text, r.review_date, r.user_id,
+             u.username, u.profile_pic_url, u.firstName, u.lastName
+      FROM product_reviews r
+      LEFT JOIN users u ON r.user_id = u.user_id
+      WHERE r.product_id = ?
+      ORDER BY r.review_date DESC
+    `, [productId]);
+    res.json({ reviews });
+  } catch (err) {
+    console.error('Error fetching product reviews:', err);
+    res.status(500).json({ error: 'Failed to fetch product reviews' });
+  }
+});
+
+// POST /api/products/:productId/reviews - submit a review for a product
+router.post('/:productId/reviews', async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const { user_id, rating, review_text } = req.body;
+    if (!user_id || !rating || !review_text) {
+      return res.status(400).json({ error: 'Missing required fields.' });
+    }
+    await db.query(
+      `INSERT INTO product_reviews (product_id, user_id, rating, review_text) VALUES (?, ?, ?, ?)`,
+      [productId, user_id, rating, review_text]
+    );
+    res.json({ message: 'Review submitted successfully.' });
+  } catch (err) {
+    console.error('Error in POST /products/:productId/reviews:', err);
+    res.status(500).json({ error: 'Failed to submit review.' });
+  }
+});
+
 export default router; 

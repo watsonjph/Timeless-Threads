@@ -371,6 +371,40 @@ const orderController = {
       res.status(500).json({ error: 'Failed to fetch supplier dashboard stats.' });
     }
   },
+
+  // Get all completed orders for a user, including items
+  async getCompletedOrdersWithItemsByUserId(req, res) {
+    const userId = req.params.userId;
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required.' });
+    }
+    try {
+      // Get completed orders
+      const [orders] = await Order.pool.query(
+        `SELECT o.order_id, o.order_date, o.status, o.total_amount, f.status AS delivery_status
+         FROM orders o
+         LEFT JOIN order_fulfillment f ON f.order_id = o.order_id
+         WHERE o.user_id = ? AND o.status = 'Completed'
+         ORDER BY o.order_date DESC`,
+        [userId]
+      );
+      // For each order, get items
+      for (const order of orders) {
+        const [items] = await Order.pool.query(
+          `SELECT oi.*, pv.product_id, pv.sku, pv.size, pv.color, p.name as product_name
+           FROM order_items oi
+           JOIN product_variants pv ON oi.variant_id = pv.variant_id
+           JOIN products p ON pv.product_id = p.product_id
+           WHERE oi.order_id = ?`,
+          [order.order_id]
+        );
+        order.items = items;
+      }
+      res.json({ orders });
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to fetch completed orders with items.' });
+    }
+  },
 };
 
 export default orderController; 

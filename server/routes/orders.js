@@ -17,6 +17,9 @@ router.get('/admin/pending', orderController.getPendingOrdersForApproval);
 // GET /api/orders/user/:userId - get all orders for a user
 router.get('/user/:userId', orderController.getUserOrders);
 
+// GET /api/orders/user/:userId/completed-with-items - get all completed orders with items for a user
+router.get('/user/:userId/completed-with-items', orderController.getCompletedOrdersWithItemsByUserId);
+
 // POST /api/orders/:orderId/complete - mark order as completed by customer
 router.post('/:orderId/complete', orderController.markOrderCompleted);
 

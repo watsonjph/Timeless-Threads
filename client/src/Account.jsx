@@ -25,24 +25,25 @@ export default function Account() {
   // Modal state
   const [modal, setModal] = useState(null); // 'email' | 'username' | 'password' | null
 
-  // Fetch current user info on mount
-  useEffect(() => {
-    async function fetchUser() {
-      if (!userId) return;
-      try {
-        const res = await fetch('/api/auth/user/' + userId);
-        const data = await res.json();
-        if (res.ok) {
-          setEmail(data.email || '');
-          setUsername(data.username || '');
-          setProfilePicUrl(data.profile_pic_url || '');
-          setFirstName(data.firstName || '');
-          setLastName(data.lastName || '');
-        }
-      } catch (err) {
-        // Optionally handle error
+  // Fetch user info (moved outside useEffect for reuse)
+  async function fetchUser() {
+    if (!userId) return;
+    try {
+      const res = await fetch('/api/auth/user/' + userId);
+      const data = await res.json();
+      if (res.ok) {
+        setEmail(data.email || '');
+        setUsername(data.username || '');
+        setProfilePicUrl(data.profile_pic_url || '');
+        setFirstName(data.firstName || '');
+        setLastName(data.lastName || '');
       }
+    } catch (err) {
+      // Optionally handle error
     }
+  }
+
+  useEffect(() => {
     fetchUser();
   }, [userId]);
 
@@ -145,11 +146,10 @@ export default function Account() {
       const data = await res.json();
       if (res.ok) {
         setNameMsg('Name updated successfully.');
-        setFirstName(newFirstName);
-        setLastName(newLastName);
         setNewFirstName('');
         setNewLastName('');
         setModal(null);
+        fetchUser(); // Re-fetch user data from backend
       } else {
         setNameMsg(data.error || 'Failed to update name.');
       }
