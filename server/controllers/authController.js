@@ -17,7 +17,13 @@ const authController = {
     try {
       const existing = await User.findByEmail(email);
       if (existing) {
-        return res.status(409).json({ error: 'User already exists.' });
+        if (existing.is_deleted === 1) {
+          // Reactivate and update the soft-deleted user
+          await User.reactivateAndUpdateByEmail(email, { username, password, firstName, lastName });
+          return res.status(200).json({ message: 'Account reactivated. You may now log in.' });
+        } else {
+          return res.status(409).json({ error: 'User already exists.' });
+        }
       }
       if (pendingRegistrations[email] && Date.now() < pendingRegistrations[email].expiresAt) {
         return res.status(429).json({ error: 'A verification email has already been sent. Please check your inbox.' });
@@ -55,6 +61,9 @@ const authController = {
       if (!user || !(await User.comparePassword(password, user.password))) {
         console.log('Invalid credentials');
         return res.status(401).json({ error: 'Invalid credentials.' });
+      }
+      if (user.is_deleted === 1) {
+        return res.status(403).json({ error: 'Login Error: Account login is restricted' });
       }
       let supplierId = null;
       if (user.role === 'supplier') {

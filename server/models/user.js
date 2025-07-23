@@ -106,6 +106,15 @@ const User = {
     );
     return result.affectedRows > 0;
   },
+
+  async reactivateAndUpdateByEmail(email, { username, password, firstName, lastName }) {
+    const hashed = await bcrypt.hash(password, 10);
+    const [result] = await pool.query(
+      `UPDATE users SET username = ?, password = ?, firstName = ?, lastName = ?, is_deleted = 0, deleted_at = NULL WHERE email = ? AND is_deleted = 1`,
+      [username, hashed, firstName, lastName, email]
+    );
+    return result.affectedRows > 0;
+  },
 };
 
 export default User;
