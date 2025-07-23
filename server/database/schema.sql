@@ -177,6 +177,7 @@ CREATE TABLE `supplier_orders` (
   `order_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `status` ENUM('Pending', 'Shipped', 'Delivered', 'Cancelled') DEFAULT 'Pending',
   `notes` TEXT,
+  `total_amount` DECIMAL(10,2),
   FOREIGN KEY (`supplier_id`) REFERENCES `suppliers`(`supplier_id`),
   FOREIGN KEY (`ordered_by_admin_id`) REFERENCES `users`(`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

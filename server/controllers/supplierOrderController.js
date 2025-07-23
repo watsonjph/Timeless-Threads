@@ -32,11 +32,40 @@ const supplierOrderController = {
   // POST create a new supplier order (with items)
   async create(req, res) {
     try {
-      const { supplier_id, ordered_by_admin_id, notes, items } = req.body;
-      if (!supplier_id || !ordered_by_admin_id || !Array.isArray(items) || items.length === 0) {
-        return res.status(400).json({ error: 'Missing required fields.' });
+      let { supplier_id, ordered_by_admin_id, notes, items } = req.body;
+      supplier_id = Number(supplier_id);
+      ordered_by_admin_id = Number(ordered_by_admin_id);
+      items = (Array.isArray(items) ? items : []).filter(item =>
+        item && Number(item.variant_id) && Number(item.quantity_ordered) > 0
+      );
+      if (!supplier_id || !ordered_by_admin_id || items.length === 0) {
+        return res.status(400).json({ error: 'Missing required fields or invalid items.' });
       }
-      const supplierOrderId = await SupplierOrder.create({ supplier_id, ordered_by_admin_id, notes });
+      // Calculate total_amount
+      let total_amount = 0;
+      for (const item of items) {
+        const variant = await ProductVariant.getById(item.variant_id);
+        if (!variant) {
+          return res.status(400).json({ error: `Product variant not found: ${item.variant_id}` });
+        }
+        if (variant.supplier_id !== supplier_id && variant.product_id) {
+          const [productRows] = await ProductVariant.pool.query(
+            'SELECT supplier_id FROM products WHERE product_id = ?',
+            [variant.product_id]
+          );
+          if (!productRows.length || productRows[0].supplier_id !== supplier_id) {
+            return res.status(400).json({ error: `Variant ${item.variant_id} does not belong to supplier ${supplier_id}` });
+          }
+        }
+        // Get product price
+        const [productRows] = await ProductVariant.pool.query(
+          'SELECT price FROM products WHERE product_id = ?',
+          [variant.product_id]
+        );
+        const price = productRows.length ? Number(productRows[0].price) : 0;
+        total_amount += price * Number(item.quantity_ordered);
+      }
+      const supplierOrderId = await SupplierOrder.create({ supplier_id, ordered_by_admin_id, notes, total_amount });
       for (const item of items) {
         await SupplierOrderItem.create({
           supplier_order_id: supplierOrderId,
@@ -63,7 +92,8 @@ const supplierOrderController = {
       }
       res.status(201).json({ supplier_order_id: supplierOrderId });
     } catch (err) {
-      res.status(500).json({ error: 'Failed to create supplier order.' });
+      console.error('Supplier order creation error:', err);
+      res.status(500).json({ error: 'Failed to create supplier order.', details: err.message });
     }
   },
 
@@ -80,6 +110,20 @@ const supplierOrderController = {
       res.json({ success: true });
     } catch (err) {
       res.status(500).json({ error: 'Failed to update status.' });
+    }
+  },
+
+  async delete(req, res) {
+    try {
+      const { id } = req.params;
+      // Delete related supplier_order_items first
+      await SupplierOrderItem.deleteBySupplierOrderId(id);
+      // Then delete the supplier order
+      const deleted = await SupplierOrder.remove(id);
+      if (!deleted) return res.status(404).json({ error: 'Order not found.' });
+      res.json({ success: true });
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to delete supplier order.' });
     }
   },
 };

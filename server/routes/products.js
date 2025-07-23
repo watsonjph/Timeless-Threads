@@ -53,23 +53,52 @@ router.get('/stock/:sku', async (req, res) => {
 // Get all products (for admin/supplier use)
 router.get('/', async (req, res) => {
   try {
-    const query = `
+    // Fetch all products
+    const [products] = await db.query(`
       SELECT 
         p.product_id,
         p.name,
         p.description,
         p.price,
         p.is_active,
+        p.supplier_id,
         c.name as category_name,
         s.name as supplier_name
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.category_id
       LEFT JOIN suppliers s ON p.supplier_id = s.supplier_id
       WHERE p.is_active = 1
-    `;
-    
-    const [products] = await db.query(query);
-    res.json({ products });
+    `);
+
+    // Fetch all variants
+    const [variants] = await db.query(`
+      SELECT 
+        pv.variant_id,
+        pv.product_id,
+        pv.size,
+        pv.color,
+        pv.sku,
+        pv.is_active,
+        pi.stock_quantity
+      FROM product_variants pv
+      LEFT JOIN product_inventory pi ON pv.variant_id = pi.variant_id
+      WHERE pv.is_active = 1
+    `);
+
+    // Group variants by product_id
+    const variantsByProduct = {};
+    for (const v of variants) {
+      if (!variantsByProduct[v.product_id]) variantsByProduct[v.product_id] = [];
+      variantsByProduct[v.product_id].push(v);
+    }
+
+    // Attach variants to products
+    const productsWithVariants = products.map(p => ({
+      ...p,
+      variants: variantsByProduct[p.product_id] || []
+    }));
+
+    res.json({ products: productsWithVariants });
   } catch (error) {
     console.error('Error fetching products:', error);
     res.status(500).json({ error: 'Internal server error' });
