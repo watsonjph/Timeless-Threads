@@ -100,5 +100,19 @@ export const adminOrdersAPI = {
   updatePaymentStatusAndDisputed: (paymentId, data) => api.patch(`/payments/${paymentId}/status-disputed`, data),
 };
 
+// Products API calls
+export const productsAPI = {
+  getAll: () => api.get('/products'),
+  update: (productId, data) => api.put(`/products/${productId}`, data),
+  getCategories: () => api.get('/products/categories'),
+  addVariant: (productId, data) => api.post(`/products/${productId}/variants`, data),
+  deleteVariant: (variantId) => api.delete(`/products/variants/${variantId}`),
+  create: (data) => api.post('/products', data),
+  getInventory: () => api.get('/products/inventory'),
+  updateInventory: (pdInventoryId, data) => api.put(`/products/inventory/${pdInventoryId}`, data),
+  deleteInventory: (pdInventoryId) => api.delete(`/products/inventory/${pdInventoryId}`),
+  delete: (productId) => api.delete(`/products/${productId}`),
+};
+
 
 export default api; 

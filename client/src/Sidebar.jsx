@@ -1,7 +1,7 @@
 // WILL FIX SPACING LATER, ALSO ADD ANIMATIONS!!
 import React, { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FiSettings, FiMenu, FiX, FiUsers, FiGrid, FiUserCheck, FiTruck, FiShoppingBag, FiClipboard, FiCheckSquare } from 'react-icons/fi';
+import { FiSettings, FiMenu, FiX, FiUsers, FiGrid, FiUserCheck, FiTruck, FiShoppingBag, FiClipboard, FiCheckSquare, FiBox } from 'react-icons/fi';
 import logo from '/images/Timeless.png'
 import logoInverted from '/images/Timeless-Inverted.png'
 
@@ -173,6 +173,34 @@ export default function Sidebar({ onLogout }) {
     );
   };
 
+  // Add renderProductManagement for admin only
+  const renderProductManagement = () => {
+    if (role !== 'admin') return null;
+    if (collapsed) {
+      return (
+        <div
+          className={ICON_CONTAINER_CLASSES + ' font-poppins text-base pointer-events-auto select-none w-full cursor-pointer'}
+          title="Product Management"
+          onClick={() => window.location.href = '/product-management'}
+        >
+          <FiBox size={ICON_SIZE} className="align-middle" />
+        </div>
+      );
+    }
+    return (
+      <Link
+        to="/product-management"
+        tabIndex={0}
+        className={`flex items-center h-16 px-4 gap-3 font-poppins text-base w-full hover:bg-custom-mint text-custom-cream cursor-pointer` +
+          (location.pathname === '/product-management' ? ' bg-custom-dark font-bold shadow-sm' : '')}
+        title="Product Management"
+      >
+        <FiBox size={ICON_SIZE} className="align-middle" />
+        <span className={textClass}>Product Management</span>
+      </Link>
+    );
+  };
+
   // Render the Access Shop button
   const renderAccessShop = () => {
     if (role !== 'admin' && role !== 'supplier') return null;
@@ -257,6 +285,7 @@ export default function Sidebar({ onLogout }) {
         {renderNavItem({ to: '/supplier-portal', label: 'Supplier Portal', icon: FiTruck })}
         {renderNavItem({ to: '/user-management', label: 'User Management', icon: FiUserCheck })}
         {renderOrderManagement()}
+        {renderProductManagement()}
       </>
     );
   };
