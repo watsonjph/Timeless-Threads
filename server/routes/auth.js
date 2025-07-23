@@ -16,6 +16,7 @@ router.post('/update-email', authController.updateEmail);
 router.post('/update-username', authController.updateUsername);
 router.post('/update-password', authController.updatePassword);
 router.post('/update-name', authController.updateName);
+router.post('/request-delete', authController.requestDelete);
 router.get('/user/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);

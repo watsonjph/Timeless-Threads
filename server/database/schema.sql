@@ -19,6 +19,7 @@ CREATE TABLE `users` (
   `postalCode` VARCHAR(15) DEFAULT NULL,
   `profile_pic_url` TEXT,
   `has_profile_pic` TINYINT(1) DEFAULT 0,
+  `is_deleted` TINYINT(1) DEFAULT 0,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

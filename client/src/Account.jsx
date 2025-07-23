@@ -24,6 +24,8 @@ export default function Account() {
 
   // Modal state
   const [modal, setModal] = useState(null); // 'email' | 'username' | 'password' | null
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteMsg, setDeleteMsg] = useState('');
 
   // Fetch user info (moved outside useEffect for reuse)
   async function fetchUser() {
@@ -158,6 +160,29 @@ export default function Account() {
     }
   };
 
+  const handleRequestDelete = async () => {
+    setDeleteMsg('');
+    try {
+      const res = await fetch('/api/auth/request-delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setDeleteMsg('Account deletion requested. You will be logged out.');
+        setTimeout(() => {
+          localStorage.clear();
+          window.location.href = '/login';
+        }, 2000);
+      } else {
+        setDeleteMsg(data.error || 'Failed to request account deletion.');
+      }
+    } catch (err) {
+      setDeleteMsg('Network error.');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-custom-cream font-poppins">
       <Navbar alwaysHovered={true} />
@@ -208,6 +233,37 @@ export default function Account() {
             </div>
             <button className="bg-custom-dark text-custom-cream px-6 py-2 rounded-lg hover:bg-custom-mint transition font-poppins cursor-pointer" onClick={() => setModal('password')}>Edit</button>
           </div>
+
+          {/* Separator */}
+          <div className="w-full h-px bg-custom-dark opacity-10 my-8" />
+
+          {/* Request Account Deletion Button */}
+          <div className="flex flex-col items-center mt-4">
+            <button
+              className="px-6 py-2 rounded bg-red-600 text-white font-bold hover:bg-red-700 transition cursor-pointer"
+              onClick={() => setShowDeleteModal(true)}
+            >
+              Request Account Deletion
+            </button>
+          </div>
+          <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)} title="Request Account Deletion">
+            <div className="text-red-700 font-semibold mb-4">Warning: This will deactivate your account. You will be logged out and will not be able to log in unless you re-register. Your data will be retained for record keeping.</div>
+            <div className="flex justify-end gap-4 mt-6">
+              <button
+                className="px-4 py-2 rounded bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition cursor-pointer"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 rounded bg-red-600 text-white font-bold hover:bg-red-700 transition cursor-pointer"
+                onClick={handleRequestDelete}
+              >
+                Confirm Deletion
+              </button>
+            </div>
+            {deleteMsg && <div className="mt-4 text-center text-red-600 font-semibold">{deleteMsg}</div>}
+          </Modal>
           {/* Email Modal */}
           <Modal isOpen={modal === 'email'} onClose={() => { setModal(null); setNewEmail(''); setEmailMsg(''); }} title="Edit Email">
             <form onSubmit={handleEmailChange} className="space-y-4">

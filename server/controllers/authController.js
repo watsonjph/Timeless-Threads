@@ -229,6 +229,22 @@ const authController = {
       return res.status(500).json({ error: 'Failed to update name.' });
     }
   },
+
+  // Handle account deletion request (soft delete)
+  async requestDelete(req, res) {
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required.' });
+    }
+    try {
+      const ok = await User.requestDelete(userId);
+      if (!ok) return res.status(404).json({ error: 'User not found or already deleted.' });
+      return res.status(200).json({ message: 'Account deletion requested.' });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to request account deletion.' });
+    }
+  },
 };
 
 export default authController; 

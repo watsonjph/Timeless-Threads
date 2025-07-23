@@ -98,6 +98,14 @@ const User = {
     );
     return result.affectedRows > 0;
   },
+
+  async requestDelete(userId) {
+    const [result] = await pool.query(
+      `UPDATE users SET is_deleted = 1, deleted_at = NOW() WHERE user_id = ?`,
+      [userId]
+    );
+    return result.affectedRows > 0;
+  },
 };
 
 export default User;
