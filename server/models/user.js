@@ -101,7 +101,7 @@ const User = {
 
   async requestDelete(userId) {
     const [result] = await pool.query(
-      `UPDATE users SET is_deleted = 1, deleted_at = NOW() WHERE user_id = ?`,
+      `UPDATE users SET is_deleted = 1 WHERE user_id = ?`,
       [userId]
     );
     return result.affectedRows > 0;
@@ -110,7 +110,7 @@ const User = {
   async reactivateAndUpdateByEmail(email, { username, password, firstName, lastName }) {
     const hashed = await bcrypt.hash(password, 10);
     const [result] = await pool.query(
-      `UPDATE users SET username = ?, password = ?, firstName = ?, lastName = ?, is_deleted = 0, deleted_at = NULL WHERE email = ? AND is_deleted = 1`,
+      `UPDATE users SET username = ?, password = ?, firstName = ?, lastName = ?, is_deleted = 0 WHERE email = ? AND is_deleted = 1`,
       [username, hashed, firstName, lastName, email]
     );
     return result.affectedRows > 0;

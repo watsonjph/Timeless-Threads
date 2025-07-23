@@ -316,7 +316,7 @@ export default function Settings() {
           </form>
         </Modal>
         <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)} title="Request Account Deletion">
-          <div className="text-red-700 font-semibold mb-4">Warning: This will deactivate your account. You will be logged out and will not be able to log in unless you re-register. Your data will be retained for record keeping.</div>
+          <div className="text-red-700 font-semibold mb-4">Warning: Your Account will be Permanently deleted from our System</div>
           <div className="flex justify-end gap-4 mt-6">
             <button
               className="px-4 py-2 rounded bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition cursor-pointer"
