@@ -107,6 +107,22 @@ const Order = {
   },
 
   async deleteOrder(orderId) {
+    // Delete related order_items
+    await pool.query(
+      `DELETE FROM order_items WHERE order_id = ?`,
+      [orderId]
+    );
+    // Delete related payments
+    await pool.query(
+      `DELETE FROM payments WHERE order_id = ?`,
+      [orderId]
+    );
+    // Delete related order_fulfillment
+    await pool.query(
+      `DELETE FROM order_fulfillment WHERE order_id = ?`,
+      [orderId]
+    );
+    // Now delete the order itself
     const [result] = await pool.query(
       `DELETE FROM orders WHERE order_id = ?`,
       [orderId]
