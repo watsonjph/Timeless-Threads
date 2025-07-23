@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProfilePicUploader from './components/ProfilePicUploader';
+import Modal from './components/Modal';
 
 export default function Settings() {
   // State for each form
@@ -13,7 +14,15 @@ export default function Settings() {
   const [newPwd, setNewPwd] = useState('');
   const [pwdMsg, setPwdMsg] = useState('');
   const [profilePicUrl, setProfilePicUrl] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [newFirstName, setNewFirstName] = useState('');
+  const [newLastName, setNewLastName] = useState('');
+  const [nameMsg, setNameMsg] = useState('');
   const userId = localStorage.getItem('userId');
+
+  // Modal state
+  const [modal, setModal] = useState(null); // 'email' | 'username' | 'password' | null
 
   // Fetch current user info on mount
   useEffect(() => {
@@ -26,6 +35,8 @@ export default function Settings() {
           setEmail(data.email || '');
           setUsername(data.username || '');
           setProfilePicUrl(data.profile_pic_url || '');
+          setFirstName(data.firstName || '');
+          setLastName(data.lastName || '');
         }
       } catch (err) {
         // Optionally handle error
@@ -117,6 +128,35 @@ export default function Settings() {
     }
   };
 
+  const handleNameChange = async (e) => {
+    e.preventDefault();
+    setNameMsg('');
+    if (!newFirstName || !newLastName) {
+      setNameMsg('Please enter both first and last name.');
+      return;
+    }
+    try {
+      const res = await fetch('/api/auth/update-name', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, firstName: newFirstName, lastName: newLastName })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setNameMsg('Name updated successfully.');
+        setFirstName(newFirstName);
+        setLastName(newLastName);
+        setNewFirstName('');
+        setNewLastName('');
+        setModal(null);
+      } else {
+        setNameMsg(data.error || 'Failed to update name.');
+      }
+    } catch (err) {
+      setNameMsg('Network error.');
+    }
+  };
+
   return (
     <main className="flex-1 flex flex-col items-center justify-center bg-custom-cream min-h-screen py-12">
       <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl p-16 flex flex-col items-center gap-12">
@@ -128,66 +168,115 @@ export default function Settings() {
             onUpload={url => setProfilePicUrl(url)}
           />
         </div>
-        {/* Separator below profile picture */}
         <div className="w-full h-px bg-custom-dark opacity-20 mb-2" />
-        {/* Email Section */}
-        <form onSubmit={handleEmailChange} className="w-full flex flex-col gap-2">
-          <h2 className="text-lg font-semibold text-custom-dark mb-1 font-poppins">Email</h2>
-          <div className="flex flex-row items-center gap-8 mb-4 w-full">
-            <div className="flex-1 flex flex-col">
-              <label className="text-custom-dark font-poppins mb-1">Current</label>
-              <input type="email" className="border border-custom-dark rounded px-4 py-3 bg-custom-cream font-nunito" value={email} disabled />
-            </div>
-            <div className="flex-1 flex flex-col">
-              <label className="text-custom-dark font-poppins mb-1">New</label>
-              <input type="email" className="border border-custom-dark rounded px-4 py-3 font-nunito" value={newEmail} onChange={e => setNewEmail(e.target.value)} placeholder="New Email" />
-            </div>
+        {/* Email Row */}
+        <div className="w-full flex flex-row items-center justify-between mb-4">
+          <div className="flex flex-col">
+            <span className="text-custom-dark font-poppins text-lg">Email</span>
+            <span className="text-custom-dark font-nunito">{email}</span>
           </div>
-          <div className="flex flex-row justify-start">
-            <button type="submit" className="bg-custom-dark text-custom-cream px-8 py-2 rounded-lg hover:bg-custom-mint transition font-poppins">Apply</button>
+          <button className="bg-custom-dark text-custom-cream px-6 py-2 rounded-lg hover:bg-custom-mint transition font-poppins cursor-pointer" onClick={() => setModal('email')}>Edit</button>
+        </div>
+        <div className="w-full h-px bg-custom-dark opacity-20 mb-2" />
+        {/* Username Row */}
+        <div className="w-full flex flex-row items-center justify-between mb-4">
+          <div className="flex flex-col">
+            <span className="text-custom-dark font-poppins text-lg">Username</span>
+            <span className="text-custom-dark font-nunito">{username}</span>
           </div>
-          {emailMsg && <div className="mt-2 text-sm text-custom-dark text-left font-nunito">{emailMsg}</div>}
-        </form>
-        {/* Separator */}
-        <div className="w-full h-px bg-custom-dark opacity-20 mb-2 mt-4" />
-        {/* Username Section */}
-        <form onSubmit={handleUsernameChange} className="w-full flex flex-col gap-2">
-          <h2 className="text-lg font-semibold text-custom-dark mb-1 font-poppins">Username</h2>
-          <div className="flex flex-row items-center gap-8 mb-4 w-full">
-            <div className="flex-1 flex flex-col">
-              <label className="text-custom-dark font-poppins mb-1">Current</label>
-              <input type="text" className="border border-custom-dark rounded px-4 py-3 bg-custom-cream font-nunito" value={username} disabled />
+          <button className="bg-custom-dark text-custom-cream px-6 py-2 rounded-lg hover:bg-custom-mint transition font-poppins cursor-pointer" onClick={() => setModal('username')}>Edit</button>
+        </div>
+        <div className="w-full h-px bg-custom-dark opacity-20 mb-2" />
+        {/* Name Row */}
+        <div className="w-full flex flex-row items-center justify-between mb-4">
+          <div className="flex flex-col">
+            <span className="text-custom-dark font-poppins text-lg">Name</span>
+            <span className="text-custom-dark font-nunito">{[firstName, lastName].filter(Boolean).join(' ')}</span>
+          </div>
+          <button className="bg-custom-dark text-custom-cream px-6 py-2 rounded-lg hover:bg-custom-mint transition font-poppins cursor-pointer" onClick={() => { setModal('name'); setNewFirstName(firstName); setNewLastName(lastName); }}>Edit</button>
+        </div>
+        <div className="w-full h-px bg-custom-dark opacity-20 mb-2" />
+        {/* Password Row */}
+        <div className="w-full flex flex-row items-center justify-between mb-4">
+          <div className="flex flex-col">
+            <span className="text-custom-dark font-poppins text-lg">Password</span>
+            <span className="text-custom-dark font-nunito">••••••••</span>
+          </div>
+          <button className="bg-custom-dark text-custom-cream px-6 py-2 rounded-lg hover:bg-custom-mint transition font-poppins cursor-pointer" onClick={() => setModal('password')}>Edit</button>
+        </div>
+        {/* Email Modal */}
+        <Modal isOpen={modal === 'email'} onClose={() => { setModal(null); setNewEmail(''); setEmailMsg(''); }} title="Edit Email">
+          <form onSubmit={handleEmailChange} className="space-y-4">
+            <div>
+              <label className="block text-custom-dark font-medium mb-2">Current Email</label>
+              <input type="email" className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100" value={email} disabled />
             </div>
-            <div className="flex-1 flex flex-col">
-              <label className="text-custom-dark font-poppins mb-1">New</label>
-              <input type="text" className="border border-custom-dark rounded px-4 py-3 font-nunito" value={newUsername} onChange={e => setNewUsername(e.target.value)} placeholder="New Username" />
+            <div>
+              <label className="block text-custom-dark font-medium mb-2">New Email</label>
+              <input type="email" className="w-full px-4 py-2 border border-gray-300 rounded-lg" value={newEmail} onChange={e => setNewEmail(e.target.value)} placeholder="New Email" required />
             </div>
-          </div>
-                      <div className="flex flex-row justify-start">
-            <button type="submit" className="bg-custom-dark text-custom-cream px-8 py-2 rounded-lg hover:bg-custom-mint transition font-poppins">Apply</button>
-          </div>
-          {usernameMsg && <div className="mt-2 text-sm text-custom-dark text-left font-nunito">{usernameMsg}</div>}
-        </form>
-        {/* Separator */}
-        <div className="w-full h-px bg-custom-dark opacity-20 mb-2 mt-4" />
-        {/* Password Section */}
-        <form onSubmit={handlePasswordChange} className="w-full flex flex-col gap-2">
-          <h2 className="text-lg font-semibold text-custom-dark mb-1 font-poppins">Password</h2>
-          <div className="flex flex-row items-center gap-8 mb-4 w-full">
-            <div className="flex-1 flex flex-col">
-              <label className="text-custom-dark font-poppins mb-1">Current</label>
-              <input type="password" className="border border-custom-dark rounded px-4 py-3 font-nunito" value={currentPwd} onChange={e => setCurrentPwd(e.target.value)} placeholder="Current Password" />
+            {emailMsg && <div className="text-sm text-custom-dark">{emailMsg}</div>}
+            <div className="flex gap-3 pt-2">
+              <button type="button" onClick={() => { setModal(null); setNewEmail(''); setEmailMsg(''); }} className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition font-poppins cursor-pointer">Cancel</button>
+              <button type="submit" className="flex-1 bg-custom-dark text-custom-cream py-2 px-4 rounded-lg hover:bg-custom-mint transition font-poppins cursor-pointer">Update Email</button>
             </div>
-            <div className="flex-1 flex flex-col">
-              <label className="text-custom-dark font-poppins mb-1">New</label>
-              <input type="password" className="border border-custom-dark rounded px-4 py-3 font-nunito" value={newPwd} onChange={e => setNewPwd(e.target.value)} placeholder="New Password" />
+          </form>
+        </Modal>
+        {/* Username Modal */}
+        <Modal isOpen={modal === 'username'} onClose={() => { setModal(null); setNewUsername(''); setUsernameMsg(''); }} title="Edit Username">
+          <form onSubmit={handleUsernameChange} className="space-y-4">
+            <div>
+              <label className="block text-custom-dark font-medium mb-2">Current Username</label>
+              <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100" value={username} disabled />
             </div>
-          </div>
-                      <div className="flex flex-row justify-start">
-            <button type="submit" className="bg-custom-dark text-custom-cream px-8 py-2 rounded-lg hover:bg-custom-mint transition font-poppins">Apply</button>
-          </div>
-          {pwdMsg && <div className="mt-2 text-sm text-custom-dark text-left font-nunito">{pwdMsg}</div>}
-        </form>
+            <div>
+              <label className="block text-custom-dark font-medium mb-2">New Username</label>
+              <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-lg" value={newUsername} onChange={e => setNewUsername(e.target.value)} placeholder="New Username" required />
+            </div>
+            {usernameMsg && <div className="text-sm text-custom-dark">{usernameMsg}</div>}
+            <div className="flex gap-3 pt-2">
+              <button type="button" onClick={() => { setModal(null); setNewUsername(''); setUsernameMsg(''); }} className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition font-poppins cursor-pointer">Cancel</button>
+              <button type="submit" className="flex-1 bg-custom-dark text-custom-cream py-2 px-4 rounded-lg hover:bg-custom-mint transition font-poppins cursor-pointer">Update Username</button>
+            </div>
+          </form>
+        </Modal>
+        {/* Name Modal */}
+        <Modal isOpen={modal === 'name'} onClose={() => { setModal(null); setNewFirstName(''); setNewLastName(''); setNameMsg(''); }} title="Edit Name">
+          <form onSubmit={handleNameChange} className="space-y-4">
+            <div>
+              <label className="block text-custom-dark font-medium mb-2">First Name</label>
+              <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-lg" value={newFirstName} onChange={e => setNewFirstName(e.target.value)} placeholder="First Name" required />
+            </div>
+            <div>
+              <label className="block text-custom-dark font-medium mb-2">Last Name</label>
+              <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-lg" value={newLastName} onChange={e => setNewLastName(e.target.value)} placeholder="Last Name" required />
+            </div>
+            {nameMsg && <div className="text-sm text-custom-dark">{nameMsg}</div>}
+            <div className="flex gap-3 pt-2">
+              <button type="button" onClick={() => { setModal(null); setNewFirstName(''); setNewLastName(''); setNameMsg(''); }} className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition font-poppins cursor-pointer">Cancel</button>
+              <button type="submit" className="flex-1 bg-custom-dark text-custom-cream py-2 px-4 rounded-lg hover:bg-custom-mint transition font-poppins cursor-pointer">Update Name</button>
+            </div>
+          </form>
+        </Modal>
+        {/* Password Modal */}
+        <Modal isOpen={modal === 'password'} onClose={() => { setModal(null); setCurrentPwd(''); setNewPwd(''); setPwdMsg(''); }} title="Edit Password">
+          <form onSubmit={handlePasswordChange} className="space-y-4">
+            <div>
+              <label className="block text-custom-dark font-medium mb-2">Current Password</label>
+              <input type="password" className="w-full px-4 py-2 border border-gray-300 rounded-lg" value={currentPwd} onChange={e => setCurrentPwd(e.target.value)} placeholder="Current Password" required />
+            </div>
+            <div>
+              <label className="block text-custom-dark font-medium mb-2">New Password</label>
+              <input type="password" className="w-full px-4 py-2 border border-gray-300 rounded-lg" value={newPwd} onChange={e => setNewPwd(e.target.value)} placeholder="New Password" required />
+            </div>
+            <div className="text-xs text-gray-500">Password must be at least 8 characters and include a number and a special character.</div>
+            {pwdMsg && <div className="text-sm text-custom-dark">{pwdMsg}</div>}
+            <div className="flex gap-3 pt-2">
+              <button type="button" onClick={() => { setModal(null); setCurrentPwd(''); setNewPwd(''); setPwdMsg(''); }} className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition font-poppins cursor-pointer">Cancel</button>
+              <button type="submit" className="flex-1 bg-custom-dark text-custom-cream py-2 px-4 rounded-lg hover:bg-custom-mint transition font-poppins cursor-pointer">Update Password</button>
+            </div>
+          </form>
+        </Modal>
       </div>
     </main>
   );

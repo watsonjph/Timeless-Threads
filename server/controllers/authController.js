@@ -215,6 +215,20 @@ const authController = {
       return res.status(500).json({ error: 'Failed to reset password.' });
     }
   },
+
+  async updateName(req, res) {
+    const { userId, firstName, lastName } = req.body;
+    if (!userId || !firstName || !lastName) {
+      return res.status(400).json({ error: 'User ID, first name, and last name are required.' });
+    }
+    try {
+      await User.updateName(userId, firstName, lastName);
+      return res.status(200).json({ message: 'Name updated successfully.' });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'Failed to update name.' });
+    }
+  },
 };
 
 export default authController; 

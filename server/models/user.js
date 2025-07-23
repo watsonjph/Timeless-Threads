@@ -90,6 +90,14 @@ const User = {
     );
     return result.affectedRows > 0;
   },
+
+  async updateName(userId, firstName, lastName) {
+    const [result] = await pool.query(
+      `UPDATE users SET firstName = ?, lastName = ? WHERE user_id = ?`,
+      [firstName, lastName, userId]
+    );
+    return result.affectedRows > 0;
+  },
 };
 
 export default User;
