@@ -1,3 +1,4 @@
+<img src="./client/public/images/Timeless-Inverted.png" alt="logo" width="150"> <br>
 # Timeless Threads
 *A Dedicated web-based e-commerce platform for Timeless Threads to replace its reliance on Instagram for sales* <br>
 The system will streamline product browsing, secure checkout, payment processing (via QR or Gcash), and automate inventory and Order management, Replacing Error-prone manual spreadsheets.
@@ -10,7 +11,7 @@ The system will streamline product browsing, secure checkout, payment processing
 ## 📁 Project Structure
 ```
 Timeless-Threads/
-├── server/                       # Backend (Node.js + Express + MySQL)
+├── server/                       # Backend (Node.#s + Express + MySQL)
 │   ├── app.js                    # Express server entry point
 │   ├── app.prod.js               # Production server entry (used for PM2)
 │   ├── config/                   # Database config
@@ -104,5 +105,7 @@ Quick Setup Guide for the Application
 ---
 ## Group Members:
 
-[![Joseph Corsega](https://github.com/watsonjph.png?size=48 "Joseph Corsega")](https://github.com/watsonjph) [![Paul Divinagracia](https://github.com/PaoloBen.png?size=48 "Paul Divinagracia")](https://github.com/PaoloBen) 
-[![Alex Yap](https://github.com/sojaARY.png?size=48 "Alex Yap")](https://github.com/sojaARY)
+[![Joseph Corsega](https://github.com/watsonjph.png?size=60 "Joseph Corsega")](https://github.com/watsonjph) [![Paul Divinagracia](https://github.com/PaoloBen.png?size=60 "Paul Divinagracia")](https://github.com/PaoloBen) 
+<a href="https://github.com/sojaARY">
+    <img src="https://github.com/sojaARY.png" width="60" height="60" alt="Alex Yap" />
+</a>
