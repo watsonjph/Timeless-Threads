@@ -1,4 +1,4 @@
-<img src="./client/public/images/Timeless-Inverted.png" alt="logo" width="150"> <br>
+<img src="./client/public/images/Timeless-Inverted.png" alt="logo" width="120"> <br>
 # Timeless Threads
 *A Dedicated web-based e-commerce platform for Timeless Threads to replace its reliance on Instagram for sales* <br>
 The system will streamline product browsing, secure checkout, payment processing (via QR or Gcash), and automate inventory and Order management, Replacing Error-prone manual spreadsheets.
@@ -6,6 +6,7 @@ The system will streamline product browsing, secure checkout, payment processing
 ## 🛠 Tech Stack
 ![Tech Stack](https://skills-icons.vercel.app/api/icons?i=react,tailwind,mysql,node,vite,axios,express)
 
+[Access the Website Here](https://timelessthreads.xyz/)
 ---
 
 ## 📁 Project Structure
