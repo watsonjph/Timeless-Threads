@@ -10,32 +10,42 @@ The system will streamline product browsing, secure checkout, payment processing
 ## 📁 Project Structure
 ```
 Timeless-Threads/
-├── server/                       # Backend (Node.js + MySQL)
-│   ├── config/                   # Environment/config files
-│   ├── controllers/              # Route handlers
-│   ├── models/                   # Data models
-│   ├── database/                 # Database schema and seed files
-│   ├── routes/                   # API route definitions
-│   ├── middleware/               # Authentication & RBAC
-│   ├── utils/                    # PDF generator, email, etc.
-│   └── app.js                    # Express server entry point
+├── server/                       # Backend (Node.js + Express + MySQL)
+│   ├── app.js                    # Express server entry point
+│   ├── app.prod.js               # Production server entry (used for PM2)
+│   ├── config/                   # Database config
+│   │   └── db.config.js
+│   ├── controllers/              # Express route handler logic
+│   ├── database/                 # SQL schema and seed files
+│   ├── models/                   # Data access models (raw SQL)
+│   ├── routes/                   # Express route definitions (API endpoints)
+│   ├── uploads/                  # Uploaded files (e.g., user profile pictures)
+│   └── utils/                    # Utility functions (e.g., email sending)
 │
-├── client/                       # Frontend (React + Vite + Tailwind)
+├── client/                       # Frontend (React + Vite + Tailwind CSS)
+│   ├── index.html                # Main HTML entry point
 │   ├── public/                   # Public static files
-│   │   ├── images/               # Logo, icons, etc.
-│   │   └── documents/            # Invoice templates
-│   ├── src/
-│   │   ├── assets/               # Images, icons, fonts
-│   │   ├── components/           # Reusable UI components
-│   │   ├── pages/                # Main route pages
-│   │   ├── api/                  # Axios API service functions
-│   │   ├── context/              # Global state (e.g., AuthContext)
-│   │   ├── routes/               # React Router setup
+│   │   ├── images/               # Product, logo, and payment images
+│   │   ├── videos/               # Tutorial or promo videos
+│   │   └── documents/
+│   └── src/
+│       ├── components/           # Reusable React UI components
+│       ├── api/                  # Axios API service functions
+│       ├── css/                  # Custom CSS (main.css)
+│       ├── App.jsx, main.jsx     # Main React app entry and bootstrap
+│       └── (various .jsx files)  # Page and feature components (e.g., Login, Cart, Dashboard, etc.)
+│
+├── config/                       # Frontend build and styling config (Vite, Tailwind, PostCSS)
+│   ├── postcss.config.js
+│   ├── tailwind.config.js
+│   └── vite.config.js
+│
 ├── .env                          # Backend environment variables
 ├── .gitignore
-├── package.json                  # Root (for both server and scripts)
-├── config/                       # Config files for Tailwind, Vite and Postcss
-└── README.md
+├── package.json                  # Project dependencies and scripts (shared for client/server)
+├── package-lock.json
+├── README.md
+├── LICENSE
 ```
 
 ---
@@ -85,4 +95,14 @@ Quick Setup Guide for the Application
     npm run dev:server
     npm run dev:client
     ```
+    **OR**
+    *For Production:*
+    ```
+    npm run build
+    pm2 start server/app.prod.js --name "Timeless"
+    ```
 ---
+## Group Members:
+
+[![Joseph Corsega](https://github.com/watsonjph.png?size=48 "Joseph Corsega")](https://github.com/watsonjph) [![Paul Divinagracia](https://github.com/PaoloBen.png?size=48 "Paul Divinagracia")](https://github.com/PaoloBen) 
+[![Alex Yap](https://github.com/sojaARY.png?size=48 "Alex Yap")](https://github.com/sojaARY)
