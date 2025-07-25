@@ -7,8 +7,17 @@ const router = express.Router();
 router.get('/stock/:sku', async (req, res) => {
   try {
     const { sku } = req.params;
-    
-    const query = `
+    // First, find the product_id for the given SKU
+    const productIdQuery = `
+      SELECT product_id FROM product_variants WHERE sku = ? LIMIT 1
+    `;
+    const [productRows] = await db.query(productIdQuery, [sku]);
+    if (!productRows.length) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+    const product_id = productRows[0].product_id;
+    // Now, get all variants for this product
+    const variantsQuery = `
       SELECT 
         pv.variant_id,
         pv.sku,
@@ -20,15 +29,12 @@ router.get('/stock/:sku', async (req, res) => {
       FROM product_variants pv
       JOIN products p ON pv.product_id = p.product_id
       LEFT JOIN product_inventory pi ON pv.variant_id = pi.variant_id
-      WHERE pv.sku = ? AND pv.is_active = 1
+      WHERE pv.product_id = ? AND pv.is_active = 1
     `;
-    
-    const [variants] = await db.query(query, [sku]);
-    
+    const [variants] = await db.query(variantsQuery, [product_id]);
     if (variants.length === 0) {
-      return res.status(404).json({ error: 'Product not found' });
+      return res.status(404).json({ error: 'No variants found for this product' });
     }
-    
     // Format the response
     const stockData = {
       product_name: variants[0].product_name,
@@ -42,7 +48,6 @@ router.get('/stock/:sku', async (req, res) => {
         in_stock: (variant.stock_quantity || 0) > 0
       }))
     };
-    
     res.json(stockData);
   } catch (error) {
     console.error('Error fetching product stock:', error);

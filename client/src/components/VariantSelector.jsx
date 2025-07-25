@@ -33,7 +33,10 @@ export default function VariantSelector({ open, onClose, variants, onSelect, loa
                     className={`flex items-center justify-between py-4 text-lg font-mono ${!variant.in_stock ? 'text-gray-400' : 'text-black'} ${variant.in_stock ? 'cursor-pointer hover:bg-gray-100 transition' : 'cursor-not-allowed'}`}
                     onClick={() => variant.in_stock && onSelect(variant)}
                   >
-                    <span>{variant.size || variant.sku || 'N/A'}</span>
+                    <span>
+                      {variant.size || 'N/A'}
+                      {variant.color ? ` • ${variant.color}` : ''}
+                    </span>
                     <span className="text-xs font-mono">
                       {!variant.in_stock ? 'Notify me' :
                         (variant.stock_quantity === 1 ? 'Only One Left' : '')}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const CartModal = ({ isVisible, onClose, productName }) => {
+const CartModal = ({ isVisible, onClose, productName, variantInfo }) => {
   const navigate = useNavigate();
   const [isFading, setIsFading] = useState(false);
 
@@ -45,6 +45,13 @@ const CartModal = ({ isVisible, onClose, productName }) => {
             <div>
               <p className="font-semibold text-lg">ADDED TO CART</p>
               <p className="text-sm text-gray-300">{productName}</p>
+              {variantInfo && (
+                <p className="text-xs text-gray-400">
+                  {variantInfo.size && `${variantInfo.size}`}
+                  {variantInfo.color && variantInfo.size && ' • '}
+                  {variantInfo.color && `${variantInfo.color}`}
+                </p>
+              )}
             </div>
           </div>
           

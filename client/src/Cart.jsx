@@ -141,6 +141,13 @@ const Cart = () => {
                     />
                     <div>
                       <h2 className="text-custom-dark font-semibold">{item.name}</h2>
+                      {(item.size || item.color) && (
+                        <p className="text-xs text-gray-500 font-mono">
+                          {item.size && `Size: ${item.size}`}
+                          {item.size && item.color && ' • '}
+                          {item.color && `Color: ${item.color}`}
+                        </p>
+                      )}
                       <p className="text-sm text-gray-600">
                         ₱{item.price.toLocaleString()}
                       </p>

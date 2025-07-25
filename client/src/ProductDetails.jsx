@@ -36,6 +36,7 @@ const ProductDetails = () => {
   const [variantSelectorLoading, setVariantSelectorLoading] = useState(false);
   const [variantSelectorError, setVariantSelectorError] = useState('');
   const [variantOptions, setVariantOptions] = useState([]);
+  const [selectedVariant, setSelectedVariant] = useState(null);
 
 
   useEffect(() => {
@@ -110,6 +111,7 @@ const ProductDetails = () => {
       });
     }
     localStorage.setItem('cart', JSON.stringify(cart));
+    setSelectedVariant(variant);
     setShowVariantSelector(false);
     setShowCartModal(true);
     window.dispatchEvent(new CustomEvent('cartUpdated'));
@@ -171,6 +173,7 @@ const ProductDetails = () => {
         isVisible={showCartModal}
         onClose={() => setShowCartModal(false)}
         productName={product.name}
+        variantInfo={selectedVariant}
       />
       <VariantSelector
         open={showVariantSelector}
